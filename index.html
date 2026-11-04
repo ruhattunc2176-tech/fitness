@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
 <style>
-/* Düzen: YDUS Dahiliye kalıbı — üst bar, yeşil özet kartı, altında gölgeli kutular; hareket kartları kas grubu rengiyle */
+/* Düzen: tek sütun uygulama kalıbı — üst bar, yeşil özet kartı, altında gölgeli kutular; hareket kartları kas grubu rengiyle */
 :root{
   --bg:#f2f5f3; --card:#ffffff; --ink:#1a2233; --muted:#5b6578; --line:#dbe2ee; --soft:#eef2f8;
   --accent:#0b6e4c; --accent-2:#0f3d33; --accent-soft:#dcf5e8; --on:#ffffff; --on-soft:#c9f2dd; --on-hi:#8ef0be;
@@ -240,8 +240,12 @@ S=duzenle(S&&S.plan?S:ilkProgram());
 let V={v:"ana",gun:null,grp:"",q:"",pk:"squat",y:0};
 try{Object.assign(V,JSON.parse(localStorage.getItem(LSV)||"{}"))}catch(e){}
 
-/* ---------- Firebase (YDUS projesi, fitness/<uid> dalı) ---------- */
-const FB={apiKey:"AIzaSyBIbSfnN5wQTY5jUYijki44yWWcJ9b2XCI",authDomain:"ydus-defteri.firebaseapp.com",databaseURL:"https://ydus-defteri-default-rtdb.europe-west1.firebasedatabase.app",projectId:"ydus-defteri",storageBucket:"ydus-defteri.firebasestorage.app",messagingSenderId:"673811477774",appId:"1:673811477774:web:c30d7d8c93e54c4a36135f"};
+/* ---------- Firebase (fitness projesi; salon/<salonId>/uye/<uid>) ---------- */
+const FB={apiKey:"AIzaSyAcRdjIei7JjAlvoaRWhDJJAglHRIa5V1Q",authDomain:"fitness-e8b39.firebaseapp.com",databaseURL:"https://fitness-e8b39-default-rtdb.europe-west1.firebasedatabase.app",projectId:"fitness-e8b39",storageBucket:"fitness-e8b39.firebasestorage.app",messagingSenderId:"867214972425",appId:"1:867214972425:web:64362f55b57e08ab164ad8"};
+const ALAN="@fitness-e8b39.app";
+const telNorm=v=>{let d=String(v||"").replace(/\D/g,"");if(d.startsWith("0"))d=d.slice(1);if(d.length===10)d="90"+d;return /^90\d{10}$/.test(d)?d:""};
+const telGoster=d=>d?"0"+d.slice(2,5)+" "+d.slice(5,8)+" "+d.slice(8,10)+" "+d.slice(10):"";
+let salon=null, izinYok=false;
 const FBV="10.12.2";
 let fbDurum="yukleniyor", kul=null, kok=null, esit=false;
 const kirli=new Set(), silinecek=new Set(); let yazT=null, yaziyor=false;
@@ -253,11 +257,13 @@ async function fbBaslat(){
       new Promise((_,no)=>setTimeout(no,8000))]);
     firebase.initializeApp(FB);
     fbDurum="hazir";
-    firebase.auth().onAuthStateChanged(u=>{kul=u; if(u){baglan()}else{if(kok){kok.off();kok=null}esit=false} ciz()});
+    firebase.auth().onAuthStateChanged(async u=>{kul=u; izinYok=false; salon=null;
+      if(u){try{const tel=(u.email||"").replace(ALAN,"");const v=(await firebase.database().ref("izin/"+tel).get()).val();if(v&&typeof v==="string"){salon=v;baglan()}else izinYok=true}catch(e){izinYok=true}}
+      else{if(kok){kok.off();kok=null}esit=false} ciz()});
   }catch(e){fbDurum="yok"; ciz()}
 }
 function baglan(){
-  kok=firebase.database().ref("fitness/"+kul.uid); let ilk=true;
+  kok=firebase.database().ref("salon/"+salon+"/uye/"+kul.uid); let ilk=true;
   kok.on("value",snap=>{
     const d=snap.val(); esit=true;
     if(ilk&&!d){ilk=false; kaydet(["main",...Object.keys(S.sessions).map(s=>"s/"+s)]); ciz(); return}
@@ -461,27 +467,32 @@ function sAyar(){
   return `<div class="stack"><button class="geri" data-act="git" data-v="ana">‹ Ana sayfa</button>
    <div class="baslik"><h2>Ayarlar</h2></div>
    <section class="kart stack" style="gap:8px"><h3>Hesap</h3>
-    ${kul?`<div class="meta">Giriş: <b style="color:var(--ink)">${esc(kul.email)}</b></div><div class="meta">Kayıtlar YDUS'taki hesabınla eşitlenir; telefon ve webde aynı kaldığın yer.</div><button class="btn kir" data-act="cikis">Çıkış yap</button>`
+    ${kul?`<div class="meta">Giriş: <b style="color:var(--ink)">${esc(telGoster((kul.email||"").replace(ALAN,"")))}</b></div><div class="meta">Kayıtların hesabınla eşitlenir; telefon ve webde aynı kaldığın yer.</div><button class="btn kir" data-act="cikis">Çıkış yap</button><div class="meta">Şifreni unutursan yöneticiye haber ver; yeni şifre tanımlanır, kayıtların silinmez.</div>`
      :fbDurum==="hazir"?`<div class="meta">Şu an yalnız bu cihaza kaydediliyor.</div><button class="btn ana" data-act="girisAc">Giriş yap</button>`
      :`<div class="meta">Eşitleme bu ortamda açılamadı; kayıtlar bu cihazda duruyor.</div>`}</section>
    <section class="kart"><h3>Fotoğraflar</h3><div class="meta">Hareket fotoğrafları kamu malı olarak paylaşılan free-exercise-db arşivinden alındı. Video düğmesi YouTube'da o hareketin doğru yapılışını açar.</div></section>
   </div>`;
 }
 function sGiris(){
+  if(izinYok)return `<div class="giris"><img class="logo" src="icon-192.png" alt="" style="width:64px;height:64px;border-radius:18px">
+   <div class="baslik"><h2>Erişim yok</h2><p>${esc(telGoster((kul.email||"").replace(ALAN,"")))} numarası için giriş izni tanımlı değil. Salon yöneticisinden izin iste.</p></div>
+   <button class="btn" data-act="cikis">Başka numarayla gir</button></div>`;
+  const yeni=V.kayit;
   return `<div class="giris"><img class="logo" src="icon-192.png" alt="" style="width:64px;height:64px;border-radius:18px">
-   <div class="baslik"><h2>Fitness</h2><p>YDUS Dahiliye'deki e-posta ve şifrenle gir</p></div>
-   <input class="alan" id="ge" type="email" autocomplete="username" placeholder="ad@gmail.com" value="${esc(V.ep||"")}">
-   <input class="alan" id="gs" type="password" autocomplete="current-password" placeholder="Şifre">
+   <div class="baslik"><h2>Fitness</h2><p>${yeni?"İlk giriş: numaranı yaz, kendine bir şifre belirle":"Telefon numaran ve şifrenle gir"}</p></div>
+   <input class="alan" id="gt" type="tel" inputmode="tel" autocomplete="tel" placeholder="0532 123 45 67" value="${esc(V.tel||"")}">
+   <input class="alan" id="gs" type="password" autocomplete="${yeni?"new-password":"current-password"}" placeholder="${yeni?"Yeni şifre (en az 6 karakter)":"Şifre"}">
+   ${yeni?`<input class="alan" id="gs2" type="password" autocomplete="new-password" placeholder="Şifreyi tekrar yaz">`:""}
    <div class="hata" id="gh"></div>
-   <button class="btn ana" data-act="giris">Giriş yap</button>
-   <button class="btn" data-act="sifre">Şifremi unuttum</button>
+   <button class="btn ana" data-act="giris">${yeni?"Hesabı oluştur":"Giriş yap"}</button>
+   <button class="btn" data-act="kayitDegis">${yeni?"Hesabım var, giriş yap":"İlk kez mi giriyorsun? Hesap oluştur"}</button>
    <button class="geri" data-act="yerel" style="align-self:center">Giriş yapmadan bu cihazda kullan</button></div>`;
 }
 
 /* ---------- çizim ve kaldığın yer ---------- */
 function ciz(yerinde){
   const y=window.scrollY;
-  const girisGerek=fbDurum==="hazir"&&!kul&&!V.yerel;
+  const girisGerek=fbDurum==="hazir"&&((!kul&&!V.yerel)||izinYok);
   $("app").innerHTML=girisGerek?sGiris():V.v==="gun"?sGun():V.v==="lib"?sLib():V.v==="ilerleme"?sIlerleme():V.v==="program"?sProgram():V.v==="ayar"?sAyar():sAna();
   if(yerinde)window.scrollTo(0,y);
   gorunumKaydet();
@@ -532,15 +543,18 @@ document.addEventListener("click",async ev=>{
   if(a==="gekle"){const n=S.plan.days.length;S.plan.days.push({id:uid(),name:"Gün "+String.fromCharCode(65+n),wd:Math.min(6,n*2+1),ex:[]});kaydet(["main"]);ciz(true);return}
   if(a==="gsil"){if(b.dataset.on!=="1"){b.dataset.on="1";b.textContent="Emin misin? Tekrar dokun";return}
     S.plan.days=S.plan.days.filter(d=>d.id!==b.dataset.gun);kaydet(["main"]);ciz(true);return}
-  if(a==="giris"||a==="sifre"){const ep=$("ge").value.trim(),sf=$("gs").value;V.ep=ep;const gh=$("gh");
-    if(!ep){gh.textContent="E-posta adresini yaz.";return}
-    try{if(a==="sifre"){await firebase.auth().sendPasswordResetEmail(ep);gh.textContent="Şifre yenileme bağlantısı e-postana gönderildi."}
-      else{if(!sf){gh.textContent="Şifreni yaz.";return}gh.textContent="Giriş yapılıyor…";await firebase.auth().signInWithEmailAndPassword(ep,sf)}}
-    catch(e){gh.textContent=/wrong-password|invalid-credential|user-not-found|invalid-login/.test(e.code||"")?"E-posta ya da şifre hatalı.":/too-many/.test(e.code||"")?"Çok deneme yapıldı, biraz sonra tekrar dene.":"Giriş olmadı: "+(e.code||"bağlantı yok")}
+  if(a==="kayitDegis"){V.kayit=!V.kayit;ciz();return}
+  if(a==="giris"){const tel=telNorm($("gt").value),sf=$("gs").value,gh=$("gh");V.tel=$("gt").value;
+    if(!tel){gh.textContent="Numarayı 0532 123 45 67 biçiminde yaz.";return}
+    if(sf.length<6){gh.textContent="Şifre en az 6 karakter olmalı.";return}
+    if(V.kayit&&sf!==$("gs2").value){gh.textContent="Şifreler aynı değil.";return}
+    gh.textContent=V.kayit?"Hesap oluşturuluyor…":"Giriş yapılıyor…";
+    try{const au=firebase.auth();V.kayit?await au.createUserWithEmailAndPassword(tel+ALAN,sf):await au.signInWithEmailAndPassword(tel+ALAN,sf);V.kayit=false}
+    catch(e){const c=e.code||"";gh.textContent=/email-already-in-use/.test(c)?"Bu numarayla hesap zaten var, giriş yap.":/wrong-password|invalid-credential|user-not-found|invalid-login/.test(c)?"Numara ya da şifre hatalı.":/too-many/.test(c)?"Çok deneme yapıldı, biraz sonra tekrar dene.":/operation-not-allowed/.test(c)?"Giriş yöntemi henüz açılmamış.":"Giriş olmadı: "+(c||"bağlantı yok")}
     return}
   if(a==="yerel"){V.yerel=true;ciz();return}
   if(a==="girisAc"){V.yerel=false;ciz();return}
-  if(a==="cikis"){await firebase.auth().signOut();V.yerel=false;ciz();return}
+  if(a==="cikis"){await firebase.auth().signOut();V.yerel=false;izinYok=false;ciz();return}
 });
 document.addEventListener("input",ev=>{const t=ev.target;
   if(t.id==="q"){V.q=t.value;const q=t.value.toLocaleLowerCase("tr");const list=Object.entries(LIB).filter(([k,L])=>(!V.grp||L.g===V.grp)&&(!q||L.n.toLocaleLowerCase("tr").includes(q)||L.en.includes(q)));
@@ -556,7 +570,7 @@ document.addEventListener("change",ev=>{const t=ev.target;
     if(t.dataset.ef==="sets"){v=Math.max(1,Math.min(10,parseInt(v)||e.sets));t.value=v}
     e[t.dataset.ef]=v;kaydet(["main"])}
 });
-document.addEventListener("keydown",ev=>{if(ev.key==="Enter"&&(ev.target.id==="gs"||ev.target.id==="ge")){const b=document.querySelector('[data-act="giris"]');b&&b.click()}});
+document.addEventListener("keydown",ev=>{if(ev.key==="Enter"&&/^(gs|gs2|gt)$/.test(ev.target.id)){const b=document.querySelector('[data-act="giris"]');b&&b.click()}});
 
 ciz();requestAnimationFrame(()=>window.scrollTo(0,V.y||0));
 fbBaslat();
