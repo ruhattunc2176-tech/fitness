@@ -1,0 +1,24 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "izin": {
+      ".read": "auth != null && auth.token.email === '905523020476@fitness-e8b39.app'",
+      ".write": "auth != null && auth.token.email === '905523020476@fitness-e8b39.app'",
+      "$tel": {
+        ".read": "auth != null && auth.token.email === $tel + '@fitness-e8b39.app'",
+        ".validate": "newData.isString() && $tel.matches(/^90[0-9]{10}$/)"
+      }
+    },
+    "salon": {
+      "$salon": {
+        "uye": {
+          "$uid": {
+            ".read": "auth != null && auth.uid === $uid && root.child('izin').child(auth.token.email.replace('@fitness-e8b39.app', '')).val() === $salon",
+            ".write": "auth != null && auth.uid === $uid && root.child('izin').child(auth.token.email.replace('@fitness-e8b39.app', '')).val() === $salon"
+          }
+        }
+      }
+    }
+  }
+}

@@ -242,7 +242,7 @@ try{Object.assign(V,JSON.parse(localStorage.getItem(LSV)||"{}"))}catch(e){}
 
 /* ---------- Firebase (fitness projesi; salon/<salonId>/uye/<uid>) ---------- */
 const FB={apiKey:"AIzaSyAcRdjIei7JjAlvoaRWhDJJAglHRIa5V1Q",authDomain:"fitness-e8b39.firebaseapp.com",databaseURL:"https://fitness-e8b39-default-rtdb.europe-west1.firebasedatabase.app",projectId:"fitness-e8b39",storageBucket:"fitness-e8b39.firebasestorage.app",messagingSenderId:"867214972425",appId:"1:867214972425:web:64362f55b57e08ab164ad8"};
-const ALAN="@fitness-e8b39.app";
+const ALAN="@fitness-e8b39.app", YONETICI="905523020476";
 const telNorm=v=>{let d=String(v||"").replace(/\D/g,"");if(d.startsWith("0"))d=d.slice(1);if(d.length===10)d="90"+d;return /^90\d{10}$/.test(d)?d:""};
 const telGoster=d=>d?"0"+d.slice(2,5)+" "+d.slice(5,8)+" "+d.slice(8,10)+" "+d.slice(10):"";
 let salon=null, izinYok=false;
@@ -258,7 +258,7 @@ async function fbBaslat(){
     firebase.initializeApp(FB);
     fbDurum="hazir";
     firebase.auth().onAuthStateChanged(async u=>{kul=u; izinYok=false; salon=null;
-      if(u){try{const tel=(u.email||"").replace(ALAN,"");const v=(await firebase.database().ref("izin/"+tel).get()).val();if(v&&typeof v==="string"){salon=v;baglan()}else izinYok=true}catch(e){izinYok=true}}
+      if(u){try{const tel=(u.email||"").replace(ALAN,"");const r=firebase.database().ref("izin/"+tel);let v=(await r.get()).val();if(!v&&tel===YONETICI){await r.set("ana");v="ana"}if(v&&typeof v==="string"){salon=v;baglan()}else izinYok=true}catch(e){izinYok=true}}
       else{if(kok){kok.off();kok=null}esit=false} ciz()});
   }catch(e){fbDurum="yok"; ciz()}
 }
