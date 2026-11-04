@@ -1,211 +1,252 @@
 <!DOCTYPE html>
 <html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Fitness</title>
-<meta name="claude:viewport-fit-sides" content="cover">
 <meta name="robots" content="noindex,nofollow,noarchive">
-<meta name="theme-color" content="#0b6e4c">
+<meta name="theme-color" content="#17181A">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Barlow:wght@400;500;600;700&display=swap">
 <style>
-/* Düzen: tek sütun uygulama kalıbı — üst bar, yeşil özet kartı, altında gölgeli kutular; hareket kartları kas grubu rengiyle */
+/* Düzen: salon zemini üzerinde demir kartlar; tek renk kaynağı IWF plaka renkleri; altta demir sekme çubuğu */
 :root{
-  --bg:#f2f5f3; --card:#ffffff; --ink:#1a2233; --muted:#5b6578; --line:#dbe2ee; --soft:#eef2f8;
-  --accent:#0b6e4c; --accent-2:#0f3d33; --accent-soft:#dcf5e8; --on:#ffffff; --on-soft:#c9f2dd; --on-hi:#8ef0be;
-  --bacak:#9a3412; --bacak-s:#fde8d7; --itis:#1864ab; --itis-s:#d9ecfc; --cekis:#0f766e; --cekis-s:#d7f3ee; --karin:#b45309; --karin-s:#fff1dc;
-  --mor:#6741d9; --mor-s:#ebe4ff; --kirmizi:#c92a2a; --kirmizi-s:#ffdede;
-  --track:#e3e8ef; --shadow:0 1px 2px rgba(16,24,40,.04),0 6px 18px rgba(16,24,40,.06);
-  --f:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --bg:#E7E3DA; --bg2:#DCD7CC; --ink:#17181A; --muted:#6A655B; --line:#CFC9BC;
+  --iron:#17181A; --iron2:#26282C; --chalk:#F6F3EC; --chalk-m:#A9A398; --steel:#9A968E; --steel-d:#5E5B55;
+  --p25:#D7263D; --p20:#1F5BD8; --p15:#E8B921; --p10:#1E9E5A; --p5:#F2F1ED; --p2:#D7263D; --p1:#B9BDC4;
+  --ok:#1E9E5A;
+  --display:"Oswald","Arial Narrow",Impact,sans-serif;
+  --body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0f1512; --card:#18201c; --ink:#e7ece9; --muted:#9aa7a0; --line:#28332d; --soft:#1f2924;
-  --accent:#0f8a5f; --accent-2:#0b3b2c; --accent-soft:#163a2b; --track:#2a3530; --shadow:none;
-  --bacak:#f6a56b; --bacak-s:#3d2416; --itis:#6aaee8; --itis-s:#142a40; --cekis:#5eead4; --cekis-s:#113531; --karin:#f0a050; --karin-s:#3a2a14;
-  --mor:#a78bfa; --mor-s:#271f45; --kirmizi:#f07b76; --kirmizi-s:#3d1a1a; color-scheme:dark}}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0F1011; --bg2:#1A1B1E; --ink:#F1EEE7; --muted:#9C978D; --line:#2C2E33;
+  --iron:#1F2124; --iron2:#2B2E33; --steel:#8A867E; --steel-d:#4D4B47; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#0f1512; --card:#18201c; --ink:#e7ece9; --muted:#9aa7a0; --line:#28332d; --soft:#1f2924;
-  --accent:#0f8a5f; --accent-2:#0b3b2c; --accent-soft:#163a2b; --track:#2a3530; --shadow:none;
-  --bacak:#f6a56b; --bacak-s:#3d2416; --itis:#6aaee8; --itis-s:#142a40; --cekis:#5eead4; --cekis-s:#113531; --karin:#f0a050; --karin-s:#3a2a14;
-  --mor:#a78bfa; --mor-s:#271f45; --kirmizi:#f07b76; --kirmizi-s:#3d1a1a; color-scheme:dark}
+  --bg:#0F1011; --bg2:#1A1B1E; --ink:#F1EEE7; --muted:#9C978D; --line:#2C2E33;
+  --iron:#1F2124; --iron2:#2B2E33; --steel:#8A867E; --steel-d:#4D4B47; color-scheme:dark}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html{-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 var(--f)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.45;-webkit-tap-highlight-color:transparent}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
 button,input,select{font:inherit;color:inherit}
-.wrap{max-width:640px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:calc(14px + env(safe-area-inset-top,0px)) calc(110px + env(safe-area-inset-bottom,0px))}
+button{cursor:pointer}
+#app{max-width:520px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:calc(14px + env(safe-area-inset-top,0px)) calc(110px + env(safe-area-inset-bottom,0px))}
+.d{font-family:var(--display);text-transform:uppercase;letter-spacing:.02em}
+.lbl{font-family:var(--display);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 .stack{display:flex;flex-direction:column;gap:14px}
-.ust{display:flex;align-items:center;gap:12px;padding:4px 0 2px}
-.logo{width:44px;height:44px;border-radius:14px;flex:none;display:block}
-.ust h1{margin:0;font-size:21px;font-weight:800;line-height:1.15;letter-spacing:-.01em}
-.ust p{margin:0;font-size:13px;color:var(--muted);font-weight:600}
-.ikb{margin-left:auto;width:44px;height:44px;border-radius:14px;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;cursor:pointer;box-shadow:var(--shadow);flex:none}
-.ikb svg{width:22px;height:22px}
-.geri{border:0;background:none;color:var(--accent);font-weight:800;font-size:15px;padding:6px 0;cursor:pointer;align-self:flex-start}
-.baslik h2{margin:0;font-size:28px;font-weight:800;letter-spacing:-.02em;line-height:1.15;text-wrap:balance}
-.baslik p{margin:2px 0 0;color:var(--muted);font-weight:600;font-size:14px}
-
-/* özet kartı */
-.bakiye{background:var(--accent);color:var(--on);border-radius:26px;padding:20px;display:flex;flex-direction:column;gap:12px;position:relative;overflow:hidden}
-.bakiye::after{content:"";position:absolute;right:-50px;top:-70px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.06);pointer-events:none}
-.bk-ust{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:14px;font-weight:700;color:var(--on-soft)}
-.sync{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.14);border:0;border-radius:999px;padding:4px 11px;font-size:12px;font-weight:700;color:#fff;white-space:nowrap}
-.sync i{width:8px;height:8px;border-radius:50%;background:#ffc75a;flex:none}
-.sync.on i{background:var(--on-hi)}
-.bk-sayi{display:flex;align-items:baseline;gap:8px}
-.bk-sayi b{font-size:44px;font-weight:800;line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
-.bk-sayi span{font-size:17px;font-weight:700;color:var(--on-soft)}
-.bk-bar{height:10px;border-radius:6px;background:rgba(255,255,255,.18);overflow:hidden}
-.bk-bar i{display:block;height:100%;background:var(--on-hi);border-radius:6px;transition:width .4s}
-.kirilim{display:flex;gap:8px;flex-wrap:wrap}
-.kirilim span{display:flex;align-items:baseline;gap:6px;background:rgba(255,255,255,.12);border-radius:12px;padding:7px 11px}
-.kirilim small{font-size:13px;font-weight:700;color:var(--on-soft)}
-.kirilim b{font-size:16px;font-weight:800;font-variant-numeric:tabular-nums}
-.devam{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.1);border:0;border-radius:18px;padding:12px;text-align:left;cursor:pointer;color:#fff;width:100%}
-.devam:active{transform:scale(.99)}
-.dv-y{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
-.dv-y small{font-size:11px;letter-spacing:.06em;text-transform:uppercase;opacity:.85;font-weight:700}
-.dv-y b{font-size:17px;font-weight:800;line-height:1.25}
-.dv-y span{font-size:12.5px;color:var(--on-soft);font-weight:600}
-.oyna{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#fff;color:#0b5d43;box-shadow:0 6px 16px rgba(0,0,0,.18)}
-.oyna svg{width:18px;height:18px;margin-left:2px}
-
-/* kutular */
-.kutular{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.kutu{border:0;background:var(--card);border-radius:20px;padding:14px;display:flex;flex-direction:column;align-items:flex-start;gap:8px;cursor:pointer;box-shadow:var(--shadow);text-align:left;min-width:0}
-.kutu.gen{grid-column:1/-1;flex-direction:row;align-items:center;gap:12px}
-.kutu.gen b{margin-right:auto}
-.kutu:active{transform:scale(.98)}
-.kutu .ik{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;overflow:hidden;flex:none}
-.kutu .ik svg{width:22px;height:22px}
-.kutu .ik img{width:100%;height:100%;object-fit:cover}
-.kutu b{font-size:15px;font-weight:800;line-height:1.25}
-.kutu small{font-size:12px;color:var(--muted);font-weight:600}
-.etk{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:2px 9px;font-size:11.5px;font-weight:800;white-space:nowrap}
-.etk.ok{background:var(--accent-soft);color:var(--accent)}
-.etk.now{background:var(--mor-s);color:var(--mor)}
-.etk.bos{background:var(--soft);color:var(--muted)}
-.etk.pr{background:var(--kirmizi-s);color:var(--kirmizi)}
-
-/* hareket kartı */
-.hk{background:var(--card);border-radius:22px;overflow:hidden;box-shadow:var(--shadow),inset 0 0 0 1px var(--line)}
-.hk.bitti{box-shadow:var(--shadow),inset 0 0 0 2px var(--accent)}
-.foto{position:relative;aspect-ratio:3/2;max-height:220px;width:100%;background:var(--soft);cursor:pointer;overflow:hidden}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:4px 0 6px}
+.mark{font-family:var(--display);font-weight:700;font-size:26px;letter-spacing:.04em;display:flex;align-items:center;gap:8px}
+.mark i{display:inline-block;width:6px;height:22px;border-radius:2px;background:var(--p25)}
+.mark i+i{background:var(--p20);height:19px}
+.sag{display:flex;align-items:center;gap:8px}
+.sync{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:3px 9px;white-space:nowrap}
+.sync i{width:7px;height:7px;border-radius:50%;background:var(--p15)}
+.sync.on i{background:var(--ok)}
+.ikb{width:40px;height:40px;border-radius:13px;border:0;background:var(--bg2);display:grid;place-items:center;flex:none}
+.ikb svg{width:20px;height:20px}
+h1.bas{margin:0;font-family:var(--display);font-size:34px;font-weight:700;text-transform:uppercase;line-height:1}
+/* hafta */
+.hafta{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.gun{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;font-weight:600;color:var(--muted)}
+.disk{width:100%;max-width:42px;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;position:relative}
+.disk::after{content:"";width:22%;aspect-ratio:1;border-radius:50%;background:var(--bg);position:absolute}
+.disk.bos{border:2px dashed var(--line)}
+.disk.bos::after{display:none}
+.disk.plan{background:var(--bg2);border:2px solid var(--line)}
+.disk.yap{background:var(--p25);border:0}
+.disk.bugun{outline:2px solid var(--ink);outline-offset:2px}
+.gun b{font-family:var(--display);font-weight:500;color:var(--ink);font-size:12px;min-height:1em}
+/* demir kart */
+.iron{background:var(--iron);color:var(--chalk);border-radius:22px;padding:18px;display:flex;flex-direction:column;gap:12px;position:relative;overflow:hidden}
+.iron .lbl{color:var(--chalk-m)}
+.iron h2{margin:0;font-family:var(--display);font-weight:700;font-size:44px;line-height:.95;text-transform:uppercase;text-wrap:balance}
+.iron .alt{color:var(--chalk-m);font-size:15px;font-weight:500}
+.bar-svg{width:100%;height:auto;display:block}
+.taki{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:14px;font-weight:600;color:var(--chalk-m)}
+.chip{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:3px 10px 3px 4px;background:var(--iron2);color:var(--chalk);font-family:var(--display);font-size:14px}
+.chip s{width:16px;height:16px;border-radius:50%;display:inline-block;box-shadow:inset 0 0 0 1px rgba(0,0,0,.2)}
+.buyuk{font-family:var(--display);font-size:56px;font-weight:700;line-height:.9;font-variant-numeric:tabular-nums}
+.buyuk small{font-size:20px;color:var(--chalk-m);font-weight:500;margin-left:4px}
+.btn-p{border:0;border-radius:16px;padding:15px;background:var(--chalk);color:var(--iron);font-family:var(--display);font-size:20px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;display:flex;justify-content:center;align-items:center;gap:10px;width:100%}
+.btn-p:active,.btn-k:active{transform:scale(.985)}
+.iki{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.kutu{background:var(--bg2);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:2px;min-width:0;border:0;text-align:left}
+.kutu .v{font-family:var(--display);font-size:34px;font-weight:600;line-height:1.05;font-variant-numeric:tabular-nums}
+.kutu .v small{font-size:15px;color:var(--muted);font-weight:500}
+.kutu .s{font-size:13px;color:var(--muted);font-weight:500}
+.band{height:8px;border-radius:4px;background:var(--line);position:relative;margin-top:6px;width:100%}
+.band i{position:absolute;top:0;bottom:0;left:30%;right:30%;background:var(--ok);opacity:.35;border-radius:4px}
+.band b{position:absolute;top:-4px;width:4px;height:16px;border-radius:2px;background:var(--ink);transform:translateX(-2px)}
+.sekme{display:flex;gap:6px;overflow-x:auto}
+.sekme button{flex:none;border:0;border-radius:999px;padding:7px 14px;background:var(--bg2);color:var(--muted);font-family:var(--display);font-size:15px;letter-spacing:.04em;text-transform:uppercase}
+.sekme button.on{background:var(--ink);color:var(--bg)}
+.liste{display:flex;flex-direction:column;background:var(--bg2);border-radius:18px;overflow:hidden}
+.satir{display:flex;align-items:center;gap:12px;padding:12px 14px;border:0;border-top:1px solid var(--line);font-weight:600;background:none;text-align:left;width:100%}
+.satir:first-child{border-top:0}
+.satir img{width:46px;height:46px;border-radius:12px;object-fit:cover;flex:none;background:var(--line)}
+.satir .ad{flex:1;min-width:0}
+.satir .ad small{display:block;font-weight:500;color:var(--muted);font-size:13px}
+.satir .hedef{font-family:var(--display);font-size:18px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.satir.bitti .hedef{color:var(--ok)}
+/* antrenman */
+.ust{display:flex;align-items:center;gap:10px}
+.geri{border:0;background:var(--bg2);width:42px;height:42px;border-radius:14px;font-size:22px;display:grid;place-items:center;flex:none}
+.ilerleme{flex:1;display:flex;align-items:center;gap:3px;height:42px;min-width:0}
+.ilerleme .sh{height:5px;background:var(--steel);flex:1;border-radius:3px;min-width:4px}
+.ilerleme .pl{width:9px;border-radius:2px;flex:none}
+.bitir{border:0;background:var(--bg2);border-radius:13px;padding:0 12px;height:42px;font-family:var(--display);font-size:15px;letter-spacing:.06em;text-transform:uppercase;flex:none}
+.foto{position:relative;border-radius:22px;overflow:hidden;aspect-ratio:16/10;background:var(--bg2)}
 .foto img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.foto img.b{animation:cevir 2.6s infinite}
-
-.foto.dur img.b{animation-play-state:paused}
-@keyframes cevir{0%,38%{opacity:0}50%,88%{opacity:1}100%{opacity:0}}
+.foto img.b{animation:cevir 2.8s infinite}
+@keyframes cevir{0%,40%{opacity:0}50%,90%{opacity:1}100%{opacity:0}}
 @media (prefers-reduced-motion:reduce){.foto img.b{animation:none;opacity:0}}
-.foto .yon{position:absolute;left:10px;bottom:10px;display:flex;gap:6px}
-.foto .yon span{background:rgba(15,23,42,.62);color:#fff;font-size:11.5px;font-weight:700;border-radius:999px;padding:3px 9px}
-.hk-bas{padding:12px 14px;display:flex;flex-direction:column;gap:3px}
-.hk-bas .grp{font-size:11.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
-.hk-bas h3{margin:0;font-size:20px;font-weight:800;letter-spacing:-.01em;line-height:1.2}
-.hk-bas .ipucu{font-size:13.5px;font-weight:600}
-.hk-ic{padding:4px 14px 14px;display:flex;flex-direction:column;gap:8px}
-.meta{font-size:13px;color:var(--muted);font-weight:600}
-.oneri{font-size:13px;background:var(--mor-s);color:var(--mor);border-radius:10px;padding:7px 10px;font-weight:700}
-.vid{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:800;text-decoration:none;border-radius:999px;padding:5px 11px;background:var(--kirmizi-s);color:var(--kirmizi);align-self:flex-start}
-.vid svg{width:14px;height:14px}
-.kolon,.set{display:grid;grid-template-columns:26px minmax(0,1fr) minmax(0,1fr) 46px;gap:8px;align-items:center}
-.kolon{font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.06em;text-align:center}
-.set .n{font-weight:800;color:var(--muted);text-align:center}
-.set input{width:100%;min-width:0;text-align:center;font-weight:800;font-variant-numeric:tabular-nums;background:var(--soft);border:1px solid transparent;border-radius:12px;padding:9px 6px}
-.set input::placeholder{color:var(--muted);opacity:.6}
-.set.ok input{background:var(--accent-soft);color:var(--accent)}
-.tik{width:46px;height:42px;border-radius:13px;border:1px solid var(--line);background:var(--card);color:var(--muted);cursor:pointer;display:grid;place-items:center}
-.tik svg{width:20px;height:20px}
-.set.ok .tik{background:var(--accent);border-color:var(--accent);color:#fff}
-.satir{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.btn{border:1px solid var(--line);background:var(--card);border-radius:14px;padding:11px 15px;font-weight:800;font-size:14px;cursor:pointer;box-shadow:var(--shadow)}
-.btn.ana{background:var(--accent);border-color:var(--accent);color:#fff}
-.btn.kir{color:var(--kirmizi)}
-.btn.kc{padding:6px 11px;font-size:13px;border-radius:11px;box-shadow:none}
-.plaka{display:flex;align-items:center;gap:2px;min-height:34px}
-.plaka .bar{width:22px;height:4px;background:var(--muted);border-radius:2px}
-.plaka .p{width:7px;border-radius:2px;border:1px solid rgba(0,0,0,.15)}
-.plaka small{font-size:12px;color:var(--muted);font-weight:700;margin-left:8px}
-input:focus-visible,select:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.kart{background:var(--card);border-radius:22px;padding:16px;box-shadow:var(--shadow),inset 0 0 0 1px var(--line)}
-.kart h3{margin:0 0 4px;font-size:17px;font-weight:800}
-.alan{width:100%;min-width:0;background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
-.cipler{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px}
-.cip{border:0;border-radius:999px;padding:6px 13px;font-size:13px;font-weight:800;cursor:pointer;white-space:nowrap;background:var(--card);box-shadow:inset 0 0 0 1px var(--line);color:var(--muted)}
-.cip.on{background:var(--ink);color:var(--bg);box-shadow:none}
+.foto .ad{position:absolute;left:0;right:0;bottom:0;padding:40px 16px 14px;background:linear-gradient(to top,rgba(10,10,12,.85),rgba(10,10,12,0));color:#fff;display:flex;flex-direction:column;gap:2px}
+.foto .ad h2{margin:0;font-family:var(--display);font-size:34px;font-weight:700;line-height:1;text-transform:uppercase}
+.foto .ad span{font-size:14px;font-weight:600;opacity:.88}
+.vid{position:absolute;top:12px;right:12px;display:inline-flex;align-items:center;gap:6px;background:rgba(10,10,12,.6);color:#fff;text-decoration:none;border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600}
+.not{background:var(--bg2);border-radius:16px;padding:12px 14px;font-size:15px;font-weight:500;display:flex;gap:10px;align-items:flex-start}
+.not b{font-family:var(--display);font-weight:600;font-size:16px;letter-spacing:.02em}
+.not .ik{flex:none;width:28px;height:28px;border-radius:50%;background:var(--p25);position:relative}
+.not .ik::after{content:"";position:absolute;inset:10px;border-radius:50%;background:var(--bg2)}
+.toplam{display:flex;justify-content:space-between;align-items:flex-end;gap:10px}
+.toplam .f{text-align:right;font-size:13px;color:var(--chalk-m);font-weight:600;line-height:1.35}
+.plakalar{display:flex;align-items:center;justify-content:space-between;gap:4px}
+.plaka{border:0;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-weight:600;padding:0;flex:none;box-shadow:inset 0 0 0 3px rgba(0,0,0,.18)}
+.plaka:active{transform:scale(.92)}
+.plaka span{font-size:15px}
+.plaka.k span{font-size:12px}
+.mini{display:flex;gap:8px}
+.mini button{flex:1;border:0;background:var(--iron2);color:var(--chalk);border-radius:12px;padding:9px;font-weight:600;font-size:14px}
+.tekrar{display:flex;align-items:center;justify-content:space-between;background:var(--bg2);border-radius:20px;padding:10px}
+.tekrar button{width:56px;height:56px;border-radius:16px;border:0;background:var(--bg);font-size:28px;font-weight:500;display:grid;place-items:center}
+.tekrar .v{font-family:var(--display);font-size:48px;font-weight:700;line-height:1;text-align:center;font-variant-numeric:tabular-nums}
+.tekrar .v small{display:block;font-family:var(--body);font-size:13px;color:var(--muted);font-weight:600;text-transform:none;letter-spacing:0}
+.setler{display:flex;gap:8px;flex-wrap:wrap}
+.set{display:flex;align-items:center;gap:8px;background:var(--bg2);border-radius:14px;padding:7px 12px 7px 7px;font-family:var(--display);font-size:16px;font-variant-numeric:tabular-nums;border:0}
+.set i{width:22px;height:22px;border-radius:50%;background:var(--ok);display:grid;place-items:center;color:#fff;font-style:normal;font-size:13px}
+.set.bos{background:transparent;border:2px dashed var(--line);color:var(--muted)}
+.set.bos i{background:var(--line)}
+.kule-sar{display:grid;grid-template-columns:120px minmax(0,1fr);gap:14px;align-items:center}
+.kule{display:flex;flex-direction:column;gap:3px;background:var(--iron2);border-radius:14px;padding:8px}
+.blok{border:0;height:19px;border-radius:4px;background:var(--steel-d);color:var(--chalk);font-family:var(--display);font-size:11px;display:flex;align-items:center;justify-content:space-between;padding:0 8px}
+.blok.secili{background:var(--chalk);color:var(--iron)}
+.blok.ust{background:var(--steel)}
+.blok .pin{width:9px;height:9px;border-radius:50%;background:var(--p25);box-shadow:0 0 0 2px var(--chalk)}
+.kule-ok{border:0;background:var(--iron);color:var(--chalk);border-radius:8px;height:28px;font-size:12px}
+.raf{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 8px;scroll-snap-type:x mandatory}
+.dmb{flex:none;scroll-snap-align:center;border:0;background:var(--iron2);border-radius:14px;padding:10px 8px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--chalk);min-width:64px}
+.dmb.secili{background:var(--chalk);color:var(--iron)}
+.dmb svg{width:46px;height:20px}
+.dmb b{font-family:var(--display);font-size:17px;font-weight:600}
+.btn-k{border:0;border-radius:18px;padding:17px;background:var(--p25);color:#fff;font-family:var(--display);font-size:22px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;width:100%}
+.alt-nav{display:flex;justify-content:space-between;gap:10px}
+.alt-nav button{flex:1;border:1px solid var(--line);background:transparent;border-radius:14px;padding:11px;font-weight:600;font-size:14px}
+.alt-nav button:disabled{opacity:.4}
+.link{border:0;background:none;color:var(--muted);font-weight:600;font-size:14px;text-decoration:underline;text-underline-offset:3px;padding:4px;align-self:center}
+/* alt sekmeler */
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:15;background:var(--iron);display:flex;justify-content:center;padding:6px max(8px,env(safe-area-inset-left,0px)) calc(8px + env(safe-area-inset-bottom,0px))}
+.tabs button{flex:1;max-width:130px;border:0;background:none;color:var(--chalk-m);display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;font-family:var(--display);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+.tabs button.on{color:var(--chalk)}
+.tabs button.on::after{content:"";width:18px;height:3px;border-radius:2px;background:var(--p25)}
+.tabs svg{width:24px;height:24px}
+/* kartlar, formlar */
+.kart{background:var(--bg2);border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.kart h3{margin:0;font-family:var(--display);font-size:20px;font-weight:600;text-transform:uppercase;letter-spacing:.02em}
+.meta{font-size:14px;color:var(--muted);font-weight:500}
+.alan{width:100%;min-width:0;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:11px 12px;font-size:16px}
+.alan:focus,button:focus-visible,a:focus-visible{outline:3px solid var(--p20);outline-offset:1px}
+.btn{border:0;border-radius:14px;padding:12px 16px;background:var(--bg);font-weight:600;font-size:15px}
+.giris .btn{background:var(--bg2)}
+.btn.koyu{background:var(--ink);color:var(--bg)}
+.btn.kir{color:var(--p25)}
+.yan{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .grafik{width:100%;height:auto;display:block}
-.gecmis{display:flex;justify-content:space-between;gap:8px;padding:10px 0;border-top:1px solid var(--line);font-size:14px}
+.gecmis{display:flex;justify-content:space-between;gap:8px;padding:10px 0;border-top:1px solid var(--line);font-size:15px}
 .gecmis:first-of-type{border-top:0}
 .gecmis .s{color:var(--muted);text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
-.bosx{color:var(--muted);font-size:14px;padding:4px 0}
-.duz{display:grid;grid-template-columns:minmax(0,1fr) 52px 70px 32px;gap:6px;align-items:center}
-.duz select,.duz input{padding:8px;font-size:14px}
-.sil{border:0;background:none;color:var(--kirmizi);font-size:22px;cursor:pointer;line-height:1}
+.etk{display:inline-block;border-radius:999px;padding:1px 8px;font-size:12px;font-weight:700;background:var(--p25);color:#fff;margin-left:4px}
+.duz{display:grid;grid-template-columns:minmax(0,1fr) 54px 70px 32px;gap:6px;align-items:center}
+.duz .alan{padding:9px 8px;font-size:15px}
+.sil{border:0;background:none;color:var(--p25);font-size:24px;line-height:1}
 label.lb{display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:700;color:var(--muted);flex:1;min-width:130px}
-.dinlen{position:fixed;left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));max-width:616px;margin:0 auto;background:var(--accent-2);color:#fff;border-radius:20px;padding:10px 12px;display:flex;align-items:center;gap:10px;z-index:21;box-shadow:0 10px 30px rgba(0,0,0,.25)}
-.dinlen .t{font-size:28px;font-weight:800;font-variant-numeric:tabular-nums;min-width:72px}
-.dinlen .rb{flex:1;height:6px;border-radius:3px;background:rgba(255,255,255,.2);overflow:hidden}
-.dinlen .rb i{display:block;height:100%;background:var(--on-hi)}
-.dinlen button{background:rgba(255,255,255,.14);color:#fff;border:0;border-radius:11px;padding:7px 10px;font-weight:800;font-size:13px;cursor:pointer}
-.tost{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:14px;font-weight:700;font-size:14px;z-index:30;max-width:90vw;text-align:center}
-.giris{max-width:420px;margin:8vh auto 0;display:flex;flex-direction:column;gap:12px}
-.giris .alan{font-size:16px}
-.not{font-size:13px;color:var(--muted);font-weight:600}
-.hata{font-size:13px;color:var(--kirmizi);font-weight:700;min-height:1em}
+.hk{background:var(--bg2);border-radius:20px;overflow:hidden}
+.hk .foto{border-radius:0}
+.hk-ic{padding:12px 14px 14px;display:flex;flex-direction:column;gap:10px}
+.tur{display:inline-flex;align-items:center;gap:6px;font-family:var(--display);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.tur s{width:12px;height:12px;border-radius:50%;display:inline-block}
+.giris{max-width:420px;margin:4vh auto 0;display:flex;flex-direction:column;gap:12px}
+.hata{font-size:14px;color:var(--p25);font-weight:600;min-height:1.2em}
+/* dinlenme */
+.dinlen{position:fixed;inset:auto 0 0 0;z-index:20;padding:0 max(12px,env(safe-area-inset-left,0px)) calc(12px + env(safe-area-inset-bottom,0px));display:flex;justify-content:center;pointer-events:none}
+.dinlen>div{pointer-events:auto;width:100%;max-width:496px;background:var(--iron);color:var(--chalk);border-radius:24px;padding:14px 16px;display:flex;align-items:center;gap:14px;box-shadow:0 16px 40px rgba(0,0,0,.3)}
+.dinlen svg{width:84px;height:84px;flex:none}
+.dinlen .y{flex:1;min-width:0}
+.dinlen .y b{font-family:var(--display);font-size:26px;font-weight:600;display:block;font-variant-numeric:tabular-nums}
+.dinlen .y span{font-size:14px;color:var(--chalk-m);font-weight:500}
+.dinlen .bt{display:flex;flex-direction:column;gap:6px}
+.dinlen .bt button{border:0;background:var(--iron2);color:var(--chalk);border-radius:10px;padding:7px 12px;font-weight:600;font-size:14px}
+.tost{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top,0px));transform:translateX(-50%);background:var(--iron);color:var(--chalk);padding:11px 18px;border-radius:14px;font-weight:600;z-index:30;max-width:90vw;text-align:center;font-size:15px}
+@media (prefers-reduced-motion:no-preference){.yeni{animation:tak .35s cubic-bezier(.2,1.4,.4,1);transform-origin:center;transform-box:fill-box}@keyframes tak{from{opacity:0;transform:scaleY(.6)}}}
 </style></head><body>
-<div class="wrap" id="app"></div>
+<div id="app"></div>
+<nav class="tabs" id="tabs" hidden></nav>
 <div class="dinlen" id="dinlen" hidden></div>
 <div class="tost" id="tost" hidden></div>
 
 <script>
-/* ---------- hareket kütüphanesi (fotoğraflar: free-exercise-db, kamu malı) ---------- */
-const GRP={bacak:{ad:"Bacak · kalça",k:"bacak"},itis:{ad:"İtiş · göğüs, omuz, arka kol",k:"itis"},cekis:{ad:"Çekiş · sırt, ön kol",k:"cekis"},karin:{ad:"Karın",k:"karin"}};
+/* ---------- plakalar ---------- */
+const PL={25:{c:"var(--p25)",t:22,h:1,ink:"#fff"},20:{c:"var(--p20)",t:19,h:1,ink:"#fff"},15:{c:"var(--p15)",t:15,h:1,ink:"#17181A"},10:{c:"var(--p10)",t:12,h:1,ink:"#fff"},5:{c:"var(--p5)",t:10,h:.58,ink:"#17181A"},2.5:{c:"var(--p2)",t:8,h:.44,ink:"#fff"},1.25:{c:"var(--p1)",t:7,h:.34,ink:"#17181A"}};
+const SIRA=[25,20,15,10,5,2.5,1.25];
+const DMB=[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40];
+
+/* ---------- hareket kütüphanesi (fotoğraflar: free-exercise-db, kamu malı)
+   tip: bar (20 kg bar + plaka), plaka (kızak + plaka), kule (makine pimi), dambil, vucut (yalnız tekrar), sure (saniye) */
+const GRP={bacak:{ad:"Bacak",c:"var(--p25)"},itis:{ad:"İtiş",c:"var(--p20)"},cekis:{ad:"Çekiş",c:"var(--p10)"},karin:{ad:"Karın",c:"var(--p15)"}};
+const TIP={bar:"Bar",plaka:"Plaka",kule:"Makine",dambil:"Dambıl",vucut:"Vücut ağırlığı",sure:"Süre"};
 const LIB={
- squat:{n:"Squat",id:"Barbell_Squat",g:"bacak",bar:1,en:"barbell back squat",tip:"Göğüs dik, dizler parmak yönünde, kalça diz hizasına insin"},
- deadlift:{n:"Deadlift",id:"Barbell_Deadlift",g:"bacak",bar:1,en:"conventional deadlift",tip:"Bar ayak ortası üstünde, sırt nötr, bar bacağa sürtünerek kalksın"},
- rdl:{n:"Romanian deadlift",id:"Romanian_Deadlift",g:"bacak",bar:1,en:"romanian deadlift",tip:"Sırt düz, kalçayı geriye it, dizler hafif bükük"},
- hipthrust:{n:"Hip thrust",id:"Barbell_Hip_Thrust",g:"bacak",bar:1,en:"barbell hip thrust",tip:"Üstte kalçayı sık, çene içeride, kaburgalar aşağıda"},
- legpress:{n:"Leg press",id:"Leg_Press",g:"bacak",en:"leg press",tip:"Bel sırtlıktan kalkmasın, üstte dizi kilitleme"},
- goblet:{n:"Goblet squat",id:"Goblet_Squat",g:"bacak",en:"goblet squat",tip:"Dambıl göğüste, dirsekler dizlerin içinden geçsin"},
- lunge:{n:"Lunge",id:"Dumbbell_Lunges",g:"bacak",en:"dumbbell lunge",tip:"Gövde dik, arka diz yere yaklaşsın"},
- legcurl:{n:"Leg curl",id:"Lying_Leg_Curls",g:"bacak",en:"lying leg curl",tip:"Kalça sehpadan kalkmasın, yavaş indir"},
- legext:{n:"Leg extension",id:"Leg_Extensions",g:"bacak",en:"leg extension",tip:"Yukarıda bir an sık, kontrollü indir"},
- calf:{n:"Calf raise",id:"Standing_Calf_Raises",g:"bacak",en:"standing calf raise",tip:"Tam aşağı in, yukarıda 1 sn bekle"},
- backext:{n:"Back extension",id:"Hyperextensions_Back_Extensions",g:"bacak",en:"back extension",tip:"Gövde düz çizgiye kadar kalk, aşırı geriye gitme"},
- bench:{n:"Bench press",id:"Barbell_Bench_Press_-_Medium_Grip",g:"itis",bar:1,en:"barbell bench press",tip:"Kürek kemikleri sıkı, bar göğsün alt kısmına insin"},
- dbbench:{n:"Dumbbell bench press",id:"Dumbbell_Bench_Press",g:"itis",en:"dumbbell bench press",tip:"Dambıllar göğüs hizasına kontrollü insin"},
- incdb:{n:"Incline dumbbell press",id:"Incline_Dumbbell_Press",g:"itis",en:"incline dumbbell press",tip:"Sehpa 30 derece, dambıllar üst göğse insin"},
- dbsp:{n:"Dumbbell omuz press",id:"Dumbbell_Shoulder_Press",g:"itis",en:"seated dumbbell shoulder press",tip:"Beli boşluk bırakmadan sırtlığa yasla, baş üstünde birleştir"},
- latraise:{n:"Lateral raise",id:"Side_Lateral_Raise",g:"itis",en:"dumbbell lateral raise",tip:"Dirsek hafif bükük, omuz hizasına kadar kaldır"},
- pushup:{n:"Şınav",id:"Pushups",g:"itis",en:"push up",tip:"Gövde düz, göğüs yere yaklaşsın"},
- dip:{n:"Dips",id:"Dips_-_Chest_Version",g:"itis",en:"chest dips",tip:"Gövde hafif öne, omuz dirsek hizasına insin"},
- fly:{n:"Pec deck",id:"Butterfly",g:"itis",en:"pec deck machine",tip:"Omuzlar geride, göğüsle birleştir"},
- pushdown:{n:"Triceps pushdown",id:"Triceps_Pushdown",g:"itis",en:"triceps pushdown",tip:"Dirsekler yanda sabit, kolu tam aç"},
- latpd:{n:"Lat pulldown",id:"Wide-Grip_Lat_Pulldown",g:"cekis",en:"lat pulldown",tip:"Barı üst göğse çek, dirsekler aşağı ve geriye"},
- pullup:{n:"Barfiks",id:"Pullups",g:"cekis",en:"pull up",tip:"Tam asılıdan başla, çene barın üstüne"},
- row:{n:"Barbell row",id:"Bent_Over_Barbell_Row",g:"cekis",bar:1,en:"barbell bent over row",tip:"Sırt düz, barı göbeğe çek"},
- dbrow:{n:"Tek kol dumbbell row",id:"One-Arm_Dumbbell_Row",g:"cekis",en:"one arm dumbbell row",tip:"Sırt düz, dambılı kalçaya doğru çek"},
- cablerow:{n:"Seated cable row",id:"Seated_Cable_Rows",g:"cekis",en:"seated cable row",tip:"Göğüs dik, tutamağı karna çek"},
- facepull:{n:"Face pull",id:"Face_Pull",g:"cekis",en:"face pull",tip:"İpi yüze çek, dirsekler yüksekte"},
- curl:{n:"Biceps curl",id:"Dumbbell_Bicep_Curl",g:"cekis",en:"dumbbell biceps curl",tip:"Dirsek gövdeye sabit, sallanma"},
- hammer:{n:"Hammer curl",id:"Hammer_Curls",g:"cekis",en:"hammer curl",tip:"Avuçlar birbirine bakar, dirsek sabit"},
- plank:{n:"Plank (sn)",id:"Plank",g:"karin",en:"plank",tip:"Baş, kalça ve topuk tek çizgide, karın sıkı"},
- cablecrunch:{n:"Cable crunch",id:"Cable_Crunch",g:"karin",en:"cable crunch",tip:"Kalça sabit, karınla bük"},
- legraise:{n:"Asılı bacak kaldırma",id:"Hanging_Leg_Raise",g:"karin",en:"hanging leg raise",tip:"Sallanmadan, karınla kaldır"}
+ squat:{n:"Squat",id:"Barbell_Squat",g:"bacak",tip:"bar",en:"barbell back squat",ip:"Göğüs dik, dizler parmak yönünde, kalça diz hizasına insin"},
+ deadlift:{n:"Deadlift",id:"Barbell_Deadlift",g:"bacak",tip:"bar",en:"conventional deadlift",ip:"Bar ayak ortası üstünde, sırt nötr, bar bacağa sürtünerek kalksın"},
+ rdl:{n:"Romanian deadlift",id:"Romanian_Deadlift",g:"bacak",tip:"bar",en:"romanian deadlift",ip:"Sırt düz, kalçayı geriye it, dizler hafif bükük"},
+ hipthrust:{n:"Hip thrust",id:"Barbell_Hip_Thrust",g:"bacak",tip:"bar",en:"barbell hip thrust",ip:"Üstte kalçayı sık, çene içeride"},
+ legpress:{n:"Leg press",id:"Leg_Press",g:"bacak",tip:"plaka",en:"leg press",ip:"Bel sırtlıktan kalkmasın, üstte dizi kilitleme"},
+ goblet:{n:"Goblet squat",id:"Goblet_Squat",g:"bacak",tip:"dambil",en:"goblet squat",ip:"Dambıl göğüste, dirsekler dizlerin içinden geçsin"},
+ lunge:{n:"Lunge",id:"Dumbbell_Lunges",g:"bacak",tip:"dambil",en:"dumbbell lunge",ip:"Gövde dik, arka diz yere yaklaşsın"},
+ legcurl:{n:"Leg curl",id:"Lying_Leg_Curls",g:"bacak",tip:"kule",en:"lying leg curl",ip:"Kalça sehpadan kalkmasın, yavaş indir"},
+ legext:{n:"Leg extension",id:"Leg_Extensions",g:"bacak",tip:"kule",en:"leg extension",ip:"Yukarıda bir an sık, kontrollü indir"},
+ calf:{n:"Calf raise",id:"Standing_Calf_Raises",g:"bacak",tip:"kule",en:"standing calf raise",ip:"Tam aşağı in, yukarıda 1 sn bekle"},
+ backext:{n:"Back extension",id:"Hyperextensions_Back_Extensions",g:"bacak",tip:"vucut",en:"back extension",ip:"Gövde düz çizgiye kadar kalk, aşırı geriye gitme"},
+ bench:{n:"Bench press",id:"Barbell_Bench_Press_-_Medium_Grip",g:"itis",tip:"bar",en:"barbell bench press",ip:"Kürek kemikleri sıkı, bar göğsün altına insin"},
+ dbbench:{n:"Dumbbell bench press",id:"Dumbbell_Bench_Press",g:"itis",tip:"dambil",en:"dumbbell bench press",ip:"Dambıllar göğüs hizasına kontrollü insin"},
+ incdb:{n:"Incline dumbbell press",id:"Incline_Dumbbell_Press",g:"itis",tip:"dambil",en:"incline dumbbell press",ip:"Sehpa 30 derece, dambıllar üst göğse insin"},
+ dbsp:{n:"Dumbbell omuz press",id:"Dumbbell_Shoulder_Press",g:"itis",tip:"dambil",en:"seated dumbbell shoulder press",ip:"Beli sırtlığa yasla, baş üstünde birleştir"},
+ latraise:{n:"Lateral raise",id:"Side_Lateral_Raise",g:"itis",tip:"dambil",en:"dumbbell lateral raise",ip:"Dirsek hafif bükük, omuz hizasına kadar"},
+ pushup:{n:"Şınav",id:"Pushups",g:"itis",tip:"vucut",en:"push up",ip:"Gövde düz, göğüs yere yaklaşsın"},
+ dip:{n:"Dips",id:"Dips_-_Chest_Version",g:"itis",tip:"vucut",en:"chest dips",ip:"Gövde hafif öne, omuz dirsek hizasına insin"},
+ fly:{n:"Pec deck",id:"Butterfly",g:"itis",tip:"kule",en:"pec deck machine",ip:"Omuzlar geride, göğüsle birleştir"},
+ pushdown:{n:"Triceps pushdown",id:"Triceps_Pushdown",g:"itis",tip:"kule",en:"triceps pushdown",ip:"Dirsekler yanda sabit, kolu tam aç"},
+ latpd:{n:"Lat pulldown",id:"Wide-Grip_Lat_Pulldown",g:"cekis",tip:"kule",en:"lat pulldown",ip:"Barı üst göğse çek, dirsekler aşağı ve geriye"},
+ pullup:{n:"Barfiks",id:"Pullups",g:"cekis",tip:"vucut",en:"pull up",ip:"Tam asılıdan başla, çene barın üstüne"},
+ row:{n:"Barbell row",id:"Bent_Over_Barbell_Row",g:"cekis",tip:"bar",en:"barbell bent over row",ip:"Sırt düz, barı göbeğe çek"},
+ dbrow:{n:"Tek kol dumbbell row",id:"One-Arm_Dumbbell_Row",g:"cekis",tip:"dambil",en:"one arm dumbbell row",ip:"Sırt düz, dambılı kalçaya doğru çek"},
+ cablerow:{n:"Seated cable row",id:"Seated_Cable_Rows",g:"cekis",tip:"kule",en:"seated cable row",ip:"Göğüs dik, tutamağı karna çek"},
+ facepull:{n:"Face pull",id:"Face_Pull",g:"cekis",tip:"kule",en:"face pull",ip:"İpi yüze çek, dirsekler yüksekte"},
+ curl:{n:"Biceps curl",id:"Dumbbell_Bicep_Curl",g:"cekis",tip:"dambil",en:"dumbbell biceps curl",ip:"Dirsek gövdeye sabit, sallanma"},
+ hammer:{n:"Hammer curl",id:"Hammer_Curls",g:"cekis",tip:"dambil",en:"hammer curl",ip:"Avuçlar birbirine bakar, dirsek sabit"},
+ plank:{n:"Plank",id:"Plank",g:"karin",tip:"sure",en:"plank",ip:"Baş, kalça ve topuk tek çizgide, karın sıkı"},
+ cablecrunch:{n:"Cable crunch",id:"Cable_Crunch",g:"karin",tip:"kule",en:"cable crunch",ip:"Kalça sabit, karınla bük"},
+ legraise:{n:"Asılı bacak kaldırma",id:"Hanging_Leg_Raise",g:"karin",tip:"vucut",en:"hanging leg raise",ip:"Sallanmadan, karınla kaldır"}
 };
-const WD=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
-const SVG={
+const WD=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"], WK=["Pzt","Sal","Çar","Per","Cum","Cmt","Paz"];
+const IK={
  ayar:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',
- oyna:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l13-7.5z"/></svg>',
- tik:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
- grafik:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16M5 15l4-4 3 3 6-7"/></svg>',
- kitap:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5M8 7h7"/></svg>',
- takvim:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg>',
- video:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg>'
+ bugun:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 12h20"/><rect x="5" y="6" width="3" height="12" rx="1"/><rect x="16" y="6" width="3" height="12" rx="1"/></svg>',
+ ilerleme:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16M5 15l4-4 3 3 6-7"/></svg>',
+ hareket:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="7" height="7" rx="2"/><rect x="14" y="4" width="7" height="7" rx="2"/><rect x="3" y="15" width="7" height="5" rx="2"/><rect x="14" y="15" width="7" height="5" rx="2"/></svg>',
+ program:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg>',
+ oyna:'<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg>'
 };
 
 /* ---------- yardımcılar ---------- */
@@ -213,32 +254,37 @@ const $=id=>document.getElementById(id);
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const pad=n=>String(n).padStart(2,"0");
-const bugun=()=>{const d=new Date();return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())};
+const gunStr=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+const bugun=()=>gunStr(new Date());
 const tarih=s=>{const [y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString("tr-TR",{day:"numeric",month:"short"})};
+const haftaGunu=s=>{const [y,m,d]=s.split("-").map(Number);return (new Date(y,m-1,d).getDay()+6)%7};
+const haftaBasi=()=>{const d=new Date();d.setDate(d.getDate()-(d.getDay()+6)%7);return gunStr(d)};
 const sayi=v=>{const n=parseFloat(String(v??"").replace(",","."));return isFinite(n)?n:0};
-const yaz=n=>(Math.round(n*10)/10).toLocaleString("tr-TR");
-const haftaBasi=()=>{const d=new Date();d.setDate(d.getDate()-(d.getDay()+6)%7);return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())};
+const yaz=n=>(Math.round(n*100)/100).toLocaleString("tr-TR");
+const arr=v=>Array.isArray(v)?v:(v&&typeof v==="object"?Object.values(v):[]);
 const img=(k,i)=>`img/${LIB[k].id}-${i}.webp`;
 const vidUrl=k=>"https://www.youtube.com/results?search_query="+encodeURIComponent(LIB[k].en+" proper form");
-const arr=v=>Array.isArray(v)?v:(v&&typeof v==="object"?Object.values(v):[]);
+const tipOf=k=>LIB[k].tip, birimOf=k=>tipOf(k)==="sure"?"sn":"tekrar";
+const varsayDn=k=>({bar:150,plaka:120,kule:90,dambil:75,vucut:75,sure:60})[tipOf(k)];
 
 /* ---------- veri ---------- */
-const LS="fitness.v2", LSV="fitness.gorunum.v2";
-const h=(k,sets,reps,rest)=>({id:uid(),k,sets,reps,rest});
+const LS="fitness.v2", LSV="fitness.gorunum.v3";
+const h=(k,sets,reps,rest)=>({id:uid(),k,sets,reps,rest:rest||varsayDn(k)});
 function ilkProgram(){return {plan:{days:[
-  {id:"gA",name:"Gün A",wd:0,ex:[h("squat",3,"6-8",150),h("bench",3,"6-8",150),h("latpd",3,"8-12",90),h("rdl",3,"8-10",120),h("latraise",2,"12-15",60),h("plank",2,"30-45",60)]},
-  {id:"gB",name:"Gün B",wd:3,ex:[h("legpress",3,"10-12",120),h("row",3,"8-10",120),h("dbsp",3,"8-10",90),h("incdb",3,"8-12",90),h("legcurl",2,"10-15",60),h("curl",2,"10-12",60),h("pushdown",2,"10-12",60)]}
+  {id:"gA",name:"Gün A",wd:0,ex:[h("squat",3,"6-8"),h("bench",3,"6-8"),h("latpd",3,"8-12"),h("rdl",3,"8-10",120),h("latraise",2,"12-15",60),h("plank",2,"30-45",60)]},
+  {id:"gB",name:"Gün B",wd:3,ex:[h("legpress",3,"10-12"),h("row",3,"8-10",120),h("dbsp",3,"8-10",90),h("incdb",3,"8-12",90),h("legcurl",2,"10-15",60),h("curl",2,"10-12",60),h("pushdown",2,"10-12",60)]}
  ]},body:[],activeSid:null,sessions:{}}}
 function duzenle(x){
-  x=x||{}; x.plan=x.plan||{}; x.plan.days=arr(x.plan.days).map(d=>({...d,ex:arr(d.ex).filter(e=>LIB[e.k])}));
+  x=x||{}; x.plan=x.plan||{}; x.plan.days=arr(x.plan.days).map(d=>({...d,ex:arr(d.ex).filter(e=>LIB[e.k]).map(e=>({...e,rest:e.rest||varsayDn(e.k)}))}));
   x.body=arr(x.body); x.sessions=x.sessions||{}; x.activeSid=x.activeSid||null;
-  Object.values(x.sessions).forEach(s=>{s.sets=s.sets||{};Object.keys(s.sets).forEach(k=>s.sets[k]=arr(s.sets[k]).map(z=>({kg:z.kg??"",r:z.r??"",ok:!!z.ok})));s.keys=s.keys||{}});
+  Object.values(x.sessions).forEach(s=>{s.sets=s.sets||{};Object.keys(s.sets).forEach(k=>s.sets[k]=arr(s.sets[k]).filter(z=>z&&z.ok!==false).map(z=>({kg:sayi(z.kg),r:sayi(z.r),ok:true})));s.keys=s.keys||{}});
   return x;
 }
 let S; try{S=JSON.parse(localStorage.getItem(LS)||"null")}catch(e){S=null}
 S=duzenle(S&&S.plan?S:ilkProgram());
-let V={v:"ana",gun:null,grp:"",q:"",pk:"squat",y:0};
+let V={v:"ana",gun:null,i:0,grp:"",q:"",pk:"squat",y:0,g:{}};
 try{Object.assign(V,JSON.parse(localStorage.getItem(LSV)||"{}"))}catch(e){}
+V.g=V.g||{};
 
 /* ---------- Firebase (fitness projesi; salon/<salonId>/uye/<uid>) ---------- */
 const FB={apiKey:"AIzaSyAcRdjIei7JjAlvoaRWhDJJAglHRIa5V1Q",authDomain:"fitness-e8b39.firebaseapp.com",databaseURL:"https://fitness-e8b39-default-rtdb.europe-west1.firebasedatabase.app",projectId:"fitness-e8b39",storageBucket:"fitness-e8b39.firebasestorage.app",messagingSenderId:"867214972425",appId:"1:867214972425:web:64362f55b57e08ab164ad8"};
@@ -259,15 +305,15 @@ async function fbBaslat(){
     fbDurum="hazir";
     firebase.auth().onAuthStateChanged(async u=>{kul=u; izinYok=false; salon=null;
       if(u){try{const tel=(u.email||"").replace(ALAN,"");const r=firebase.database().ref("izin/"+tel);let v=(await r.get()).val();if(!v&&tel===YONETICI){await r.set("ana");v="ana"}if(v&&typeof v==="string"){salon=v;baglan()}else izinYok=true}catch(e){izinYok=true}}
-      else{if(kok){kok.off();kok=null}esit=false} ciz()});
-  }catch(e){fbDurum="yok"; ciz()}
+      else{if(kok){kok.off();kok=null}esit=false} ciz(true)});
+  }catch(e){fbDurum="yok"; ciz(true)}
 }
 function baglan(){
   kok=firebase.database().ref("salon/"+salon+"/uye/"+kul.uid); let ilk=true;
   kok.on("value",snap=>{
     const d=snap.val(); esit=true;
-    if(ilk&&!d){ilk=false; kaydet(["main",...Object.keys(S.sessions).map(s=>"s/"+s)]); ciz(); return}
-    ilk=false; if(!d){ciz();return}
+    if(ilk&&!d){ilk=false; kaydet(["main",...Object.keys(S.sessions).map(s=>"s/"+s)]); ciz(true); return}
+    ilk=false; if(!d){ciz(true);return}
     const uzak=duzenle({plan:d.main&&d.main.plan,body:d.main&&d.main.body,activeSid:d.main&&d.main.activeSid,sessions:d.s||{}});
     let degisti=false;
     if(!kirli.has("main")&&d.main){const a=JSON.stringify([S.plan,S.body,S.activeSid]),b=JSON.stringify([uzak.plan,uzak.body,uzak.activeSid]); if(a!==b){S.plan=uzak.plan;S.body=uzak.body;S.activeSid=uzak.activeSid;degisti=true}}
@@ -303,197 +349,227 @@ const seanslar=()=>Object.values(S.sessions).sort((a,b)=>(b.date+String(b.t)).lo
 const gunSeansi=id=>{const a=aktif();return a&&a.dayId===id?a:null};
 function seansAc(dayId){let s=gunSeansi(dayId);if(s)return s;const d=gunBul(dayId);
   s={sid:uid(),dayId,dayName:d.name,date:bugun(),t:Date.now(),done:false,sets:{},keys:{}};S.sessions[s.sid]=s;S.activeSid=s.sid;return s}
-function setler(s,e){const bos=()=>Array.from({length:e.sets},()=>({kg:"",r:"",ok:false}));if(!s)return bos();
-  if(!s.sets[e.id])s.sets[e.id]=bos(); s.keys[e.id]=e.k; return s.sets[e.id]}
+const kayitli=(s,e)=>s&&s.sets[e.id]?s.sets[e.id]:[];
 function oncekiSet(k,haric){
   for(const s of seanslar()){if(s.sid===haric)continue;
-    for(const [eid,kk] of Object.entries(s.keys||{})){if(kk!==k)continue;const a=(s.sets[eid]||[]).filter(x=>x.ok);if(a.length)return {s,a}}}
+    for(const [eid,kk] of Object.entries(s.keys||{})){if(kk!==k)continue;const a=(s.sets[eid]||[]);if(a.length)return {s,a}}}
   return null}
-const ustTekrar=r=>{const m=String(r).match(/(\d+)\s*$/);return m?+m[1]:0};
-function artirOnerisi(e,son){
-  if(!son)return null;const ust=ustTekrar(e.reps);if(!ust)return null;
-  if(!(son.a.length>=e.sets&&son.a.every(x=>sayi(x.r)>=ust)))return null;
-  const kg=Math.max(...son.a.map(x=>sayi(x.kg)));
-  if(!kg)return `Geçen sefer tüm setlerde ${ust}: bu sefer tekrarı artır`;
-  const art=LIB[e.k].bar?2.5:(kg>=20?2:1);
-  return `Geçen sefer tüm setlerde ${ust} tekrar: bu sefer ${yaz(kg+art)} kg dene`;
+const aralik=r=>{const m=String(r).match(/(\d+)\D*(\d+)?/);if(!m)return [8,12];const a=+m[1],b=m[2]?+m[2]:a;return [a,b]};
+function oneri(e,haric){
+  const [alt,ust]=aralik(e.reps),son=oncekiSet(e.k,haric),tip=tipOf(e.k);
+  if(!son){const kg={bar:20,plaka:40,kule:20,dambil:6,vucut:0,sure:0}[tip];return {kg,r:tip==="sure"?ust:alt,not:null}}
+  const kg=Math.max(...son.a.map(x=>x.kg)),r0=son.a[0].r;
+  const tamam=son.a.length>=e.sets&&son.a.every(x=>x.r>=ust);
+  if(tip==="sure")return {kg:0,r:tamam?r0+5:r0,not:tamam?`Geçen sefer ${r0} sn tuttun, bugün ${r0+5} sn dene`:null};
+  if(tip==="vucut")return {kg:0,r:tamam?ust+1:r0,not:tamam?`Geçen sefer tüm setlerde ${ust}: bugün ${ust+1} tekrar dene`:null};
+  if(!tamam)return {kg,r:r0,not:`Geçen sefer üst sınıra (${ust}) her sette ulaşmadın, aynı kiloda tekrarı artır`};
+  if(tip==="dambil"){const y=DMB.find(d=>d>kg)||kg;return {kg:y,r:alt,not:`Geçen sefer tüm setlerde ${ust} tekrar: bugün ${yaz(y)} kg dambıl al`}}
+  const art=tip==="bar"?2.5:5;const y=kg+art;
+  return {kg:y,r:alt,not:tip==="kule"?`Geçen sefer tüm setlerde ${ust} tekrar: pimi bir blok aşağı, ${yaz(y)} kg`:`Geçen sefer tüm setlerde ${ust} tekrar: bugün ${yaz(y)} kg. Her yana ${yaz(art/2)} kg ekle`};
 }
-const e1rm=x=>{const kg=sayi(x.kg),r=sayi(x.r);return kg>0&&r>0?kg*(1+r/30):0};
-const hacim=s=>{let v=0;Object.values(s.sets).forEach(a=>a.forEach(x=>{if(x.ok)v+=sayi(x.kg)*sayi(x.r)}));return v};
-const biten=s=>{let n=0;Object.values(s.sets).forEach(a=>a.forEach(x=>{if(x.ok)n++}));return n};
-const toplamSet=d=>d.ex.reduce((a,e)=>a+e.sets,0);
-const PC={25:["#D7263D",34],20:["#1F5BD8",32],15:["#F2C230",28],10:["#1E9E5A",24],5:["#F3F4F6",18],2.5:["#D7263D",14],1.25:["#AEB5C0",12]};
-function plakaHTML(kg){
-  if(!kg)return ""; if(kg<20)return `<div class="plaka"><small>Boş bar 20 kg</small></div>`;
-  let yan=(kg-20)/2;const ps=[];for(const p of [25,20,15,10,5,2.5,1.25]){while(yan>=p-1e-9){ps.push(p);yan-=p}}
-  return `<div class="plaka" aria-label="Bir yana takılacak plakalar"><span class="bar"></span>${ps.map(p=>`<span class="p" style="height:${PC[p][1]}px;background:${PC[p][0]}"></span>`).join("")}<small>${ps.length?"Her yana "+ps.map(yaz).join(" + "):"Yalnız bar"}</small></div>`;
+const tabanKg=k=>tipOf(k)==="bar"?20:0;
+function plakala(kg,taban){let yan=Math.max(0,(kg-taban)/2);const o=[];for(const p of SIRA){while(yan>=p-1e-9){o.push(p);yan-=p}}return o}
+/* girişteki (henüz kaydedilmemiş) değer: V.g[exId] = {yan,kg,r}; yoksa öneriden kurulur */
+function giris(e){
+  let g=V.g[e.id];
+  if(!g){const s=aktif(),o=oneri(e,s&&s.sid),tip=tipOf(e.k);g={kg:o.kg,r:o.r,yan:(tip==="bar"||tip==="plaka")?plakala(o.kg,tabanKg(e.k)):[]};V.g[e.id]=g}
+  return g;
 }
-function fotoHTML(k){return `<div class="foto" data-act="foto"><img src="${img(k,0)}" alt="${esc(LIB[k].n)} başlangıç" loading="lazy"><img class="b" src="${img(k,1)}" alt="" loading="lazy"></div>`}
-function basHTML(k,ek){const L=LIB[k],g=L.g;
-  return `<div class="hk-bas" style="background:var(--${g}-s);color:var(--${g})"><span class="grp">${GRP[g].ad}</span><h3>${esc(L.n)}</h3><span class="ipucu">${esc(L.tip)}</span>${ek||""}</div>`}
+const girisKg=e=>{const g=giris(e),tip=tipOf(e.k);return (tip==="bar"||tip==="plaka")?tabanKg(e.k)+2*g.yan.reduce((a,b)=>a+b,0):g.kg};
+const hacim=s=>{let v=0;Object.values(s.sets).forEach(a=>a.forEach(x=>{v+=x.kg*x.r}));return v};
+const biten=s=>{let n=0;Object.values(s.sets).forEach(a=>{n+=a.length});return n};
+const e1rm=x=>x.kg>0&&x.r>0?x.kg*(1+x.r/30):0;
+function siradakiGun(){const a=aktif();if(a&&gunBul(a.dayId))return a.dayId;const n=S.plan.days.length;if(!n)return null;
+  const sb=seanslar().find(s=>s.done);let i=0;if(sb){const j=S.plan.days.findIndex(d=>d.id===sb.dayId);i=(j+1)%n}return S.plan.days[i].id}
+
+/* ---------- çizimler ---------- */
+function barSVG(yan,{yeniIdx=-1,taban=20}={}){
+  const W=340,H=124,cy=62,yuk=110,xL=124,xR=W-124,uc=6,kol=8,sleeve=xL-kol-uc-2;
+  const top=yan.reduce((a,p)=>a+PL[p].t+2,0);const olc=top>sleeve?sleeve/top:1;
+  const metal="var(--steel)";let cl=xL-kol-2,cr=xR+kol+2,g="";
+  yan.forEach((p,i)=>{const P=PL[p],t=P.t*olc,hh=yuk*P.h,r=Math.min(3,t/2),y=cy-hh/2,cls=i===yeniIdx?' class="yeni"':'';
+    const tek=X=>`<rect x="${X.toFixed(1)}" y="${y}" width="${t.toFixed(1)}" height="${hh}" rx="${r}" fill="${P.c}" stroke="rgba(0,0,0,.25)"/>${hh>70&&t>10?`<rect x="${(X+t/2-1).toFixed(1)}" y="${y+7}" width="2" height="${hh-14}" fill="rgba(255,255,255,.2)"/>`:""}`;
+    g+=`<g${cls}>${tek(cl-t)}${tek(cr)}</g>`;cl-=t+2*olc;cr+=t+2*olc});
+  const govde=taban?`<rect x="${xL}" y="${cy-4}" width="${xR-xL}" height="8" rx="2" fill="${metal}"/>`:`<rect x="${xL}" y="${cy-18}" width="${xR-xL}" height="36" rx="6" fill="var(--steel-d)"/><text x="${W/2}" y="${cy+5}" text-anchor="middle" font-family="Oswald,sans-serif" font-size="13" fill="var(--chalk)" letter-spacing="1">KIZAK</text>`;
+  return `<svg class="bar-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Her yana ${yan.map(yaz).join(", ")||"plaka yok"}">
+   <rect x="${uc}" y="${cy-6}" width="${xL-kol-uc}" height="12" rx="3" fill="${metal}"/><rect x="${xR+kol}" y="${cy-6}" width="${W-uc-xR-kol}" height="12" rx="3" fill="${metal}"/>
+   ${govde}<rect x="${xL-kol}" y="${cy-15}" width="${kol}" height="30" rx="2" fill="${metal}"/><rect x="${xR}" y="${cy-15}" width="${kol}" height="30" rx="2" fill="${metal}"/>${g}</svg>`;
+}
+const dmbSVG='<svg viewBox="0 0 46 20" aria-hidden="true"><rect x="0" y="3" width="8" height="14" rx="2" fill="currentColor"/><rect x="38" y="3" width="8" height="14" rx="2" fill="currentColor"/><rect x="8" y="8" width="30" height="4" rx="1" fill="currentColor" opacity=".6"/></svg>';
+const adH=k=>`<span lang="${k==="pullup"?"tr":"en"}">${esc(LIB[k].n)}</span>`;
+const plakaChip=p=>`<span class="chip"><s style="background:${PL[p].c}"></s>${yaz(p)}</span>`;
+function hedefYazi(e){const tip=tipOf(e.k),g=giris(e);return tip==="sure"?`${g.r} sn`:tip==="vucut"?`${g.r} tekrar`:`${yaz(girisKg(e))} kg`}
 
 /* ---------- sayfalar ---------- */
+function ust(baslik){return `<header class="top">${baslik?`<h1 class="bas">${baslik}</h1>`:`<span class="mark"><i></i><i></i>FITNESS</span>`}<span class="sag">${syncHTML()}<button class="ikb" data-a="git" data-v="ayar" aria-label="Ayarlar">${IK.ayar}</button></span></header>`}
 function sAna(){
-  const a=aktif(), hb=haftaBasi(), bitenHafta=seanslar().filter(s=>s.done&&s.date>=hb);
-  const bw=S.body.slice().sort((x,y)=>x.d.localeCompare(y.d)), son=bw[bw.length-1], ilk=bw[0];
-  const n=S.plan.days.length, oran=n?Math.min(100,Math.round(bitenHafta.length/n*100)):0;
-  const setHafta=bitenHafta.reduce((t,s)=>t+biten(s),0);
-  let devam="";
-  if(a){const d=gunBul(a.dayId)||{name:a.dayName,ex:[]};const e=d.ex.find(e=>!(a.sets[e.id]||[]).length||!a.sets[e.id].every(x=>x.ok));
-    const no=e?(a.sets[e.id]||[]).filter(x=>x.ok).length+1:0;const o=e?oncekiSet(e.k,a.sid):null;
-    devam=`<button class="devam" data-act="ac" data-id="${d.id}"><span class="dv-y"><small>Kaldığın yer</small><b>${esc(d.name)}${e?" · "+esc(LIB[e.k].n):""}</b><span>${e?`${no}. set${o?` · son ${yaz(sayi(o.a[0].kg))} kg × ${esc(o.a[0].r)}`:""}`:"Tüm setler bitti, antrenmanı kapat"}</span></span><span class="oyna">${SVG.oyna}</span></button>`;
-  }else if(n){const sb=seanslar().find(s=>s.done);let i=0;if(sb){const j=S.plan.days.findIndex(d=>d.id===sb.dayId);i=(j+1)%n}const d=S.plan.days[i];
-    devam=`<button class="devam" data-act="ac" data-id="${d.id}"><span class="dv-y"><small>Sıradaki antrenman</small><b>${esc(d.name)}</b><span>${d.ex.length} hareket · ${toplamSet(d)} set</span></span><span class="oyna">${SVG.oyna}</span></button>`}
-  const gunler=S.plan.days.map(d=>{const yap=bitenHafta.some(s=>s.dayId===d.id),simdi=a&&a.dayId===d.id;
-    const et=simdi?`<span class="etk now">Devam ediyor</span>`:yap?`<span class="etk ok">✓ Bu hafta yapıldı</span>`:`<span class="etk bos">${WD[d.wd]||""}</span>`;
-    const k=d.ex[0]&&d.ex[0].k;
-    return `<button class="kutu" data-act="ac" data-id="${d.id}"><span class="ik" style="background:var(--soft)">${k?`<img src="${img(k,0)}" alt="">`:""}</span><b>${esc(d.name)}</b><small>${d.ex.slice(0,2).map(e=>esc(LIB[e.k].n)).join(" · ")}${d.ex.length>2?` +${d.ex.length-2}`:""}</small>${et}</button>`}).join("");
-  return `<header class="ust"><img class="logo" src="icon-192.png" alt=""><div><h1>Fitness</h1><p>Haftada ${n} gün · kilo koru, kas yap</p></div><button class="ikb" data-act="git" data-v="ayar" aria-label="Ayarlar">${SVG.ayar}</button></header>
-  <div class="stack" style="margin-top:12px">
-   <section class="bakiye"><div class="bk-ust"><span>Bu hafta</span>${syncHTML()}</div>
-    <div class="bk-sayi"><b>${bitenHafta.length}/${n}</b><span>antrenman</span></div>
-    <div class="bk-bar"><i style="width:${oran}%"></i></div>
-    <div class="kirilim"><span><small>Kilo</small><b>${son?yaz(son.kg):"—"}</b></span>${son&&ilk?`<span><small>Başlangıca</small><b>${son.kg-ilk.kg>0?"+":""}${yaz(son.kg-ilk.kg)}</b></span>`:""}<span><small>Set</small><b>${setHafta}</b></span></div>
-    ${devam}</section>
-   <div class="kutular">${gunler}
-    <button class="kutu" data-act="git" data-v="ilerleme"><span class="ik" style="background:var(--cekis-s);color:var(--cekis)">${SVG.grafik}</span><b>İlerleme</b><small>Kilo, güç, rekorlar</small></button>
-    <button class="kutu" data-act="git" data-v="lib"><span class="ik" style="background:var(--karin-s);color:var(--karin)">${SVG.kitap}</span><b>Hareketler</b><small>${Object.keys(LIB).length} hareket, fotoğraflı</small></button>
-    <button class="kutu ${(S.plan.days.length+3)%2?"gen":""}" data-act="git" data-v="program"><span class="ik" style="background:var(--itis-s);color:var(--itis)">${SVG.takvim}</span><b>Program</b><small>Gün ve hareket düzenle</small></button>
-   </div>
+  if(!S.plan.days.length)return ust()+`<div class="kart"><h3>Program boş</h3><span class="meta">Program sekmesinden bir gün ekle.</span></div>`;
+  if(!V.gun||!gunBul(V.gun))V.gun=siradakiGun();
+  const d=gunBul(V.gun),a=aktif(),s=gunSeansi(d.id),hb=haftaBasi(),bg=haftaGunu(bugun());
+  const haftaS=seanslar().filter(x=>x.date>=hb);const yapildi=new Set(haftaS.filter(x=>x.done||biten(x)).map(x=>haftaGunu(x.date)));
+  const planWd={};S.plan.days.forEach(x=>{planWd[x.wd]=x.name.replace(/^Gün\s*/i,"")});
+  const ton=Math.round(haftaS.reduce((t,x)=>t+hacim(x),0)),setN=haftaS.reduce((t,x)=>t+biten(x),0);
+  const j=d.ex.findIndex(e=>kayitli(s,e).length<e.sets);const e=d.ex[Math.max(0,j)];
+  let hero="";
+  if(e){const tip=tipOf(e.k),g=giris(e);
+    const yuk=j<0?"":(tip==="bar"||tip==="plaka")?`${barSVG(g.yan,{taban:tabanKg(e.k)})}<div class="taki">Her yana: ${g.yan.length?g.yan.map(plakaChip).join(""):"plaka yok"}</div>`
+      :tip==="kule"?`<span class="buyuk">${yaz(g.kg)}<small>kg · makine</small></span>`:tip==="dambil"?`<span class="buyuk">${yaz(g.kg)}<small>kg · dambıl</small></span>`
+      :`<span class="buyuk">${g.r}<small>${birimOf(e.k)}</small></span>`;
+    const etiket=s?"Devam ediyor":d.id===siradakiGun()?"Sıradaki":"Seçili gün";
+    hero=`<section class="iron"><span class="lbl">${etiket} · ${esc(d.name)} · ${d.ex.length} hareket</span>
+     <h2>${j<0?"Hepsi tamam":adH(e.k)}</h2><span class="alt">${j<0?"Tüm setler kaydedildi, antrenmanı kapat":`Bugünkü yükün: ${hedefYazi(e)}`}</span>${yuk}
+     <button class="btn-p" data-a="${j<0?"bitir":"ac"}" data-i="${Math.max(0,j)}">${j<0?"Antrenmanı bitir":s?"Devam et":"Antrenmanı başlat"} ${IK.oyna}</button></section>`}
+  const bw=S.body.slice().sort((x,y)=>x.d.localeCompare(y.d)),son=bw[bw.length-1],ilk=bw[0];
+  const fark=son&&ilk?son.kg-ilk.kg:0,pos=Math.max(4,Math.min(96,50+fark*20));
+  return ust()+`<div class="stack">
+   <div class="hafta">${WK.map((w,i)=>{const p=planWd[i];return `<div class="gun"><span class="disk ${i===bg?"bugun ":""}${yapildi.has(i)?"yap":p?"plan":"bos"}"></span><span>${w}</span><b>${p?esc(p):""}</b></div>`}).join("")}</div>
+   ${S.plan.days.length>1?`<div class="sekme">${S.plan.days.map(x=>`<button class="${x.id===d.id?"on":""}" data-a="gunSec" data-id="${x.id}">${esc(x.name)}</button>`).join("")}</div>`:""}
+   ${hero}
+   ${a&&a.dayId!==d.id?`<div class="not"><span class="ik"></span><span>Yarım kalan <b>${esc(a.dayName)}</b> antrenmanın var. <button class="link" data-a="gunSec" data-id="${a.dayId}">Oraya dön</button></span></div>`:""}
+   <div class="liste">${d.ex.map((x,i)=>{const n=kayitli(s,x).length,b=n>=x.sets;return `<button class="satir ${b?"bitti":""}" data-a="ac" data-i="${i}"><img src="${img(x.k,0)}" alt="" loading="lazy"><span class="ad">${esc(LIB[x.k].n)}<small>${b?"✓ tamam":n?`${n}/${x.sets} set`:`${x.sets} set × ${esc(x.reps)}${tipOf(x.k)==="sure"?" sn":""}`}</small></span><span class="hedef">${b?"✓":hedefYazi(x)}</span></button>`}).join("")||`<div class="satir">Bu günde hareket yok</div>`}</div>
+   <div class="iki">
+    <button class="kutu" data-a="git" data-v="ilerleme"><span class="lbl">Bu hafta</span><span class="v">${ton.toLocaleString("tr-TR")}<small> kg</small></span><span class="s">${setN} sette kaldırdın</span></button>
+    <button class="kutu" data-a="git" data-v="ilerleme"><span class="lbl">Vücut ağırlığı</span><span class="v">${son?yaz(son.kg):"—"}<small> kg</small></span>${son?`<span class="band"><i></i><b style="left:${pos}%"></b></span><span class="s">${Math.abs(fark)<=1?"Koruma bandında":(fark>0?"+":"")+yaz(fark)+" kg"}</span>`:`<span class="s">Kilonu gir</span>`}</button>
+   </div></div>`;
+}
+function sEx(){
+  const d=gunBul(V.gun);if(!d||!d.ex.length){V.v="ana";return sAna()}
+  if(V.i>=d.ex.length)V.i=d.ex.length-1;
+  const i=V.i,e=d.ex[i],L=LIB[e.k],tip=L.tip,s=gunSeansi(d.id),kay=kayitli(s,e),g=giris(e),o=oneri(e,s&&s.sid),kg=girisKg(e);
+  const ilerle=`<div class="ilerleme" aria-label="Antrenman ilerlemesi">${d.ex.map((q,j)=>{const b=kayitli(s,q).length>=q.sets;return `<span class="pl" style="height:${j===i?34:24}px;background:${b?"var(--p25)":j===i?"var(--ink)":"var(--line)"}"></span>`}).join('<span class="sh"></span>')}</div>`;
+  let gir="";
+  if(tip==="bar"||tip==="plaka"){
+    const boy={25:54,20:50,15:46,10:42,5:36,2.5:32,1.25:30},taban=tabanKg(e.k);
+    gir=`<section class="iron">
+     <div class="toplam"><span class="buyuk">${yaz(kg)}<small>kg</small></span><span class="f">${taban?`Bar ${taban}<br>`:"Kızak hariç<br>"}+ her yana ${yaz((kg-taban)/2)}</span></div>
+     ${barSVG(g.yan,{yeniIdx:g.yeni??-1,taban})}
+     <span class="lbl">Plakaya dokun, iki yana takılsın</span>
+     <div class="plakalar">${SIRA.map(p=>`<button class="plaka ${p<5?"k":""}" data-a="tak" data-p="${p}" aria-label="${yaz(p)} kiloluk plaka tak" style="width:${boy[p]}px;height:${boy[p]}px;background:${PL[p].c};color:${PL[p].ink}"><span>${yaz(p)}</span></button>`).join("")}</div>
+     <div class="mini"><button data-a="cikar">Son plakayı çıkar</button><button data-a="bosalt">${taban?"Barı":"Kızağı"} boşalt</button></div></section>`;
+  }else if(tip==="kule"){
+    const ustW=Math.max(60,Math.ceil((g.kg+25)/5)*5),bl=[];for(let w=ustW;w>ustW-60&&w>=5;w-=5)bl.push(w);
+    gir=`<section class="iron"><div class="kule-sar">
+      <div class="kule" role="group" aria-label="Ağırlık kulesi"><button class="kule-ok" data-a="kule+" aria-label="Daha ağır">▲</button>${bl.map(w=>`<button class="blok ${w===g.kg?"secili":w>g.kg?"ust":""}" data-a="pin" data-w="${w}" aria-label="${w} kilo">${w}${w===g.kg?'<span class="pin"></span>':""}</button>`).join("")}<button class="kule-ok" data-a="kule-" aria-label="Daha hafif">▼</button></div>
+      <div class="stack" style="gap:6px"><span class="lbl">Pimi tak</span><span class="buyuk">${yaz(g.kg)}<small>kg</small></span><span style="color:var(--chalk-m);font-size:14px;font-weight:500">Makinede pimi taktığın bloğa dokun</span></div>
+     </div></section>`;
+  }else if(tip==="dambil"){
+    gir=`<section class="iron"><div class="toplam"><span class="buyuk">${yaz(g.kg)}<small>kg</small></span><span class="f">Her elde bir dambıl<br>Raftan seç</span></div>
+     <div class="raf" id="raf">${DMB.map(w=>`<button class="dmb ${w===g.kg?"secili":""}" data-a="dmb" data-w="${w}" aria-label="${w} kiloluk dambıl">${dmbSVG}<b>${w}</b></button>`).join("")}</div></section>`;
+  }
+  const setler=Array.from({length:Math.max(e.sets,kay.length)},(_,j)=>{const x=kay[j];return x?`<span class="set"><i>✓</i>${tip==="sure"?x.r+" sn":tip==="vucut"?x.r+" tekrar":`${yaz(x.kg)} × ${x.r}`}</span>`:`<span class="set bos"><i></i>${j+1}. set</span>`}).join("");
+  const bitti=kay.length>=e.sets,son=i===d.ex.length-1;
+  return `<div class="stack">
+   <div class="ust"><button class="geri" data-a="git" data-v="ana" aria-label="Ana ekran">‹</button>${ilerle}${s?`<button class="bitir" data-a="bitir">Bitir</button>`:""}</div>
+   <div class="foto"><img src="${img(e.k,0)}" alt="${esc(L.n)} başlangıç"><img class="b" src="${img(e.k,1)}" alt=""><a class="vid" href="${vidUrl(e.k)}" target="_blank" rel="noopener">${IK.oyna} Video</a><div class="ad"><span>${i+1}/${d.ex.length} · ${e.sets} set × ${esc(e.reps)}${tip==="sure"?" sn":""} · ${TIP[tip]}</span><h2>${adH(e.k)}</h2><span>${esc(L.ip)}</span></div></div>
+   ${o.not&&!kay.length?`<div class="not"><span class="ik"></span><span><b>Öneri</b><br>${esc(o.not)}</span></div>`:""}
+   ${gir}
+   <div class="tekrar"><button data-a="r-" aria-label="Azalt">−</button><span class="v d">${g.r}<small>${tip==="sure"?"saniye":"tekrar"}</small></span><button data-a="r+" aria-label="Artır">+</button></div>
+   <div class="setler">${setler}</div>
+   ${bitti?`<button class="btn-k" style="background:var(--ok)" data-a="${son?"bitir":"sonraki"}">${son?"Antrenmanı bitir":"Sıradaki hareket →"}</button>`:`<button class="btn-k" data-a="kaydet">${kay.length+1}. seti kaydet</button>`}
+   ${kay.length?`<button class="link" data-a="setsil">Son seti sil</button>`:""}
+   <div class="alt-nav"><button data-a="onceki" ${i===0?"disabled":""}>‹ Önceki</button><button data-a="sonraki" ${son?"disabled":""}>Atla ›</button></div>
   </div>`;
-}
-function sGun(){
-  const d=gunBul(V.gun); if(!d){V.v="ana";return sAna()}
-  const s=gunSeansi(d.id), baska=!s&&aktif();
-  const kartlar=d.ex.map(e=>{
-    const L=LIB[e.k], a=setler(s,e), son=oncekiSet(e.k,s&&s.sid), on=artirOnerisi(e,son), tam=a.length&&a.every(x=>x.ok);
-    const ph=[];a.forEach((x,i)=>{const o=son&&(son.a[i]||son.a[son.a.length-1]),p=a[i-1],q=ph[i-1];
-      ph.push({kg:p&&p.kg!==""?p.kg:(q&&q.kg!==""?q.kg:(o?o.kg:"")),r:p&&p.r!==""?p.r:(q&&q.r!==""?q.r:(o?o.r:""))})});
-    const yer=i=>ph[i]||{kg:"",r:""};
-    const acik=a.findIndex(x=>!x.ok), kgSimdi=L.bar?sayi((a[acik]||{}).kg||yer(Math.max(acik,0)).kg):0;
-    return `<article class="hk ${tam?"bitti":""}" id="h-${e.id}">${fotoHTML(e.k)}
-     ${basHTML(e.k,`<span class="meta" style="color:inherit;opacity:.85">${e.sets} set × ${esc(e.reps)} · dinlenme ${e.rest} sn</span>`)}
-     <div class="hk-ic" style="padding-top:12px">
-      ${son?`<div class="meta">Son (${tarih(son.s.date)}): ${son.a.map(x=>yaz(sayi(x.kg))+"×"+esc(x.r)).join(", ")}</div>`:""}
-      ${on&&!tam?`<div class="oneri">${esc(on)}</div>`:""}
-      <div class="kolon"><span>Set</span><span>kg</span><span>Tekrar</span><span></span></div>
-      ${a.map((x,i)=>{const p=yer(i);return `<div class="set ${x.ok?"ok":""}"><span class="n">${i+1}</span>
-        <input id="kg-${e.id}-${i}" inputmode="decimal" data-f="kg" data-ex="${e.id}" data-i="${i}" value="${esc(x.kg)}" placeholder="${esc(p.kg)}" aria-label="${i+1}. set kilo">
-        <input id="r-${e.id}-${i}" inputmode="numeric" data-f="r" data-ex="${e.id}" data-i="${i}" value="${esc(x.r)}" placeholder="${esc(p.r)}" aria-label="${i+1}. set tekrar">
-        <button class="tik" data-act="tik" data-ex="${e.id}" data-i="${i}" aria-label="${i+1}. seti tamamla">${SVG.tik}</button></div>`}).join("")}
-      <div class="satir" style="justify-content:space-between">${L.bar?`<span id="pl-${e.id}">${plakaHTML(kgSimdi)}</span>`:`<a class="vid" href="${vidUrl(e.k)}" target="_blank" rel="noopener">${SVG.video}Videoyu izle</a>`}
-       <span class="satir"><button class="btn kc" data-act="setsil" data-ex="${e.id}">− Set</button><button class="btn kc" data-act="setekle" data-ex="${e.id}">+ Set</button></span></div>
-      ${L.bar?`<a class="vid" href="${vidUrl(e.k)}" target="_blank" rel="noopener">${SVG.video}Videoyu izle</a>`:""}
-     </div></article>`}).join("");
-  return `<div class="stack"><button class="geri" data-act="git" data-v="ana">‹ Ana sayfa</button>
-   <div class="baslik"><h2>${esc(d.name)}</h2><p>${WD[d.wd]||""} · ${d.ex.length} hareket · ${toplamSet(d)} set</p></div>
-   ${baska?`<div class="kart not">Yarım kalan ${esc(baska.dayName)} antrenmanın var. Burada set işaretlersen yeni antrenman başlar.</div>`:""}
-   ${kartlar||`<div class="kart bosx">Bu günde hareket yok. Program'dan ekle.</div>`}
-   <div class="satir">${s?`<button class="btn ana" data-act="bitir" style="flex:1">Antrenmanı bitir</button><button class="btn kir" data-act="iptal">İptal</button>`:`<span class="not">İlk seti işaretleyince antrenman başlar.</span>`}</div>
-  </div>`;
-}
-function sLib(){
-  const q=(V.q||"").toLocaleLowerCase("tr");
-  const list=Object.entries(LIB).filter(([k,L])=>(!V.grp||L.g===V.grp)&&(!q||L.n.toLocaleLowerCase("tr").includes(q)||L.en.includes(q)));
-  const gunde=k=>S.plan.days.filter(d=>d.ex.some(e=>e.k===k)).map(d=>d.name);
-  return `<div class="stack"><button class="geri" data-act="git" data-v="ana">‹ Ana sayfa</button>
-   <div class="baslik"><h2>Hareketler</h2><p>Fotoğraf başlangıç ve bitiş pozisyonunu sırayla gösterir</p></div>
-   <input class="alan" id="q" type="search" placeholder="Hareket ara: row" value="${esc(V.q)}" autocomplete="off">
-   <div class="cipler">${[["","Tümü"],...Object.entries(GRP).map(([k,g])=>[k,g.ad.split(" ·")[0]])].map(([k,a])=>`<button class="cip ${V.grp===k?"on":""}" data-act="grp" data-g="${k}">${a}</button>`).join("")}</div>
-   <div id="libliste" class="stack">${libListe(list,gunde)}</div></div>`;
-}
-function libListe(list,gunde){
-  if(!list.length)return `<div class="kart bosx">Bu adda hareket yok.</div>`;
-  return list.map(([k])=>{const g=gunde(k);return `<article class="hk">${fotoHTML(k)}${basHTML(k)}
-   <div class="hk-ic" style="padding-top:12px"><div class="satir" style="justify-content:space-between">
-    <a class="vid" href="${vidUrl(k)}" target="_blank" rel="noopener">${SVG.video}Videoyu izle</a>
-    ${g.length?`<span class="etk ok">${esc(g.join(", "))}</span>`:""}</div>
-    <div class="satir"><select class="alan" id="ekg-${k}" style="flex:1" aria-label="Eklenecek gün">${S.plan.days.map(d=>`<option value="${d.id}">${esc(d.name)}</option>`).join("")}</select><button class="btn kc" data-act="libekle" data-k="${k}">Programa ekle</button></div>
-   </div></article>`}).join("");
 }
 function cizgi(pts,band){
-  if(pts.length<2)return `<div class="bosx">${pts.length?"Grafik için bir kayıt daha gerekli.":"Henüz kayıt yok."}</div>`;
+  if(pts.length<2)return `<div class="meta">${pts.length?"Grafik için bir kayıt daha gerekli.":"Henüz kayıt yok."}</div>`;
   const W=340,H=170,L=40,R=14,T=12,B=26;let ys=pts.map(p=>p.y);if(band)ys=ys.concat(band);
   let lo=Math.min(...ys),hi=Math.max(...ys);if(hi-lo<2){lo-=1;hi+=1}const pd=(hi-lo)*.12;lo-=pd;hi+=pd;
   const X=i=>L+(W-L-R)*(i/(pts.length-1)),Y=v=>T+(H-T-B)*(1-(v-lo)/(hi-lo));
   const tk=[lo+(hi-lo)*.15,(lo+hi)/2,hi-(hi-lo)*.15];
   const yol=pts.map((p,i)=>(i?"L":"M")+X(i).toFixed(1)+" "+Y(p.y).toFixed(1)).join(" ");const sp=pts[pts.length-1];
   return `<svg class="grafik" viewBox="0 0 ${W} ${H}" role="img" aria-label="Grafik">
-   ${band?`<rect x="${L}" y="${Y(band[1])}" width="${W-L-R}" height="${Y(band[0])-Y(band[1])}" fill="var(--accent)" fill-opacity=".12" rx="4"/>`:""}
-   ${tk.map(t=>`<line x1="${L}" x2="${W-R}" y1="${Y(t)}" y2="${Y(t)}" stroke="var(--line)"/><text x="${L-6}" y="${Y(t)+4}" text-anchor="end" font-size="11" fill="var(--muted)">${yaz(t)}</text>`).join("")}
-   <path d="${yol} L${X(pts.length-1)} ${H-B} L${L} ${H-B} Z" fill="var(--accent)" fill-opacity=".08"/>
-   <path d="${yol}" fill="none" stroke="var(--accent)" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
-   <circle cx="${X(pts.length-1)}" cy="${Y(sp.y)}" r="5" fill="var(--accent)" stroke="var(--card)" stroke-width="2"/>
+   ${band?`<rect x="${L}" y="${Y(band[1])}" width="${W-L-R}" height="${Y(band[0])-Y(band[1])}" fill="var(--ok)" fill-opacity=".16" rx="4"/>`:""}
+   ${tk.map(t=>`<line x1="${L}" x2="${W-R}" y1="${Y(t)}" y2="${Y(t)}" stroke="var(--line)"/><text x="${L-6}" y="${Y(t)+4}" text-anchor="end" font-size="11" fill="var(--muted)">${yaz(Math.round(t*10)/10)}</text>`).join("")}
+   <path d="${yol}" fill="none" stroke="var(--ink)" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
+   ${pts.map((p,i)=>`<circle cx="${X(i)}" cy="${Y(p.y)}" r="${i===pts.length-1?6:3}" fill="${i===pts.length-1?"var(--p25)":"var(--ink)"}"/>`).join("")}
    <text x="${L}" y="${H-6}" font-size="11" fill="var(--muted)">${tarih(pts[0].d)}</text><text x="${W-R}" y="${H-6}" font-size="11" fill="var(--muted)" text-anchor="end">${tarih(sp.d)}</text></svg>`;
 }
 function sIlerleme(){
   const bw=S.body.slice().sort((x,y)=>x.d.localeCompare(y.d)),ilk=bw[0];
-  const ks=[...new Set([...S.plan.days.flatMap(d=>d.ex.map(e=>e.k)),...Object.values(S.sessions).flatMap(s=>Object.values(s.keys||{}))])].filter(k=>LIB[k]);
+  const ks=[...new Set([...S.plan.days.flatMap(d=>d.ex.map(e=>e.k)),...Object.values(S.sessions).flatMap(s=>Object.values(s.keys||{}))])].filter(k=>LIB[k]&&tipOf(k)!=="sure"&&tipOf(k)!=="vucut");
   if(!ks.includes(V.pk))V.pk=ks[0];
-  const pts=[];seanslar().slice().reverse().forEach(s=>{let b=0;Object.entries(s.keys||{}).forEach(([eid,k])=>{if(k===V.pk)(s.sets[eid]||[]).forEach(x=>{if(x.ok)b=Math.max(b,e1rm(x))})});if(b)pts.push({d:s.date,y:Math.round(b*10)/10})});
-  const rek=new Set();{const en={};seanslar().slice().reverse().filter(s=>s.done).forEach(s=>{let r=false;Object.entries(s.keys||{}).forEach(([eid,k])=>(s.sets[eid]||[]).forEach(x=>{const v=x.ok?e1rm(x):0;if(v){if(en[k]&&v>en[k]+.01)r=true;en[k]=Math.max(en[k]||0,v)}}));if(r)rek.add(s.sid)})}
-  const gec=seanslar().filter(s=>s.done).slice(0,12);
-  return `<div class="stack"><button class="geri" data-act="git" data-v="ana">‹ Ana sayfa</button>
-   <div class="baslik"><h2>İlerleme</h2><p>Kilo koruma bandı ve güç gelişimi</p></div>
-   <section class="kart stack" style="gap:10px"><div class="satir" style="justify-content:space-between;align-items:flex-start"><div><h3>Vücut ağırlığı</h3><div class="meta">${ilk?`Hedef ${yaz(ilk.kg)} kg ± 1 (yeşil bant)`:"İlk kaydın koruma hedefin olur"}</div></div>
-     ${bw.length?`<div style="text-align:right"><b style="font-size:26px;font-weight:800">${yaz(bw[bw.length-1].kg)}</b><div class="meta">${tarih(bw[bw.length-1].d)}</div></div>`:""}</div>
+  const pts=[];seanslar().slice().reverse().forEach(s=>{let b=0;Object.entries(s.keys||{}).forEach(([eid,k])=>{if(k===V.pk)(s.sets[eid]||[]).forEach(x=>{b=Math.max(b,e1rm(x))})});if(b)pts.push({d:s.date,y:Math.round(b*10)/10})});
+  const rek=new Set();{const en={};seanslar().slice().reverse().filter(s=>s.done).forEach(s=>{let r=false;Object.entries(s.keys||{}).forEach(([eid,k])=>(s.sets[eid]||[]).forEach(x=>{const v=e1rm(x);if(v){if(en[k]&&v>en[k]+.01)r=true;en[k]=Math.max(en[k]||0,v)}}));if(r)rek.add(s.sid)})}
+  const gec=seanslar().filter(s=>s.done).slice(0,15);
+  return ust("İlerleme")+`<div class="stack">
+   <section class="kart"><div class="yan" style="justify-content:space-between;align-items:flex-start"><div><h3>Vücut ağırlığı</h3><div class="meta">${ilk?`Hedef ${yaz(ilk.kg)} kg ± 1 (yeşil bant)`:"İlk kaydın koruma hedefin olur"}</div></div>
+     ${bw.length?`<div style="text-align:right"><span class="d" style="font-size:30px;font-weight:600">${yaz(bw[bw.length-1].kg)}</span><div class="meta">${tarih(bw[bw.length-1].d)}</div></div>`:""}</div>
     ${cizgi(bw.map(b=>({d:b.d,y:b.kg})),ilk?[ilk.kg-1,ilk.kg+1]:null)}
-    <div class="satir"><input class="alan" id="kiloGir" inputmode="decimal" placeholder="Bugünkü kilo, ör. 78,4" style="flex:1"><button class="btn ana" data-act="kilo">Kaydet</button></div></section>
-   <section class="kart stack" style="gap:10px"><h3>Güç gelişimi</h3>
-    <select class="alan" id="pkSec" aria-label="Hareket seç">${ks.map(k=>`<option value="${k}" ${k===V.pk?"selected":""}>${esc(LIB[k].n)}</option>`).join("")}</select>
-    <div class="meta">Tahmini 1 tekrar maksimum (kg), her antrenmanın en iyi seti</div>${cizgi(pts)}</section>
+    <div class="yan"><input class="alan" id="kiloGir" inputmode="decimal" placeholder="Bugünkü kilo, ör. 78,4" style="flex:1"><button class="btn koyu" data-a="kilo">Kaydet</button></div></section>
+   <section class="kart"><h3>Güç gelişimi</h3>
+    ${ks.length?`<select class="alan" id="pkSec" aria-label="Hareket seç">${ks.map(k=>`<option value="${k}" ${k===V.pk?"selected":""}>${esc(LIB[k].n)}</option>`).join("")}</select>
+    <div class="meta">Tahmini 1 tekrar maksimum (kg), her antrenmanın en iyi seti</div>${cizgi(pts)}`:`<div class="meta">Programda ağırlıklı hareket yok.</div>`}</section>
    <section class="kart"><h3>Son antrenmanlar</h3>
-    ${gec.length?gec.map(s=>`<div class="gecmis"><span><b>${esc(s.dayName)}</b> <span class="meta">${tarih(s.date)}</span> ${rek.has(s.sid)?`<span class="etk pr">Rekor</span>`:""}</span><span class="s">${biten(s)} set · ${Math.round(hacim(s)).toLocaleString("tr-TR")} kg</span></div>`).join(""):`<div class="bosx">Bitirdiğin antrenmanlar burada listelenir.</div>`}</section>
+    <div>${gec.length?gec.map(s=>`<div class="gecmis"><span><b>${esc(s.dayName)}</b> <span class="meta">${tarih(s.date)}</span>${rek.has(s.sid)?`<span class="etk">Rekor</span>`:""}</span><span class="s">${biten(s)} set · ${Math.round(hacim(s)).toLocaleString("tr-TR")} kg</span></div>`).join(""):`<div class="meta">Bitirdiğin antrenmanlar burada listelenir.</div>`}</div></section>
   </div>`;
 }
+function sLib(){
+  return ust("Hareketler")+`<div class="stack">
+   <input class="alan" id="q" type="search" placeholder="Hareket ara: row" value="${esc(V.q)}" autocomplete="off">
+   <div class="sekme">${[["","Tümü"],...Object.entries(GRP).map(([k,g])=>[k,g.ad])].map(([k,a])=>`<button class="${V.grp===k?"on":""}" data-a="grp" data-g="${k}">${a}</button>`).join("")}</div>
+   <div id="libliste" class="stack">${libListe()}</div></div>`;
+}
+function libListe(){
+  const q=(V.q||"").toLocaleLowerCase("tr");
+  const list=Object.entries(LIB).filter(([k,L])=>(!V.grp||L.g===V.grp)&&(!q||L.n.toLocaleLowerCase("tr").includes(q)||L.en.includes(q)));
+  if(!list.length)return `<div class="kart meta">Bu adda hareket yok.</div>`;
+  return list.map(([k,L])=>{const gd=S.plan.days.filter(d=>d.ex.some(e=>e.k===k)).map(d=>d.name);
+   return `<article class="hk"><div class="foto"><img src="${img(k,0)}" alt="${esc(L.n)} başlangıç" loading="lazy"><img class="b" src="${img(k,1)}" alt="" loading="lazy"><a class="vid" href="${vidUrl(k)}" target="_blank" rel="noopener">${IK.oyna} Video</a><div class="ad"><h2>${adH(k)}</h2><span>${esc(L.ip)}</span></div></div>
+    <div class="hk-ic"><div class="yan" style="justify-content:space-between"><span class="tur"><s style="background:${GRP[L.g].c}"></s>${GRP[L.g].ad} · ${TIP[L.tip]}</span>${gd.length?`<span class="meta">${esc(gd.join(", "))}</span>`:""}</div>
+     ${S.plan.days.length?`<div class="yan"><select class="alan" id="ekg-${k}" style="flex:1" aria-label="Eklenecek gün">${S.plan.days.map(d=>`<option value="${d.id}">${esc(d.name)}</option>`).join("")}</select><button class="btn koyu" data-a="libekle" data-k="${k}">Programa ekle</button></div>`:""}</div></article>`}).join("");
+}
 function sProgram(){
-  const sec=k=>Object.entries(GRP).map(([g,G])=>`<optgroup label="${G.ad.split(" ·")[0]}">${Object.entries(LIB).filter(([,L])=>L.g===g).map(([kk,L])=>`<option value="${kk}" ${kk===k?"selected":""}>${esc(L.n)}</option>`).join("")}</optgroup>`).join("");
-  return `<div class="stack"><button class="geri" data-act="git" data-v="ana">‹ Ana sayfa</button>
-   <div class="baslik"><h2>Program</h2><p>Haftada 2 gün tüm vücut: her kas grubu haftada iki kez çalışır</p></div>
-   <div class="kart not">Bir harekette tüm setlerde tekrar aralığının üstüne ulaşınca uygulama bir sonraki sefer kilo artırmanı söyler.</div>
-   ${S.plan.days.map(d=>`<section class="kart stack" style="gap:10px">
-    <div class="satir"><label class="lb">Gün adı<input class="alan" id="gn-${d.id}" data-pf="name" data-gun="${d.id}" value="${esc(d.name)}"></label>
+  const sec=k=>Object.entries(GRP).map(([g,G])=>`<optgroup label="${G.ad}">${Object.entries(LIB).filter(([,L])=>L.g===g).map(([kk,L])=>`<option value="${kk}" ${kk===k?"selected":""}>${esc(L.n)}</option>`).join("")}</optgroup>`).join("");
+  return ust("Program")+`<div class="stack">
+   <div class="not"><span class="ik"></span><span>Haftada 2 gün tüm vücut: her kas grubu haftada iki kez çalışır. Bir harekette tüm setlerde tekrar aralığının üstüne çıkınca uygulama bir sonraki sefer yükü artırmanı söyler.</span></div>
+   ${S.plan.days.map(d=>`<section class="kart">
+    <div class="yan"><label class="lb">Gün adı<input class="alan" id="gn-${d.id}" data-pf="name" data-gun="${d.id}" value="${esc(d.name)}"></label>
      <label class="lb">Gün<select class="alan" id="gw-${d.id}" data-pf="wd" data-gun="${d.id}">${WD.map((w,i)=>`<option value="${i}" ${d.wd===i?"selected":""}>${w}</option>`).join("")}</select></label></div>
-    <div class="duz meta" style="font-size:11px;text-transform:uppercase;letter-spacing:.06em"><span>Hareket</span><span>Set</span><span>Tekrar</span><span></span></div>
+    <div class="duz lbl"><span>Hareket</span><span>Set</span><span>Tekrar</span><span></span></div>
     ${d.ex.map(e=>`<div class="duz"><select class="alan" id="ek-${e.id}" data-ef="k" data-gun="${d.id}" data-ex="${e.id}" aria-label="Hareket">${sec(e.k)}</select>
      <input class="alan" id="es-${e.id}" inputmode="numeric" data-ef="sets" data-gun="${d.id}" data-ex="${e.id}" value="${e.sets}" aria-label="Set">
      <input class="alan" id="er-${e.id}" data-ef="reps" data-gun="${d.id}" data-ex="${e.id}" value="${esc(e.reps)}" aria-label="Tekrar">
-     <button class="sil" data-act="hsil" data-gun="${d.id}" data-ex="${e.id}" aria-label="Sil">×</button></div>`).join("")}
-    <div class="satir" style="justify-content:space-between"><button class="btn kc" data-act="hekle" data-gun="${d.id}">+ Hareket</button><button class="btn kc kir" data-act="gsil" data-gun="${d.id}">Günü sil</button></div>
+     <button class="sil" data-a="hsil" data-gun="${d.id}" data-ex="${e.id}" aria-label="Sil">×</button></div>`).join("")}
+    <div class="yan" style="justify-content:space-between"><button class="btn" data-a="hekle" data-gun="${d.id}">+ Hareket</button><button class="btn kir" data-a="gsil" data-gun="${d.id}">Günü sil</button></div>
    </section>`).join("")}
-   <button class="btn" data-act="gekle">+ Gün ekle</button></div>`;
+   <button class="btn koyu" data-a="gekle">+ Gün ekle</button></div>`;
 }
 function sAyar(){
-  return `<div class="stack"><button class="geri" data-act="git" data-v="ana">‹ Ana sayfa</button>
-   <div class="baslik"><h2>Ayarlar</h2></div>
-   <section class="kart stack" style="gap:8px"><h3>Hesap</h3>
-    ${kul?`<div class="meta">Giriş: <b style="color:var(--ink)">${esc(telGoster((kul.email||"").replace(ALAN,"")))}</b></div><div class="meta">Kayıtların hesabınla eşitlenir; telefon ve webde aynı kaldığın yer.</div><button class="btn kir" data-act="cikis">Çıkış yap</button><div class="meta">Şifreni unutursan yöneticiye haber ver; yeni şifre tanımlanır, kayıtların silinmez.</div>`
-     :fbDurum==="hazir"?`<div class="meta">Şu an yalnız bu cihaza kaydediliyor.</div><button class="btn ana" data-act="girisAc">Giriş yap</button>`
+  const a=aktif();
+  return `<div class="stack"><div class="ust"><button class="geri" data-a="git" data-v="ana" aria-label="Geri">‹</button><h1 class="bas">Ayarlar</h1></div>
+   <section class="kart"><h3>Hesap</h3>
+    ${kul?`<div class="meta">Giriş: <b style="color:var(--ink)">${esc(telGoster((kul.email||"").replace(ALAN,"")))}</b></div><div class="meta">Kayıtların hesabınla eşitlenir; telefonda ve bilgisayarda aynı yerde kalırsın.</div><button class="btn kir" data-a="cikis">Çıkış yap</button>`
+     :fbDurum==="hazir"?`<div class="meta">Şu an yalnız bu cihaza kaydediliyor.</div><button class="btn koyu" data-a="girisAc">Giriş yap</button>`
      :`<div class="meta">Eşitleme bu ortamda açılamadı; kayıtlar bu cihazda duruyor.</div>`}</section>
-   <section class="kart"><h3>Fotoğraflar</h3><div class="meta">Hareket fotoğrafları kamu malı olarak paylaşılan free-exercise-db arşivinden alındı. Video düğmesi YouTube'da o hareketin doğru yapılışını açar.</div></section>
+   ${a?`<section class="kart"><h3>Yarım antrenman</h3><div class="meta">${esc(a.dayName)} · ${biten(a)} set kayıtlı</div><button class="btn kir" data-a="iptal">Antrenmanı sil</button></section>`:""}
+   <section class="kart"><h3>Fotoğraflar</h3><div class="meta">Hareket fotoğrafları kamu malı olarak paylaşılan free-exercise-db arşivinden alındı. Video düğmesi YouTube'da hareketin doğru yapılışını açar.</div></section>
   </div>`;
 }
 function sGiris(){
-  if(izinYok)return `<div class="giris"><img class="logo" src="icon-192.png" alt="" style="width:64px;height:64px;border-radius:18px">
-   <div class="baslik"><h2>Erişim yok</h2><p>${esc(telGoster((kul.email||"").replace(ALAN,"")))} numarası için giriş izni tanımlı değil. Salon yöneticisinden izin iste.</p></div>
-   <button class="btn" data-act="cikis">Başka numarayla gir</button></div>`;
+  if(izinYok)return `<div class="giris"><span class="mark"><i></i><i></i>FITNESS</span>
+   <section class="iron"><span class="lbl">Erişim yok</span><span class="alt">${esc(telGoster((kul.email||"").replace(ALAN,"")))} numarası için giriş izni tanımlı değil. Salon yöneticisinden izin iste.</span></section>
+   <button class="btn" data-a="cikis">Başka numarayla gir</button></div>`;
   const yeni=V.kayit;
-  return `<div class="giris"><img class="logo" src="icon-192.png" alt="" style="width:64px;height:64px;border-radius:18px">
-   <div class="baslik"><h2>Fitness</h2><p>${yeni?"İlk giriş: numaranı yaz, kendine bir şifre belirle":"Telefon numaran ve şifrenle gir"}</p></div>
+  return `<div class="giris"><span class="mark"><i></i><i></i>FITNESS</span>
+   <section class="iron">${barSVG([20,10,5])}<span class="lbl">${yeni?"İlk giriş: numaranı yaz, kendine bir şifre belirle":"Telefon numaran ve şifrenle gir"}</span></section>
    <input class="alan" id="gt" type="tel" inputmode="tel" autocomplete="tel" placeholder="0532 123 45 67" value="${esc(V.tel||"")}">
    <input class="alan" id="gs" type="password" autocomplete="${yeni?"new-password":"current-password"}" placeholder="${yeni?"Yeni şifre (en az 6 karakter)":"Şifre"}">
    ${yeni?`<input class="alan" id="gs2" type="password" autocomplete="new-password" placeholder="Şifreyi tekrar yaz">`:""}
    <div class="hata" id="gh"></div>
-   <button class="btn ana" data-act="giris">${yeni?"Hesabı oluştur":"Giriş yap"}</button>
-   <button class="btn" data-act="kayitDegis">${yeni?"Hesabım var, giriş yap":"İlk kez mi giriyorsun? Hesap oluştur"}</button>
-   <button class="geri" data-act="yerel" style="align-self:center">Giriş yapmadan bu cihazda kullan</button></div>`;
+   <button class="btn-k" data-a="giris">${yeni?"Hesabı oluştur":"Giriş yap"}</button>
+   <button class="btn" data-a="kayitDegis">${yeni?"Hesabım var, giriş yap":"İlk kez mi giriyorsun? Hesap oluştur"}</button>
+   <button class="link" data-a="yerel">Giriş yapmadan bu cihazda kullan</button></div>`;
 }
 
-/* ---------- çizim ve kaldığın yer ---------- */
+/* ---------- çizim, sekmeler, kaldığın yer ---------- */
+const SEKMELER=[["ana","Bugün",IK.bugun],["ilerleme","İlerleme",IK.ilerleme],["lib","Hareketler",IK.hareket],["program","Program",IK.program]];
 function ciz(yerinde){
   const y=window.scrollY;
   const girisGerek=fbDurum==="hazir"&&((!kul&&!V.yerel)||izinYok);
-  $("app").innerHTML=girisGerek?sGiris():V.v==="gun"?sGun():V.v==="lib"?sLib():V.v==="ilerleme"?sIlerleme():V.v==="program"?sProgram():V.v==="ayar"?sAyar():sAna();
+  $("app").innerHTML=girisGerek?sGiris():V.v==="ex"?sEx():V.v==="lib"?sLib():V.v==="ilerleme"?sIlerleme():V.v==="program"?sProgram():V.v==="ayar"?sAyar():sAna();
+  const t=$("tabs");t.hidden=girisGerek||V.v==="ex";
+  if(!t.hidden)t.innerHTML=SEKMELER.map(([v,a,ik])=>`<button class="${V.v===v?"on":""}" data-a="git" data-v="${v}">${ik}${a}</button>`).join("");
+  if(V.v==="ex"){const r=$("raf");const sl=r&&r.querySelector(".secili");if(sl)r.scrollLeft=sl.offsetLeft-r.clientWidth/2+sl.clientWidth/2}
   if(yerinde)window.scrollTo(0,y);
   gorunumKaydet();
 }
@@ -502,47 +578,59 @@ let kT;window.addEventListener("scroll",()=>{clearTimeout(kT);kT=setTimeout(goru
 function git(v,ek){Object.assign(V,{v},ek||{});ciz();window.scrollTo(0,0)}
 function tost(t){const el=$("tost");el.textContent=t;el.hidden=false;clearTimeout(tost.t);tost.t=setTimeout(()=>el.hidden=true,2800)}
 
-/* ---------- dinlenme sayacı ---------- */
+/* ---------- dinlenme: tükenen plaka ---------- */
 let D=null,DI=null;
-function dinlenBasla(sn){D={son:Date.now()+sn*1000,top:sn};dinlenCiz();clearInterval(DI);DI=setInterval(dinlenCiz,250)}
-function dinlenCiz(){const el=$("dinlen");if(!D){el.hidden=true;clearInterval(DI);return}
-  const k=Math.max(0,Math.ceil((D.son-Date.now())/1000));
-  if(k<=0){D=null;el.hidden=true;clearInterval(DI);try{navigator.vibrate&&navigator.vibrate([200,100,200])}catch(e){}tost("Dinlenme bitti, sıradaki set");return}
-  el.hidden=false;el.innerHTML=`<span class="t">${Math.floor(k/60)}:${pad(k%60)}</span><span class="rb"><i style="width:${(k/D.top*100).toFixed(1)}%"></i></span><button data-act="d15">+15</button><button data-act="dgec">Geç</button>`}
+function dinlen(sn,sonraki){D={son:Date.now()+sn*1000,top:sn,sonraki};dCiz();clearInterval(DI);DI=setInterval(dCiz,250)}
+function dCiz(){const el=$("dinlen");if(!D){el.hidden=true;clearInterval(DI);return}
+  const k=Math.max(0,(D.son-Date.now())/1000);if(k<=0){D=null;el.hidden=true;clearInterval(DI);try{navigator.vibrate&&navigator.vibrate([200,100,200])}catch(e){}tost("Dinlenme bitti, bara geç");return}
+  const C=2*Math.PI*34,o=k/D.top,ks=Math.ceil(k);
+  el.hidden=false;el.innerHTML=`<div><svg viewBox="0 0 84 84" aria-hidden="true"><circle cx="42" cy="42" r="40" fill="var(--iron2)"/><circle cx="42" cy="42" r="34" fill="none" stroke="var(--p25)" stroke-width="12" stroke-dasharray="${(C*o).toFixed(1)} ${C.toFixed(1)}" transform="rotate(-90 42 42)"/><circle cx="42" cy="42" r="9" fill="var(--iron)"/></svg>
+   <div class="y"><b>${Math.floor(ks/60)}:${pad(ks%60)}</b><span>Dinlen · sırada ${esc(D.sonraki)}</span></div>
+   <div class="bt"><button data-a="d15">+15 sn</button><button data-a="dgec">Geç</button></div></div>`}
 
 /* ---------- olaylar ---------- */
+function exAktif(){const d=gunBul(V.gun);return d&&d.ex[V.i]?{d,e:d.ex[V.i]}:null}
+function bitir(){const s=aktif();
+  if(!s||!biten(s)){if(s){delete S.sessions[s.sid];S.activeSid=null;silinecek.add("s/"+s.sid);kaydet(["main"])}V.g={};D=null;dCiz();git("ana");return}
+  s.done=true;s.end=Date.now();S.activeSid=null;V.g={};V.gun=null;D=null;dCiz();kaydet(["main","s/"+s.sid]);
+  git("ana");tost(`Bitti: ${biten(s)} set · ${Math.round(hacim(s)).toLocaleString("tr-TR")} kg kaldırdın`)}
 document.addEventListener("click",async ev=>{
-  const b=ev.target.closest("[data-act]");if(!b)return;const a=b.dataset.act;
+  const b=ev.target.closest("[data-a]");if(!b||b.disabled)return;const a=b.dataset.a;
   if(a==="git")return git(b.dataset.v);
-  if(a==="ac")return git("gun",{gun:b.dataset.id});
-  if(a==="foto"){b.querySelector(".b")&&b.classList.toggle("dur");return}
-  if(a==="d15"){if(D){D.son+=15000;D.top+=15;dinlenCiz()}return}
-  if(a==="dgec"){D=null;dinlenCiz();return}
+  if(a==="gunSec"){V.gun=b.dataset.id;ciz(true);return}
+  if(a==="ac")return git("ex",{i:+b.dataset.i});
+  if(a==="d15"){if(D){D.son+=15000;D.top+=15;dCiz()}return}
+  if(a==="dgec"){D=null;dCiz();return}
   if(a==="grp"){V.grp=b.dataset.g;ciz(true);return}
-  if(a==="tik"||a==="setekle"||a==="setsil"){
-    const d=gunBul(V.gun),e=d.ex.find(x=>x.id===b.dataset.ex);if(!e)return;const s=seansAc(d.id),ar=setler(s,e);
-    if(a==="setekle")ar.push({kg:"",r:"",ok:false});
-    else if(a==="setsil"){if(ar.length>1)ar.pop()}
-    else{const i=+b.dataset.i,x=ar[i];
-      if(!x.ok){const ki=$(`kg-${e.id}-${i}`),ri=$(`r-${e.id}-${i}`);if(x.kg==="")x.kg=ki.placeholder;if(x.r==="")x.r=ri.placeholder;
-        if(x.r===""){ri.focus();tost("Önce tekrar sayısını gir");return}
-        x.ok=true;const hepsi=d.ex.every(q=>(s.sets[q.id]||[]).length&&s.sets[q.id].every(z=>z.ok));
-        if(hepsi){D=null;dinlenCiz();tost("Tüm setler bitti, antrenmanı bitir")}else dinlenBasla(e.rest)}
-      else x.ok=false}
-    kaydet(["main","s/"+s.sid]);ciz(true);return}
-  if(a==="bitir"){const s=gunSeansi(V.gun);if(!s)return;if(!biten(s)){tost("Önce en az bir set işaretle");return}
-    s.done=true;s.end=Date.now();S.activeSid=null;D=null;dinlenCiz();kaydet(["main","s/"+s.sid]);
-    tost(`Bitti: ${biten(s)} set · ${Math.round(hacim(s)).toLocaleString("tr-TR")} kg`);git("ana");return}
+  const x=V.v==="ex"&&exAktif();
+  if(x&&["tak","cikar","bosalt","pin","dmb","kule+","kule-","r-","r+","kaydet","setsil"].includes(a)){
+    const {d,e}=x,g=giris(e),tip=tipOf(e.k);
+    if(a==="tak"){const p=+b.dataset.p;if(g.yan.reduce((t,q)=>t+PL[q].t+2,0)+PL[p].t>140){tost("Barda yer kalmadı");return}
+      g.yan.push(p);g.yan.sort((m,n)=>n-m);g.yeni=g.yan.lastIndexOf(p)}
+    else if(a==="cikar"){g.yan.pop();g.yeni=-1}
+    else if(a==="bosalt"){g.yan=[];g.yeni=-1}
+    else if(a==="pin"||a==="dmb")g.kg=+b.dataset.w;
+    else if(a==="kule+")g.kg+=5;
+    else if(a==="kule-")g.kg=Math.max(5,g.kg-5);
+    else if(a==="r-"||a==="r+"){const ad=tip==="sure"?5:1;g.r=Math.max(ad,g.r+(a==="r+"?ad:-ad))}
+    else if(a==="kaydet"){const s=seansAc(d.id);s.keys[e.id]=e.k;(s.sets[e.id]=s.sets[e.id]||[]).push({kg:girisKg(e),r:g.r,ok:true});g.yeni=-1;kaydet(["main","s/"+s.sid]);
+      const n=s.sets[e.id].length;
+      if(n<e.sets)dinlen(e.rest,`${n+1}. set`);else{const nx=d.ex[V.i+1];if(nx)dinlen(e.rest,LIB[nx.k].n);else{D=null;dCiz()}tost(`${LIB[e.k].n} bitti`)}}
+    else if(a==="setsil"){const s=gunSeansi(d.id);if(s&&s.sets[e.id]&&s.sets[e.id].length){s.sets[e.id].pop();kaydet(["s/"+s.sid])}}
+    ciz(true);return}
+  if(a==="sonraki"){const d=gunBul(V.gun);if(d&&V.i<d.ex.length-1){V.i++;ciz();scrollTo(0,0)}return}
+  if(a==="onceki"){if(V.i>0){V.i--;ciz();scrollTo(0,0)}return}
+  if(a==="bitir")return bitir();
   if(a==="iptal"){if(b.dataset.on!=="1"){b.dataset.on="1";b.textContent="Emin misin? Tekrar dokun";return}
-    const s=gunSeansi(V.gun);if(s){delete S.sessions[s.sid];S.activeSid=null;silinecek.add("s/"+s.sid);kaydet(["main"])}D=null;dinlenCiz();git("ana");return}
+    const s=aktif();if(s){delete S.sessions[s.sid];S.activeSid=null;silinecek.add("s/"+s.sid);kaydet(["main"])}V.g={};D=null;dCiz();git("ana");return}
   if(a==="kilo"){const v=sayi($("kiloGir").value);if(v<25||v>300){tost("Geçerli bir kilo gir, ör. 78,4");return}
-    const t=bugun();S.body=S.body.filter(x=>x.d!==t);S.body.push({d:t,kg:Math.round(v*10)/10});kaydet(["main"]);ciz(true);tost("Kaydedildi");return}
-  if(a==="libekle"){const g=gunBul($("ekg-"+b.dataset.k).value);if(!g)return;g.ex.push(h(b.dataset.k,3,"8-12",90));kaydet(["main"]);tost(`${LIB[b.dataset.k].n}, ${g.name} gününe eklendi`);ciz(true);return}
-  if(a==="hekle"){const g=gunBul(b.dataset.gun);g.ex.push(h("goblet",3,"8-12",90));kaydet(["main"]);ciz(true);return}
-  if(a==="hsil"){const g=gunBul(b.dataset.gun);g.ex=g.ex.filter(e=>e.id!==b.dataset.ex);kaydet(["main"]);ciz(true);return}
+    const t=bugun();S.body=S.body.filter(q=>q.d!==t);S.body.push({d:t,kg:Math.round(v*10)/10});kaydet(["main"]);ciz(true);tost("Kaydedildi");return}
+  if(a==="libekle"){const gd=gunBul($("ekg-"+b.dataset.k).value);if(!gd)return;gd.ex.push(h(b.dataset.k,3,tipOf(b.dataset.k)==="sure"?"30-45":"8-12"));kaydet(["main"]);tost(`${LIB[b.dataset.k].n}, ${gd.name} gününe eklendi`);ciz(true);return}
+  if(a==="hekle"){const gd=gunBul(b.dataset.gun);gd.ex.push(h("goblet",3,"8-12"));kaydet(["main"]);ciz(true);return}
+  if(a==="hsil"){const gd=gunBul(b.dataset.gun);gd.ex=gd.ex.filter(e=>e.id!==b.dataset.ex);kaydet(["main"]);ciz(true);return}
   if(a==="gekle"){const n=S.plan.days.length;S.plan.days.push({id:uid(),name:"Gün "+String.fromCharCode(65+n),wd:Math.min(6,n*2+1),ex:[]});kaydet(["main"]);ciz(true);return}
   if(a==="gsil"){if(b.dataset.on!=="1"){b.dataset.on="1";b.textContent="Emin misin? Tekrar dokun";return}
-    S.plan.days=S.plan.days.filter(d=>d.id!==b.dataset.gun);kaydet(["main"]);ciz(true);return}
+    S.plan.days=S.plan.days.filter(d=>d.id!==b.dataset.gun);if(V.gun===b.dataset.gun)V.gun=null;kaydet(["main"]);ciz(true);return}
   if(a==="kayitDegis"){V.kayit=!V.kayit;ciz();return}
   if(a==="giris"){const tel=telNorm($("gt").value),sf=$("gs").value,gh=$("gh");V.tel=$("gt").value;
     if(!tel){gh.textContent="Numarayı 0532 123 45 67 biçiminde yaz.";return}
@@ -557,20 +645,15 @@ document.addEventListener("click",async ev=>{
   if(a==="cikis"){await firebase.auth().signOut();V.yerel=false;izinYok=false;ciz();return}
 });
 document.addEventListener("input",ev=>{const t=ev.target;
-  if(t.id==="q"){V.q=t.value;const q=t.value.toLocaleLowerCase("tr");const list=Object.entries(LIB).filter(([k,L])=>(!V.grp||L.g===V.grp)&&(!q||L.n.toLocaleLowerCase("tr").includes(q)||L.en.includes(q)));
-    $("libliste").innerHTML=libListe(list,k=>S.plan.days.filter(d=>d.ex.some(e=>e.k===k)).map(d=>d.name));return}
-  if(t.dataset.f){const d=gunBul(V.gun),e=d.ex.find(x=>x.id===t.dataset.ex),s=seansAc(d.id),ar=setler(s,e);
-    ar[+t.dataset.i][t.dataset.f]=t.value.replace(",",".");kaydet(["main","s/"+s.sid]);
-    if(LIB[e.k].bar&&t.dataset.f==="kg"){const pl=$("pl-"+e.id);if(pl)pl.innerHTML=plakaHTML(sayi(t.value))}}
-});
+  if(t.id==="q"){V.q=t.value;$("libliste").innerHTML=libListe();return}});
 document.addEventListener("change",ev=>{const t=ev.target;
   if(t.id==="pkSec"){V.pk=t.value;ciz(true);return}
   if(t.dataset.pf){const d=gunBul(t.dataset.gun);d[t.dataset.pf]=t.dataset.pf==="wd"?+t.value:t.value;kaydet(["main"]);return}
-  if(t.dataset.ef){const d=gunBul(t.dataset.gun),e=d.ex.find(x=>x.id===t.dataset.ex);let v=t.value;
+  if(t.dataset.ef){const d=gunBul(t.dataset.gun),e=d.ex.find(q=>q.id===t.dataset.ex);let v=t.value;
     if(t.dataset.ef==="sets"){v=Math.max(1,Math.min(10,parseInt(v)||e.sets));t.value=v}
-    e[t.dataset.ef]=v;kaydet(["main"])}
-});
-document.addEventListener("keydown",ev=>{if(ev.key==="Enter"&&/^(gs|gs2|gt)$/.test(ev.target.id)){const b=document.querySelector('[data-act="giris"]');b&&b.click()}});
+    if(t.dataset.ef==="k"){e.rest=varsayDn(v);delete V.g[e.id]}
+    e[t.dataset.ef]=v;kaydet(["main"])}});
+document.addEventListener("keydown",ev=>{if(ev.key==="Enter"&&/^(gs|gs2|gt)$/.test(ev.target.id)){const b=document.querySelector('[data-a="giris"]');b&&b.click()}});
 
 ciz();requestAnimationFrame(()=>window.scrollTo(0,V.y||0));
 fbBaslat();
