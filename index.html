@@ -155,8 +155,9 @@ const LIB={
  latraise:{n:"Lateral raise",id:"Side_Lateral_Raise",g:"itis",tip:"dambil",en:"dumbbell lateral raise",ip:"Dirsek hafif bükük, omuz hizasına kadar"},
  pushup:{n:"Şınav",id:"Pushups",g:"itis",tip:"vucut",en:"push up",ip:"Gövde düz, göğüs yere yaklaşsın"},
  dip:{n:"Dips",id:"Dips_-_Chest_Version",g:"itis",tip:"vucut",en:"chest dips",ip:"Gövde hafif öne, omuz dirsek hizasına insin"},
- fly:{n:"Pec fly",ar:"pec deck kelebek butterfly göğüs makine chest fly",id:"Butterfly",g:"itis",tip:"kule",en:"pec deck machine",ip:"Sırt yaslı, omuzlar geride; kolları göğsün önünde birleştir"},
- reardelt:{n:"Rear delt (arka omuz)",ar:"pec fly makinesi ters reverse pec deck arka omuz rear delt",id:"Reverse_Machine_Flyes",g:"itis",tip:"kule",en:"reverse pec deck rear delt fly",ip:"Göğsünü minderine yasla, kolları düz tutup yana ve geriye aç"},
+ fly:{n:"Pec fly",ar:"pec fly & rear delt pec deck kelebek butterfly göğüs makine chest fly",id:"Butterfly",fotos:[["img/Butterfly-0.webp","Başlangıç"],["img/Butterfly-1.webp","Bitiş"],["img/PecFly_Label.webp","Makinedeki çizim"]],g:"itis",tip:"kule",en:"pec deck machine",ip:"Sırt yaslı, omuzlar geride; kolları göğsün önünde birleştir"},
+ reardelt:{n:"Rear delt (arka omuz)",ar:"pec fly & rear delt makinesi ters reverse pec deck arka omuz rear delt",id:"Reverse_Machine_Flyes",fotos:[["img/Reverse_Machine_Flyes-0.webp","Başlangıç"],["img/Reverse_Machine_Flyes-1.webp","Bitiş"],["img/PecFly_Label.webp","Makinedeki çizim"]],g:"itis",tip:"kule",en:"reverse pec deck rear delt fly",ip:"Göğsünü minderine yasla, kolları düz tutup yana ve geriye aç"},
+ widechest:{n:"Wide chest press",ar:"wide chest press geniş göğüs press plakalı makine oturarak",id:"Wide_Chest_Press",fotos:[["img/Wide_Chest_Press-0.webp","Başlangıç (makinedeki çizim)"],["img/Wide_Chest_Press-1.webp","Bitiş (makinedeki çizim)"]],g:"itis",tip:"plaka",adim:2.5,en:"plate loaded wide chest press",ip:"Sırtını yasla, tutamaklar göğüs hizasında olsun; öne ve hafif içe doğru it, kontrollü geri dön"},
  mchest:{n:"Makine bench press (yatarak)",ar:"horizontal chest press seated horizontal shoulder press blackline göğüs makine bench yatarak",id:"Blackline_Bench",fotos:[["img/Blackline_Bench-0.webp","Senin makinen"],["img/Blackline_Bench-1.webp","Makinedeki çizim"]],g:"itis",tip:"kule",en:"lying chest press machine",ip:"Mandalı çekip sırtlığı düz yatır; tutamakları göğüs hizasından yukarı it, kolu kilitlemeden geri dön"},
  mshoulder:{n:"Makine omuz press (oturarak)",ar:"seated shoulder press horizontal shoulder press blackline omuz makine",id:"Blackline_Shoulder",fotos:[["img/Blackline_Shoulder-0.webp","Senin makinen"],["img/ek-omuz-press-1.webp","Başlangıç"],["img/ek-omuz-press-2.webp","Bitiş"],["img/Blackline_Shoulder-1.webp","Makinedeki çizim"]],kaynak:"Çizim: Everkinetic, CC BY-SA 4.0",g:"itis",tip:"kule",en:"seated shoulder press machine",ip:"Mandalı çekip sırtlığı dik kaldır; tutamakları omuz hizasından başının üstüne it"},
  pushdown:{n:"Triceps pushdown",id:"Triceps_Pushdown",g:"itis",tip:"kule",en:"triceps pushdown",ip:"Dirsekler yanda sabit, kolu tam aç"},
@@ -172,7 +173,7 @@ const LIB={
  cablecrunch:{n:"Cable crunch",id:"Cable_Crunch",g:"karin",tip:"kule",en:"cable crunch",ip:"Kalça sabit, karınla bük"},
  legraise:{n:"Asılı bacak kaldırma",id:"Hanging_Leg_Raise",g:"karin",tip:"vucut",en:"hanging leg raise",ip:"Sallanmadan, karınla kaldır"}
 };
-const SURUM="2026-11-09 21:00";
+const SURUM="2026-11-09 21:04";
 const surumYazi=()=>{const [g,sa]=SURUM.split(" ");const [y,m,d]=g.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString("tr-TR",{day:"numeric",month:"long"})+" "+sa};
 const DMB=[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40];
 const WD=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
@@ -200,7 +201,7 @@ const vidUrl=k=>"https://www.youtube.com/results?search_query="+encodeURICompone
 const tipOf=k=>LIB[k].tip;
 const kiloVar=k=>!["vucut","sure"].includes(tipOf(k));
 const varsayDn=k=>({bar:150,plaka:120,kule:90,dambil:75,vucut:75,sure:60})[tipOf(k)];
-const adim=k=>({bar:2.5,plaka:5,kule:5})[tipOf(k)]||1;
+const adim=k=>LIB[k].adim||({bar:2.5,plaka:5,kule:5})[tipOf(k)]||1;
 
 /* ---------- veri ---------- */
 const LS="fitness.v2", LSV="fitness.gorunum.v4";
@@ -429,7 +430,7 @@ function sAyar(){
      :fbDurum==="hazir"?`<div class="lb">Şu an yalnız bu cihaza kaydediliyor.</div><button class="btn ikincil" data-a="girisAc">Giriş yap</button>`
      :`<div class="lb">Eşitleme açılamadı; kayıtlar bu cihazda.</div>`}</div>
    ${a?`<div class="k pad"><h2>Yarım antrenman</h2><div class="lb">${esc(a.dayName)} · ${biten(a)} set kayıtlı</div><button class="btn kir" data-a="iptal">Antrenmanı sil</button></div>`:""}
-   <div class="k pad"><h2>Fotoğraflar</h2><div class="lb">Hareket fotoğrafları kamu malı olarak paylaşılan free-exercise-db arşivinden alındı. Makine omuz press çizimleri Everkinetic'ten (CC BY-SA 4.0). Blackline makinesinin fotoğrafları senin çektiğin fotoğraflar. "Nasıl yapılır" içindeki video bağlantısı YouTube'u açar.</div></div>`;
+   <div class="k pad"><h2>Fotoğraflar</h2><div class="lb">Hareket fotoğrafları kamu malı olarak paylaşılan free-exercise-db arşivinden alındı. Makine omuz press çizimleri Everkinetic'ten (CC BY-SA 4.0). Makine fotoğrafları ve makine etiketlerindeki çizimler senin çektiğin fotoğraflardan. "Nasıl yapılır" içindeki video bağlantısı YouTube'u açar.</div></div>`;
 }
 function sGiris(){
   if(izinYok)return `<img class="logo" src="icon-192.png" alt=""><h1>Erişim yok</h1><div class="lb">${esc(telGoster((kul.email||"").replace(ALAN,"")))} numarası için giriş izni yok. Salon yöneticisinden izin iste.</div><button class="btn ikincil" data-a="cikis">Başka numarayla gir</button>`;
