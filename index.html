@@ -177,6 +177,11 @@ h2{margin:0;font-size:20px;font-weight:900;text-transform:uppercase}
 .satir2{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:16px;font-weight:600;padding:8px 0;border-top:1.5px solid #000}
 .satir2:first-of-type{border-top:0}
 .satir2 .art{color:var(--ok-yazi);font-weight:800}
+.uyd{display:flex;gap:14px;align-items:baseline;flex:none}
+.uyd .link{font-size:14px}
+.lnk{background:var(--soft);border:2px solid #000;border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:1px}
+.lnk small{font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.05em}
+.lnk b{font-size:14px;font-weight:700;word-break:break-all;user-select:all}
 .hata{font-size:14px;color:var(--kir);font-weight:700;min-height:1.2em}
 
 .tost{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top,0px));transform:translateX(-50%);background:#000;color:var(--sari);padding:10px 16px;border-radius:8px;font-weight:800;z-index:50;max-width:90vw;text-align:center;font-size:15px;box-shadow:3px 3px 0 var(--ac)}
@@ -233,7 +238,7 @@ const LIB={
  legraise:{n:"Asılı bacak kaldırma",id:"Hanging_Leg_Raise",g:"karin",tip:"vucut",en:"hanging leg raise",ip:"Sallanmadan, karınla kaldır"}
 };
 const COP=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>`;
-const SURUM="2026-11-09 23:24";
+const SURUM="2026-11-09 23:26";
 const surumYazi=()=>{const [g,sa]=SURUM.split(" ");const [y,m,d]=g.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString("tr-TR",{day:"numeric",month:"long"})+" "+sa};
 const DMB=[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40];
 const WD=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
@@ -328,6 +333,8 @@ const ALAN="@fitness-e8b39.app", YONETICI="905523020476";
 const telNorm=v=>{let d=String(v||"").replace(/\D/g,"");if(d.startsWith("0"))d=d.slice(1);if(d.length===10)d="90"+d;return /^90\d{10}$/.test(d)?d:""};
 const telGoster=d=>d?"0"+d.slice(2,5)+" "+d.slice(5,8)+" "+d.slice(8,10)+" "+d.slice(10):"";
 let salon=null, izinYok=false, uyeler=null, izinRef=null;
+const LINK=location.origin+location.pathname.replace(/index\.html$/,"");
+const davet=()=>encodeURIComponent(`Fitness uygulaması: ${LINK}\nGirişte "İlk kez mi giriyorsun? Hesap oluştur"a dokun, telefon numaranı yaz ve kendine bir şifre belirle.`);
 const yoneticiMi=()=>!!kul&&kul.email===YONETICI+ALAN;
 const FBV="10.12.2";
 let fbDurum="yukleniyor", kul=null, kok=null, esit=false;
@@ -670,7 +677,9 @@ function sAyar(){
    ${yoneticiMi()?`<div class="k pad"><h2>Üyeler</h2><div class="lb">Numarasını eklediğin kişi aynı linki açıp "İlk kez mi giriyorsun? Hesap oluştur" ile kendi şifresini belirler. Herkesin kaydı ayrıdır.</div>
     <div style="display:flex;gap:8px"><input class="alan" id="uyeTel" type="tel" inputmode="tel" placeholder="0532 123 45 67" aria-label="Üye telefon numarası" style="flex:1"><button class="btn kucuk" data-a="uyeEkle">Ekle</button></div>
     <div class="hata" id="uyeHata"></div>
-    <div>${uyeler?Object.keys(uyeler).sort((x,y)=>(y===YONETICI)-(x===YONETICI)||x.localeCompare(y)).map(t=>`<div class="satir2"><span>${esc(telGoster(t))}${t===YONETICI?` <span class="lb">· sen</span>`:""}</span>${t===YONETICI?"":`<button class="link" data-a="uyeSil" data-tel="${t}">Kaldır</button>`}</div>`).join(""):`<div class="lb">Liste yükleniyor…</div>`}</div></div>`:""}
+    <div>${uyeler?Object.keys(uyeler).sort((x,y)=>(y===YONETICI)-(x===YONETICI)||x.localeCompare(y)).map(t=>`<div class="satir2"><span>${esc(telGoster(t))}${t===YONETICI?` <span class="lb">· sen</span>`:""}</span>${t===YONETICI?"":`<span class="uyd"><a class="link" href="https://wa.me/${t}?text=${davet()}" target="_blank" rel="noopener">WhatsApp'tan gönder</a><button class="link" data-a="uyeSil" data-tel="${t}">Kaldır</button></span>`}</div>`).join(""):`<div class="lb">Liste yükleniyor…</div>`}</div>
+    <div class="lnk"><small>Uygulama linki</small><b>${esc(LINK)}</b></div>
+    <div style="display:flex;gap:8px"><a class="btn ikincil" href="https://wa.me/?text=${davet()}" target="_blank" rel="noopener" style="flex:1;text-align:center;text-decoration:none">WhatsApp'la gönder</a><button class="btn ikincil" data-a="linkKopya" style="width:auto">Kopyala</button></div></div>`:""}
    ${a?`<div class="k pad"><h2>Yarım antrenman</h2><div class="lb">${esc(a.dayName)} · ${biten(a)} set kayıtlı</div><button class="btn kir" data-a="iptal">Antrenmanı sil</button></div>`:""}
    <div class="k pad"><h2>Fotoğraflar</h2><div class="lb">Hareket fotoğrafları kamu malı olarak paylaşılan free-exercise-db arşivinden alındı. Makine omuz press çizimleri Everkinetic'ten (CC BY-SA 4.0). Makine fotoğrafları ve makine etiketlerindeki çizimler senin çektiğin fotoğraflardan. "Nasıl yapılır" içindeki video bağlantısı YouTube'u açar.</div></div>`;
 }
@@ -802,6 +811,7 @@ document.addEventListener("click",async ev=>{
     try{const au=firebase.auth();V.kayit?await au.createUserWithEmailAndPassword(tel+ALAN,sf):await au.signInWithEmailAndPassword(tel+ALAN,sf);V.kayit=false}
     catch(e){const c=e.code||"";gh.textContent=/email-already-in-use/.test(c)?"Bu numarayla hesap zaten var, giriş yap.":/wrong-password|invalid-credential|user-not-found|invalid-login/.test(c)?"Numara ya da şifre hatalı.":/too-many/.test(c)?"Çok deneme yapıldı, biraz sonra tekrar dene.":"Giriş olmadı: "+(c||"bağlantı yok")}
     return}
+  if(a==="linkKopya"){try{await navigator.clipboard.writeText(LINK);tost("Link kopyalandı")}catch(e){tost(LINK)}return}
   if(a==="uyeEkle"){if(!yoneticiMi())return;const tel=telNorm($("uyeTel").value),h=$("uyeHata");
     if(!tel){h.textContent="Numarayı 0532 123 45 67 biçiminde yaz.";return}
     if(uyeler&&uyeler[tel]){h.textContent="Bu numara zaten ekli.";return}
