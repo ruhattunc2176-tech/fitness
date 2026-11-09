@@ -157,7 +157,7 @@ const LIB={
  dip:{n:"Dips",id:"Dips_-_Chest_Version",g:"itis",tip:"vucut",en:"chest dips",ip:"Gövde hafif öne, omuz dirsek hizasına insin"},
  fly:{n:"Pec fly",ar:"pec fly & rear delt pec deck kelebek butterfly göğüs makine chest fly",id:"Butterfly",fotos:[["img/Butterfly-0.webp","Başlangıç"],["img/Butterfly-1.webp","Bitiş"],["img/PecFly_Label.webp","Makinedeki çizim"]],g:"itis",tip:"kule",en:"pec deck machine",ip:"Sırt yaslı, omuzlar geride; kolları göğsün önünde birleştir"},
  reardelt:{n:"Rear delt (arka omuz)",ar:"pec fly & rear delt makinesi ters reverse pec deck arka omuz rear delt",id:"Reverse_Machine_Flyes",fotos:[["img/Reverse_Machine_Flyes-0.webp","Başlangıç"],["img/Reverse_Machine_Flyes-1.webp","Bitiş"],["img/PecFly_Label.webp","Makinedeki çizim"]],g:"itis",tip:"kule",en:"reverse pec deck rear delt fly",ip:"Göğsünü minderine yasla, kolları düz tutup yana ve geriye aç"},
- widechest:{n:"Wide chest press",ar:"wide chest press geniş göğüs press plakalı makine oturarak",id:"Wide_Chest_Press",fotos:[["img/Wide_Chest_Press-0.webp","Başlangıç (makinedeki çizim)"],["img/Wide_Chest_Press-1.webp","Bitiş (makinedeki çizim)"]],g:"itis",tip:"plaka",adim:2.5,en:"plate loaded wide chest press",ip:"Sırtını yasla, tutamaklar göğüs hizasında olsun; öne ve hafif içe doğru it, kontrollü geri dön"},
+ widechest:{n:"Wide chest press",ar:"wide chest press geniş göğüs press plakalı makine oturarak",id:"Wide_Chest_Press",fotos:[["img/Wide_Chest_Press-makine.webp","Senin makinen"],["img/Wide_Chest_Press-0.webp","Başlangıç (etiket)"],["img/Wide_Chest_Press-1.webp","Bitiş (etiket)"]],g:"itis",tip:"plaka",adim:2.5,kgNot:"bir kola takılan",en:"plate loaded wide chest press",ip:"Sırtını yasla, tutamaklar göğüs hizasında olsun; öne ve hafif içe doğru it, kontrollü geri dön"},
  mchest:{n:"Makine bench press (yatarak)",ar:"horizontal chest press seated horizontal shoulder press blackline göğüs makine bench yatarak",id:"Blackline_Bench",fotos:[["img/Blackline_Bench-0.webp","Senin makinen"],["img/Blackline_Bench-1.webp","Makinedeki çizim"]],g:"itis",tip:"kule",en:"lying chest press machine",ip:"Mandalı çekip sırtlığı düz yatır; tutamakları göğüs hizasından yukarı it, kolu kilitlemeden geri dön"},
  mshoulder:{n:"Makine omuz press (oturarak)",ar:"seated shoulder press horizontal shoulder press blackline omuz makine",id:"Blackline_Shoulder",fotos:[["img/Blackline_Shoulder-0.webp","Senin makinen"],["img/ek-omuz-press-1.webp","Başlangıç"],["img/ek-omuz-press-2.webp","Bitiş"],["img/Blackline_Shoulder-1.webp","Makinedeki çizim"]],kaynak:"Çizim: Everkinetic, CC BY-SA 4.0",g:"itis",tip:"kule",en:"seated shoulder press machine",ip:"Mandalı çekip sırtlığı dik kaldır; tutamakları omuz hizasından başının üstüne it"},
  pushdown:{n:"Triceps pushdown",id:"Triceps_Pushdown",g:"itis",tip:"kule",en:"triceps pushdown",ip:"Dirsekler yanda sabit, kolu tam aç"},
@@ -173,7 +173,7 @@ const LIB={
  cablecrunch:{n:"Cable crunch",id:"Cable_Crunch",g:"karin",tip:"kule",en:"cable crunch",ip:"Kalça sabit, karınla bük"},
  legraise:{n:"Asılı bacak kaldırma",id:"Hanging_Leg_Raise",g:"karin",tip:"vucut",en:"hanging leg raise",ip:"Sallanmadan, karınla kaldır"}
 };
-const SURUM="2026-11-09 21:04";
+const SURUM="2026-11-09 21:17";
 const surumYazi=()=>{const [g,sa]=SURUM.split(" ");const [y,m,d]=g.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString("tr-TR",{day:"numeric",month:"long"})+" "+sa};
 const DMB=[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40];
 const WD=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
@@ -196,7 +196,7 @@ const haftaBasi=()=>{const d=new Date();d.setDate(d.getDate()-(d.getDay()+6)%7);
 const sayi=v=>{const n=parseFloat(String(v??"").replace(",","."));return isFinite(n)?n:0};
 const yaz=n=>(Math.round(n*100)/100).toLocaleString("tr-TR");
 const arr=v=>Array.isArray(v)?v:(v&&typeof v==="object"?Object.values(v):[]);
-const img=(k,i)=>`img/${LIB[k].id}-${i}.webp`;
+const img=(k,i)=>i===0&&LIB[k].fotos?LIB[k].fotos[0][0]:`img/${LIB[k].id}-${i}.webp`;
 const vidUrl=k=>"https://www.youtube.com/results?search_query="+encodeURIComponent(LIB[k].en+" proper form");
 const tipOf=k=>LIB[k].tip;
 const kiloVar=k=>!["vucut","sure"].includes(tipOf(k));
@@ -256,6 +256,7 @@ function baglan(){
     Object.keys(uzak.sessions).forEach(sid=>{if(kirli.has("s/"+sid)||silinecek.has("s/"+sid))return; if(JSON.stringify(S.sessions[sid])!==JSON.stringify(uzak.sessions[sid])){S.sessions[sid]=uzak.sessions[sid];degisti=true}});
     Object.keys(S.sessions).forEach(sid=>{if(!uzak.sessions[sid]&&!kirli.has("s/"+sid)){kirli.add("s/"+sid)}});
     if(gecis())degisti=true;
+    if(gecis2())degisti=true;
     if(kirli.size) yazmaPlanla();
     if(degisti){yerelKaydet(); if(odakta())bekleyenCiz=true; else ciz(true)}
   },()=>{esit=false});
@@ -265,6 +266,18 @@ function gecis(){if(S.plan.g1)return false;let deg=false;
   S.plan.days.forEach(d=>d.ex.forEach(e=>{if(e.k==="bench"){e.k="mchest";e.reps="8-12";e.rest=varsayDn("mchest");deg=true;delete V.g[e.id]}else if(e.k==="dbsp"){e.k="mshoulder";e.reps="8-12";e.rest=varsayDn("mshoulder");deg=true;delete V.g[e.id]}}));
   Object.values(S.sessions).forEach(x=>{if(x.date!=="2026-11-09")return;let sd=false;Object.keys(x.keys||{}).forEach(eid=>{if(x.keys[eid]==="bench"){x.keys[eid]="mchest";sd=true}});if(sd){kirli.add("s/"+x.sid)}});
   S.plan.g1=1;kirli.add("main");yerelKaydet();return true}
+/* tek seferlik (9 Kasım): Gün A = Pec fly, Makine bench press, Wide chest press (3×10-12); bugünkü antrenman 10 kg × 12, 3 set */
+function gecis2(){if(S.plan.g2)return false;
+  const ks=["fly","mchest","widechest"];
+  let d=S.plan.days.find(x=>x.ex.some(e=>e.k==="fly"||e.k==="mchest"))||S.plan.days[0];
+  if(!d){d={id:uid(),name:"Gün A",wd:0,ex:[]};S.plan.days.push(d)}
+  ks.forEach(k=>{let e=d.ex.find(x=>x.k===k);if(!e){e=h(k,3,"10-12");d.ex.push(e)}e.sets=3;e.reps="10-12";delete V.g[e.id]});
+  const tarihG="2026-11-09";
+  let s=Object.values(S.sessions).find(x=>x.date===tarihG&&x.dayId===d.id);
+  if(!s){s={sid:uid(),dayId:d.id,dayName:gunAd(d),date:tarihG,t:Date.parse("2026-11-09T20:00:00+03:00"),done:true,sets:{},keys:{}};S.sessions[s.sid]=s}
+  ks.forEach(k=>{const e=d.ex.find(x=>x.k===k);const v=s.sets[e.id]||[];while(v.length<3)v.push({kg:10,r:12,ok:true});s.sets[e.id]=v;s.keys[e.id]=k});
+  s.done=true;s.end=s.end||Date.parse("2026-11-09T21:00:00+03:00");if(S.activeSid===s.sid)S.activeSid=null;
+  S.plan.g2=1;kirli.add("main");kirli.add("s/"+s.sid);yerelKaydet();return true}
 function yerelKaydet(){try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}}
 function kaydet(keys){yerelKaydet();(keys||[]).forEach(k=>kirli.add(k));yazmaPlanla()}
 function yazmaPlanla(){if(!kok)return;clearTimeout(yazT);yazT=setTimeout(yazdir,600)}
@@ -352,7 +365,7 @@ function sAnt(){
     const L=LIB[e.k],kay=kayitli(s,e),bitti=kay.length>=e.sets;
     if(e.id!==V.acik)return `<button class="k sat" data-a="ac" data-ex="${e.id}" style="border:1px solid var(--line);border-radius:18px"><span class="buyut" role="button" tabindex="0" data-a="foto" data-k="${e.k}" aria-label="Fotoğrafı büyüt"><img src="${img(e.k,0)}" alt="" loading="lazy"><i aria-hidden="true">⤢</i></span><span class="a"><b>${esc(L.n)}</b><span>${bitti?`${kay.length} set tamam · ${setYazi(e.k,kay[kay.length-1])}`:kay.length?`${kay.length}/${e.sets} set`:`${e.sets} × ${esc(e.reps)}${tipOf(e.k)==="sure"?" sn":""} · ${sonKiloYazi(e)}`}</span></span>${bitti?`<span class="ok">✓</span>`:`<span class="bos"></span>`}</button>`;
     const g=giris(e),o=oneri(e,s&&s.sid),son=oncekiSet(e.k,s&&s.sid),tip=tipOf(e.k);
-    const satirKg=kiloVar(e.k)?`<div class="ad"><span class="ad-l">Kilo (kg)<small>${tip==="dambil"?"tek dambıl":tip==="bar"?"bar dahil":tip==="plaka"?"takılan plakalar":"makine"}</small></span><span class="r"><button data-a="kg-" aria-label="Kiloyu azalt">−</button><input id="kg-${e.id}" inputmode="decimal" value="${yaz(g.kg)}" data-f="kg" aria-label="Kilo"><button data-a="kg+" aria-label="Kiloyu artır">+</button></span></div>`:"";
+    const satirKg=kiloVar(e.k)?`<div class="ad"><span class="ad-l">Kilo (kg)<small>${LIB[e.k].kgNot?LIB[e.k].kgNot:tip==="dambil"?"tek dambıl":tip==="bar"?"bar dahil":tip==="plaka"?"takılan plakalar":"makine"}</small></span><span class="r"><button data-a="kg-" aria-label="Kiloyu azalt">−</button><input id="kg-${e.id}" inputmode="decimal" value="${yaz(g.kg)}" data-f="kg" aria-label="Kilo"><button data-a="kg+" aria-label="Kiloyu artır">+</button></span></div>`:"";
     const satirR=`<div class="ad"><span class="ad-l">${tip==="sure"?"Süre (sn)":"Tekrar"}</span><span class="r"><button data-a="r-" aria-label="Azalt">−</button><input id="r-${e.id}" inputmode="numeric" value="${g.r}" data-f="r" aria-label="${tip==="sure"?"Süre":"Tekrar"}"><button data-a="r+" aria-label="Artır">+</button></span></div>`;
     return `<section class="k hk">
      <div class="hb"><button class="foto" data-a="foto" data-k="${e.k}" aria-label="Fotoğrafı büyüt"><img src="${img(e.k,0)}" alt="${esc(L.n)}"></button><div><b>${esc(L.n)}</b><span class="bil">${e.sets} × ${esc(e.reps)}${tip==="sure"?" sn":""} · </span><button class="link" data-a="foto" data-k="${e.k}">▶ Nasıl yapılır</button></div></div>
@@ -561,7 +574,7 @@ document.addEventListener("change",ev=>{const t=ev.target;
 document.addEventListener("focusin",ev=>{if(ev.target.dataset&&ev.target.dataset.f)ev.target.select()});
 document.addEventListener("keydown",ev=>{if(ev.key==="Escape")perdeKapat();if((ev.key==="Enter"||ev.key===" ")&&ev.target.classList&&ev.target.classList.contains("buyut")){ev.preventDefault();fotoAc(ev.target.dataset.k)}if(ev.key==="Enter"&&/^(gs|gs2|gt)$/.test(ev.target.id)){const b=document.querySelector('[data-a="giris"]');b&&b.click()}});
 
-if(V.yerel)gecis();tarihceKur();ciz();requestAnimationFrame(()=>window.scrollTo(0,V.y||0));
+if(V.yerel){gecis();gecis2()}tarihceKur();ciz();requestAnimationFrame(()=>window.scrollTo(0,V.y||0));
 fbBaslat();
 </script>
 </body></html>
