@@ -233,7 +233,7 @@ const LIB={
  legraise:{n:"Asılı bacak kaldırma",id:"Hanging_Leg_Raise",g:"karin",tip:"vucut",en:"hanging leg raise",ip:"Sallanmadan, karınla kaldır"}
 };
 const COP=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>`;
-const SURUM="2026-11-09 23:22";
+const SURUM="2026-11-09 23:24";
 const surumYazi=()=>{const [g,sa]=SURUM.split(" ");const [y,m,d]=g.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString("tr-TR",{day:"numeric",month:"long"})+" "+sa};
 const DMB=[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40];
 const WD=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
@@ -327,7 +327,8 @@ const FB={apiKey:"AIzaSyAcRdjIei7JjAlvoaRWhDJJAglHRIa5V1Q",authDomain:"fitness-e
 const ALAN="@fitness-e8b39.app", YONETICI="905523020476";
 const telNorm=v=>{let d=String(v||"").replace(/\D/g,"");if(d.startsWith("0"))d=d.slice(1);if(d.length===10)d="90"+d;return /^90\d{10}$/.test(d)?d:""};
 const telGoster=d=>d?"0"+d.slice(2,5)+" "+d.slice(5,8)+" "+d.slice(8,10)+" "+d.slice(10):"";
-let salon=null, izinYok=false;
+let salon=null, izinYok=false, uyeler=null, izinRef=null;
+const yoneticiMi=()=>!!kul&&kul.email===YONETICI+ALAN;
 const FBV="10.12.2";
 let fbDurum="yukleniyor", kul=null, kok=null, esit=false;
 const kirli=new Set(), silinecek=new Set(); let yazT=null, yaziyor=false;
@@ -340,8 +341,9 @@ async function fbBaslat(){
     firebase.initializeApp(FB);
     fbDurum="hazir";
     firebase.auth().onAuthStateChanged(async u=>{kul=u; izinYok=false; salon=null;
-      if(u){try{const tel=(u.email||"").replace(ALAN,"");const r=firebase.database().ref("izin/"+tel);let v=(await r.get()).val();if(!v&&tel===YONETICI){await r.set("ana");v="ana"}if(v&&typeof v==="string"){salon=v;baglan()}else izinYok=true}catch(e){izinYok=true}}
-      else{if(kok){kok.off();kok=null}esit=false} ciz(true)});
+      if(u){try{const tel=(u.email||"").replace(ALAN,"");const r=firebase.database().ref("izin/"+tel);let v=(await r.get()).val();if(!v&&tel===YONETICI){await r.set("ana");v="ana"}if(v&&typeof v==="string"){salon=v;baglan();if(tel===YONETICI&&!izinRef){izinRef=firebase.database().ref("izin");izinRef.on("value",q=>{uyeler=q.val()||{};if(V.v==="ayar"&&!odakta())ciz(true)},()=>{})}}else izinYok=true}catch(e){izinYok=true}}
+      else{if(kok){kok.off();kok=null}esit=false}
+      if(!yoneticiMi()&&izinRef){izinRef.off();izinRef=null;uyeler=null} ciz(true)});
   }catch(e){fbDurum="yok"; ciz(true)}
 }
 function baglan(){
@@ -356,6 +358,7 @@ function baglan(){
     Object.keys(uzak.sessions).forEach(sid=>{if(kirli.has("s/"+sid)||silinecek.has("s/"+sid))return; if(JSON.stringify(S.sessions[sid])!==JSON.stringify(uzak.sessions[sid])){S.sessions[sid]=uzak.sessions[sid];degisti=true}});
     Object.keys(S.sessions).forEach(sid=>{if(uzak.sessions[sid]||kirli.has("s/"+sid))return;if(S.plan.silT&&(S.sessions[sid].t||0)<S.plan.silT){delete S.sessions[sid];degisti=true;return}kirli.add("s/"+sid)});
     if(S.plan.silT)Object.keys(uzak.sessions).forEach(sid=>{if((uzak.sessions[sid].t||0)<S.plan.silT){silinecek.add("s/"+sid);delete S.sessions[sid];degisti=true}});
+    if(yeniUye())degisti=true;
     if(gecis())degisti=true;
     if(gecis2())degisti=true;
     if(gecis3())degisti=true;
@@ -445,6 +448,10 @@ function gecis3(){if(S.plan.g3)return false;
   S.plan.g1=1;S.plan.g2=1;S.plan.g3=1;kirli.add("main");yerelKaydet();return true}
 /* tek seferlik (9 Kasım): geçmiş silinir, 12 Kasım Perşembe başlangıç; sıra A (Per) → B (Cmt) → C (Pzt) */
 const MILAT="2026-11-12";
+/* yönetici dışındaki üyeler: kişisel tek seferlik geçişler uygulanmaz, önerilen programla başlar */
+function yeniUye(){if(S.plan.g4||!kul||yoneticiMi())return false;
+  if(!S.plan.g3&&!Object.keys(S.sessions).length)hazirYukle("dengeli");
+  S.plan.g1=S.plan.g2=S.plan.g3=S.plan.g4=1;kirli.add("main");yerelKaydet();return true}
 function gecis4(){if(S.plan.g4)return false;
   Object.keys(S.sessions).forEach(sid=>{silinecek.add("s/"+sid)});S.sessions={};S.activeSid=null;
   const wd={0:3,1:5,2:0};S.plan.days.forEach((d,i)=>{if(wd[i]!==undefined)d.wd=wd[i]});
@@ -660,6 +667,10 @@ function sAyar(){
     ${kul?`<div class="lb">Giriş: <b style="color:var(--ink)">${esc(telGoster((kul.email||"").replace(ALAN,"")))}</b> · ${esit?"eşitlendi":"bağlanıyor"}</div><button class="btn kir" data-a="cikis">Çıkış yap</button>`
      :fbDurum==="hazir"?`<div class="lb">Şu an yalnız bu cihaza kaydediliyor.</div><button class="btn ikincil" data-a="girisAc">Giriş yap</button>`
      :`<div class="lb">Eşitleme açılamadı; kayıtlar bu cihazda.</div>`}</div>
+   ${yoneticiMi()?`<div class="k pad"><h2>Üyeler</h2><div class="lb">Numarasını eklediğin kişi aynı linki açıp "İlk kez mi giriyorsun? Hesap oluştur" ile kendi şifresini belirler. Herkesin kaydı ayrıdır.</div>
+    <div style="display:flex;gap:8px"><input class="alan" id="uyeTel" type="tel" inputmode="tel" placeholder="0532 123 45 67" aria-label="Üye telefon numarası" style="flex:1"><button class="btn kucuk" data-a="uyeEkle">Ekle</button></div>
+    <div class="hata" id="uyeHata"></div>
+    <div>${uyeler?Object.keys(uyeler).sort((x,y)=>(y===YONETICI)-(x===YONETICI)||x.localeCompare(y)).map(t=>`<div class="satir2"><span>${esc(telGoster(t))}${t===YONETICI?` <span class="lb">· sen</span>`:""}</span>${t===YONETICI?"":`<button class="link" data-a="uyeSil" data-tel="${t}">Kaldır</button>`}</div>`).join(""):`<div class="lb">Liste yükleniyor…</div>`}</div></div>`:""}
    ${a?`<div class="k pad"><h2>Yarım antrenman</h2><div class="lb">${esc(a.dayName)} · ${biten(a)} set kayıtlı</div><button class="btn kir" data-a="iptal">Antrenmanı sil</button></div>`:""}
    <div class="k pad"><h2>Fotoğraflar</h2><div class="lb">Hareket fotoğrafları kamu malı olarak paylaşılan free-exercise-db arşivinden alındı. Makine omuz press çizimleri Everkinetic'ten (CC BY-SA 4.0). Makine fotoğrafları ve makine etiketlerindeki çizimler senin çektiğin fotoğraflardan. "Nasıl yapılır" içindeki video bağlantısı YouTube'u açar.</div></div>`;
 }
@@ -790,6 +801,14 @@ document.addEventListener("click",async ev=>{
     gh.textContent=V.kayit?"Hesap oluşturuluyor…":"Giriş yapılıyor…";
     try{const au=firebase.auth();V.kayit?await au.createUserWithEmailAndPassword(tel+ALAN,sf):await au.signInWithEmailAndPassword(tel+ALAN,sf);V.kayit=false}
     catch(e){const c=e.code||"";gh.textContent=/email-already-in-use/.test(c)?"Bu numarayla hesap zaten var, giriş yap.":/wrong-password|invalid-credential|user-not-found|invalid-login/.test(c)?"Numara ya da şifre hatalı.":/too-many/.test(c)?"Çok deneme yapıldı, biraz sonra tekrar dene.":"Giriş olmadı: "+(c||"bağlantı yok")}
+    return}
+  if(a==="uyeEkle"){if(!yoneticiMi())return;const tel=telNorm($("uyeTel").value),h=$("uyeHata");
+    if(!tel){h.textContent="Numarayı 0532 123 45 67 biçiminde yaz.";return}
+    if(uyeler&&uyeler[tel]){h.textContent="Bu numara zaten ekli.";return}
+    try{await firebase.database().ref("izin/"+tel).set(salon||"ana");$("uyeTel").value="";$("uyeTel").blur();tost(telGoster(tel)+" eklendi");ciz(true)}catch(e){h.textContent="Eklenemedi, bağlantını kontrol et."}
+    return}
+  if(a==="uyeSil"){if(!yoneticiMi()||b.dataset.tel===YONETICI)return;if(b.dataset.on!=="1"){b.dataset.on="1";b.textContent="Emin misin?";return}
+    try{await firebase.database().ref("izin/"+b.dataset.tel).remove();tost("Giriş izni kaldırıldı")}catch(e){tost("Kaldırılamadı")}
     return}
   if(a==="yerel"){V.yerel=true;ciz();return}
   if(a==="girisAc"){V.yerel=false;ciz();return}
