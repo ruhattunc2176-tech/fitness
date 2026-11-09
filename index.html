@@ -158,7 +158,8 @@ const LIB={
  fly:{n:"Pec fly",ar:"pec fly & rear delt pec deck kelebek butterfly göğüs makine chest fly",id:"Butterfly",fotos:[["img/Butterfly-0.webp","Başlangıç"],["img/Butterfly-1.webp","Bitiş"],["img/PecFly_Label.webp","Makinedeki çizim"]],g:"itis",tip:"kule",en:"pec deck machine",ip:"Sırt yaslı, omuzlar geride; kolları göğsün önünde birleştir"},
  reardelt:{n:"Rear delt (arka omuz)",ar:"pec fly & rear delt makinesi ters reverse pec deck arka omuz rear delt",id:"Reverse_Machine_Flyes",fotos:[["img/Reverse_Machine_Flyes-0.webp","Başlangıç"],["img/Reverse_Machine_Flyes-1.webp","Bitiş"],["img/PecFly_Label.webp","Makinedeki çizim"]],g:"itis",tip:"kule",en:"reverse pec deck rear delt fly",ip:"Göğsünü minderine yasla, kolları düz tutup yana ve geriye aç"},
  widechest:{n:"Wide chest press",ar:"wide chest press geniş göğüs press plakalı makine oturarak",id:"Wide_Chest_Press",fotos:[["img/Wide_Chest_Press-makine.webp","Senin makinen"],["img/Wide_Chest_Press-0.webp","Başlangıç (etiket)"],["img/Wide_Chest_Press-1.webp","Bitiş (etiket)"]],g:"itis",tip:"plaka",adim:2.5,kgNot:"bir kola takılan",en:"plate loaded wide chest press",ip:"Sırtını yasla, tutamaklar göğüs hizasında olsun; öne ve hafif içe doğru it, kontrollü geri dön"},
- mchest:{n:"Makine bench press (yatarak)",ar:"horizontal chest press seated horizontal shoulder press blackline göğüs makine bench yatarak",id:"Blackline_Bench",fotos:[["img/Blackline_Bench-0.webp","Senin makinen"],["img/Blackline_Bench-1.webp","Makinedeki çizim"]],g:"itis",tip:"kule",en:"lying chest press machine",ip:"Mandalı çekip sırtlığı düz yatır; tutamakları göğüs hizasından yukarı it, kolu kilitlemeden geri dön"},
+ mchest:{n:"Makine bench press – geniş tutuş",ar:"yukarıdaki uzun bar wide grip horizontal chest press seated horizontal shoulder press blackline göğüs makine bench yatarak",id:"Blackline_Bench",fotos:[["img/Blackline_Bench-0.webp","Senin makinen"],["img/Blackline_Bench-1.webp","Makinedeki çizim"]],g:"itis",tip:"kule",en:"wide grip lying chest press machine",ip:"Mandalla sehpayı düz yatır; yukarıdaki uzun barı eller geniş, avuçlar ayağa bakacak şekilde tut, göğüs hizasından yukarı it"},
+ mchestn:{n:"Makine bench press – nötr tutuş",ar:"aşağıdaki dikey tutamak neutral grip dar tutuş horizontal chest press seated horizontal shoulder press blackline göğüs makine bench yatarak",id:"Blackline_Bench",fotos:[["img/Blackline_Bench-0.webp","Senin makinen"],["img/Blackline_Bench-1.webp","Makinedeki çizim"]],g:"itis",tip:"kule",en:"neutral grip lying chest press machine",ip:"Sehpa düz; aşağıdaki dikey tutamakları avuçlar birbirine bakacak şekilde tut, göğüs hizasından yukarı it"},
  mshoulder:{n:"Makine omuz press (oturarak)",ar:"seated shoulder press horizontal shoulder press blackline omuz makine",id:"Blackline_Shoulder",fotos:[["img/Blackline_Shoulder-0.webp","Senin makinen"],["img/ek-omuz-press-1.webp","Başlangıç"],["img/ek-omuz-press-2.webp","Bitiş"],["img/Blackline_Shoulder-1.webp","Makinedeki çizim"]],kaynak:"Çizim: Everkinetic, CC BY-SA 4.0",g:"itis",tip:"kule",en:"seated shoulder press machine",ip:"Mandalı çekip sırtlığı dik kaldır; tutamakları omuz hizasından başının üstüne it"},
  pushdown:{n:"Triceps pushdown",id:"Triceps_Pushdown",g:"itis",tip:"kule",en:"triceps pushdown",ip:"Dirsekler yanda sabit, kolu tam aç"},
  latpd:{n:"Lat pulldown",id:"Wide-Grip_Lat_Pulldown",g:"cekis",tip:"kule",en:"lat pulldown",ip:"Barı üst göğse çek, dirsekler aşağı ve geriye"},
@@ -173,7 +174,7 @@ const LIB={
  cablecrunch:{n:"Cable crunch",id:"Cable_Crunch",g:"karin",tip:"kule",en:"cable crunch",ip:"Kalça sabit, karınla bük"},
  legraise:{n:"Asılı bacak kaldırma",id:"Hanging_Leg_Raise",g:"karin",tip:"vucut",en:"hanging leg raise",ip:"Sallanmadan, karınla kaldır"}
 };
-const SURUM="2026-11-09 21:17";
+const SURUM="2026-11-09 22:28";
 const surumYazi=()=>{const [g,sa]=SURUM.split(" ");const [y,m,d]=g.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString("tr-TR",{day:"numeric",month:"long"})+" "+sa};
 const DMB=[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40];
 const WD=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
@@ -257,6 +258,7 @@ function baglan(){
     Object.keys(S.sessions).forEach(sid=>{if(!uzak.sessions[sid]&&!kirli.has("s/"+sid)){kirli.add("s/"+sid)}});
     if(gecis())degisti=true;
     if(gecis2())degisti=true;
+    if(gecis3())degisti=true;
     if(kirli.size) yazmaPlanla();
     if(degisti){yerelKaydet(); if(odakta())bekleyenCiz=true; else ciz(true)}
   },()=>{esit=false});
@@ -278,6 +280,15 @@ function gecis2(){if(S.plan.g2)return false;
   ks.forEach(k=>{const e=d.ex.find(x=>x.k===k);const v=s.sets[e.id]||[];while(v.length<3)v.push({kg:10,r:12,ok:true});s.sets[e.id]=v;s.keys[e.id]=k});
   s.done=true;s.end=s.end||Date.parse("2026-11-09T21:00:00+03:00");if(S.activeSid===s.sid)S.activeSid=null;
   S.plan.g2=1;kirli.add("main");kirli.add("s/"+s.sid);yerelKaydet();return true}
+/* tek seferlik (9 Kasım): 3 günlük tüm vücut programı — Pzt A, Per B, Cmt C */
+function gecis3(){if(S.plan.g3)return false;
+  const eski=S.plan.days.find(x=>x.ex.some(e=>e.k==="mchest"||e.k==="fly"))||S.plan.days[0];
+  const g=(k,sets,reps,rest)=>{const e=h(k,sets,reps,rest);return e};
+  S.plan.days=[
+   {id:eski?eski.id:uid(),name:"Gün A",wd:0,ex:[g("legpress",3,"10-12"),g("mchest",3,"8-12"),g("latpd",3,"10-12"),g("legcurl",2,"12-15",75),g("latraise",2,"12-15",60),g("plank",2,"30-45",60)]},
+   {id:uid(),name:"Gün B",wd:3,ex:[g("rdl",3,"8-10",120),g("mshoulder",3,"10-12"),g("cablerow",3,"10-12"),g("fly",2,"12-15",75),g("legext",2,"12-15",75),g("pushdown",2,"10-12",60)]},
+   {id:uid(),name:"Gün C",wd:5,ex:[g("goblet",3,"10-12",90),g("widechest",3,"8-12",120),g("dbrow",3,"10-12",90),g("reardelt",2,"12-15",60),g("curl",2,"10-12",60),g("cablecrunch",2,"12-15",60)]}];
+  S.plan.g1=1;S.plan.g2=1;S.plan.g3=1;V.g={};V.gun=null;kirli.add("main");yerelKaydet();return true}
 function yerelKaydet(){try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}}
 function kaydet(keys){yerelKaydet();(keys||[]).forEach(k=>kirli.add(k));yazmaPlanla()}
 function yazmaPlanla(){if(!kok)return;clearTimeout(yazT);yazT=setTimeout(yazdir,600)}
@@ -574,7 +585,7 @@ document.addEventListener("change",ev=>{const t=ev.target;
 document.addEventListener("focusin",ev=>{if(ev.target.dataset&&ev.target.dataset.f)ev.target.select()});
 document.addEventListener("keydown",ev=>{if(ev.key==="Escape")perdeKapat();if((ev.key==="Enter"||ev.key===" ")&&ev.target.classList&&ev.target.classList.contains("buyut")){ev.preventDefault();fotoAc(ev.target.dataset.k)}if(ev.key==="Enter"&&/^(gs|gs2|gt)$/.test(ev.target.id)){const b=document.querySelector('[data-a="giris"]');b&&b.click()}});
 
-if(V.yerel){gecis();gecis2()}tarihceKur();ciz();requestAnimationFrame(()=>window.scrollTo(0,V.y||0));
+if(V.yerel){gecis();gecis2();gecis3()}tarihceKur();ciz();requestAnimationFrame(()=>window.scrollTo(0,V.y||0));
 fbBaslat();
 </script>
 </body></html>
