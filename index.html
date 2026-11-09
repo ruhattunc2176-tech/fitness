@@ -182,6 +182,18 @@ h2{margin:0;font-size:20px;font-weight:900;text-transform:uppercase}
 .lnk{background:var(--soft);border:2px solid #000;border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:1px}
 .lnk small{font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.05em}
 .lnk b{font-size:14px;font-weight:700;word-break:break-all;user-select:all}
+.al{position:relative}
+.al .alan{padding-right:50px}
+.goz{position:absolute;right:5px;top:50%;transform:translateY(-50%);width:40px;height:40px;border:0;background:none;display:grid;place-items:center;color:#000;padding:0}
+.goz svg{width:22px;height:22px}
+.guc{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+.guc i{height:9px;border:2px solid #000;border-radius:4px;background:#fff}
+.gy{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;margin-top:-10px;min-height:1.3em}
+.kr{background:#fff;border:2px solid #000;border-radius:8px;padding:9px 11px;display:flex;flex-direction:column;gap:6px}
+.kr div{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--muted)}
+.kr b{width:20px;height:20px;border:2px solid #000;border-radius:5px;display:grid;place-items:center;font-size:12px;font-weight:900;background:#fff;color:transparent;flex:none}
+.kr .ok{color:#000}
+.kr .ok b{background:var(--ok);color:#000}
 .hata{font-size:14px;color:var(--kir);font-weight:700;min-height:1.2em}
 
 .tost{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top,0px));transform:translateX(-50%);background:#000;color:var(--sari);padding:10px 16px;border-radius:8px;font-weight:800;z-index:50;max-width:90vw;text-align:center;font-size:15px;box-shadow:3px 3px 0 var(--ac)}
@@ -238,7 +250,7 @@ const LIB={
  legraise:{n:"Asılı bacak kaldırma",id:"Hanging_Leg_Raise",g:"karin",tip:"vucut",en:"hanging leg raise",ip:"Sallanmadan, karınla kaldır"}
 };
 const COP=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>`;
-const SURUM="2026-11-09 23:26";
+const SURUM="2026-11-09 23:27";
 const surumYazi=()=>{const [g,sa]=SURUM.split(" ");const [y,m,d]=g.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString("tr-TR",{day:"numeric",month:"long"})+" "+sa};
 const DMB=[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40];
 const WD=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
@@ -286,6 +298,8 @@ const IK={
  bugun:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h18M6 8v8M18 8v8"/></svg>',
  gelisim:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16M5 15l4-4 3 3 6-7"/></svg>',
  program:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg>',
+ goz:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
+ gozK:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18M10.6 5.1A10.7 10.7 0 0 1 12 5c6.4 0 10 7 10 7a17 17 0 0 1-3.2 4M6.5 6.6C3.7 8.5 2 12 2 12s3.6 7 10 7c1.6 0 3-.4 4.3-1M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>',
  sure:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9 2h6"/></svg>'
 };
 
@@ -683,15 +697,26 @@ function sAyar(){
    ${a?`<div class="k pad"><h2>Yarım antrenman</h2><div class="lb">${esc(a.dayName)} · ${biten(a)} set kayıtlı</div><button class="btn kir" data-a="iptal">Antrenmanı sil</button></div>`:""}
    <div class="k pad"><h2>Fotoğraflar</h2><div class="lb">Hareket fotoğrafları kamu malı olarak paylaşılan free-exercise-db arşivinden alındı. Makine omuz press çizimleri Everkinetic'ten (CC BY-SA 4.0). Makine fotoğrafları ve makine etiketlerindeki çizimler senin çektiğin fotoğraflardan. "Nasıl yapılır" içindeki video bağlantısı YouTube'u açar.</div></div>`;
 }
+/* yeni hesap şifre kuralları: en az 8 karakter, bir harf, bir rakam, telefon numarası olmasın */
+function sifreKural(v,tel){const n=(tel||"").slice(2);return {uz:v.length>=8,hf:/[a-zçğıöşü]/i.test(v),rk:/\d/.test(v),tl:v.length>0&&!(n&&v.replace(/\D/g,"").includes(n))}}
+function sifreBak(){const e=$("gs"),e2=$("gs2");if(!e||!e2||!$("kr"))return;const v=e.value,k=sifreKural(v,telNorm($("gt").value));
+  let n=0;$("kr").querySelectorAll("div").forEach(d=>{const o=k[d.dataset.k];d.className=o?"ok":"";if(o)n++});
+  let g=v?Math.min(4,(v.length>=8)+(v.length>=12)+(k.hf&&k.rk)+(/[^a-z0-9çğıöşü]/i.test(v)||v.length>=14)):0;if(v&&g<1)g=1;
+  const rk=["#fff","var(--ac)","#FFB020","var(--sari)","var(--ok)"][g];$("guc").querySelectorAll("i").forEach((x,i)=>x.style.background=i<g?rk:"#fff");
+  $("gy").textContent=v?["","Zayıf","Orta","İyi","Güçlü"][g]:"";
+  const es=!!v&&v===e2.value;$("es").className=es?"ok":"";$("gbtn").disabled=!(n===4&&es)}
 function sGiris(){
   if(izinYok)return `<img class="logo" src="icon-192.png?v=2" alt=""><h1>Erişim yok</h1><div class="lb">${esc(telGoster((kul.email||"").replace(ALAN,"")))} numarası için giriş izni yok. Salon yöneticisinden izin iste.</div><button class="btn ikincil" data-a="cikis">Başka numarayla gir</button>`;
   const yeni=V.kayit;
   return `<img class="logo" src="icon-192.png?v=2" alt="" style="margin-top:6vh"><h1>Fitness</h1><div class="lb">${yeni?"İlk giriş: numaranı yaz, kendine bir şifre belirle":"Telefon numaran ve şifrenle gir"}</div>
    <input class="alan" id="gt" type="tel" inputmode="tel" autocomplete="tel" placeholder="0532 123 45 67" value="${esc(V.tel||"")}">
-   <input class="alan" id="gs" type="password" autocomplete="${yeni?"new-password":"current-password"}" placeholder="${yeni?"Yeni şifre (en az 6 karakter)":"Şifre"}">
-   ${yeni?`<input class="alan" id="gs2" type="password" autocomplete="new-password" placeholder="Şifreyi tekrar yaz">`:""}
+   <div class="al"><input class="alan" id="gs" type="password" autocomplete="${yeni?"new-password":"current-password"}" placeholder="${yeni?"Yeni şifre":"Şifre"}"><button class="goz" type="button" data-a="goz" data-i="gs" aria-label="Şifreyi göster">${IK.goz}</button></div>
+   ${yeni?`<div class="guc" id="guc"><i></i><i></i><i></i><i></i></div><div class="gy" id="gy"></div>
+   <div class="kr" id="kr"><div data-k="uz"><b>✓</b>En az 8 karakter</div><div data-k="hf"><b>✓</b>En az bir harf</div><div data-k="rk"><b>✓</b>En az bir rakam</div><div data-k="tl"><b>✓</b>Telefon numaran olmasın</div></div>
+   <div class="al"><input class="alan" id="gs2" type="password" autocomplete="new-password" placeholder="Şifreyi tekrar yaz"><button class="goz" type="button" data-a="goz" data-i="gs2" aria-label="Şifreyi göster">${IK.goz}</button></div>
+   <div class="kr"><div id="es"><b>✓</b>İki şifre aynı</div></div>`:""}
    <div class="hata" id="gh"></div>
-   <button class="btn" data-a="giris">${yeni?"Hesabı oluştur":"Giriş yap"}</button>
+   <button class="btn" id="gbtn" data-a="giris" ${yeni?"disabled":""}>${yeni?"Hesabı oluştur":"Giriş yap"}</button>
    <button class="btn ikincil" data-a="kayitDegis">${yeni?"Hesabım var, giriş yap":"İlk kez mi giriyorsun? Hesap oluştur"}</button>
    <button class="geri" data-a="yerel" style="align-self:center;color:var(--muted)">Giriş yapmadan bu cihazda kullan</button>`;
 }
@@ -802,11 +827,13 @@ document.addEventListener("click",async ev=>{
   if(a==="gekle"){const n=S.plan.days.length;S.plan.days.push({id:uid(),name:"Gün "+String.fromCharCode(65+n),wd:Math.min(6,n*2+1),ex:[]});kaydet(["main"]);ciz(true);return}
   if(a==="gsil"){if(b.dataset.on!=="1"){b.dataset.on="1";b.textContent="Emin misin?";return}
     S.plan.days=S.plan.days.filter(d=>d.id!==b.dataset.gun);if(V.gun===b.dataset.gun)V.gun=null;kaydet(["main"]);ciz(true);return}
+  if(a==="goz"){const i=$(b.dataset.i);if(!i)return;const ac=i.type==="password";i.type=ac?"text":"password";b.innerHTML=ac?IK.gozK:IK.goz;b.setAttribute("aria-label",ac?"Şifreyi gizle":"Şifreyi göster");return}
   if(a==="kayitDegis"){V.kayit=!V.kayit;ciz();return}
   if(a==="giris"){const tel=telNorm($("gt").value),sf=$("gs").value,gh=$("gh");V.tel=$("gt").value;
     if(!tel){gh.textContent="Numarayı 0532 123 45 67 biçiminde yaz.";return}
-    if(sf.length<6){gh.textContent="Şifre en az 6 karakter olmalı.";return}
-    if(V.kayit&&sf!==$("gs2").value){gh.textContent="Şifreler aynı değil.";return}
+    if(V.kayit){const k=sifreKural(sf,tel);if(!(k.uz&&k.hf&&k.rk&&k.tl)){gh.textContent="Şifre kurallara uymuyor.";return}
+      if(sf!==$("gs2").value){gh.textContent="Şifreler aynı değil.";return}}
+    else if(sf.length<6){gh.textContent="Şifre en az 6 karakter olmalı.";return}
     gh.textContent=V.kayit?"Hesap oluşturuluyor…":"Giriş yapılıyor…";
     try{const au=firebase.auth();V.kayit?await au.createUserWithEmailAndPassword(tel+ALAN,sf):await au.signInWithEmailAndPassword(tel+ALAN,sf);V.kayit=false}
     catch(e){const c=e.code||"";gh.textContent=/email-already-in-use/.test(c)?"Bu numarayla hesap zaten var, giriş yap.":/wrong-password|invalid-credential|user-not-found|invalid-login/.test(c)?"Numara ya da şifre hatalı.":/too-many/.test(c)?"Çok deneme yapıldı, biraz sonra tekrar dene.":"Giriş olmadı: "+(c||"bağlantı yok")}
@@ -826,6 +853,7 @@ document.addEventListener("click",async ev=>{
 });
 $("perde").addEventListener("click",ev=>{if(ev.target.id==="perde")perdeKapat()});
 document.addEventListener("input",ev=>{const t=ev.target;
+  if(t.id==="gs"||t.id==="gs2"||t.id==="gt"){if(V.kayit)sifreBak();return}
   if(t.id==="q"){V.q=t.value;$("secListe").innerHTML=secListe();return}
   if(t.dataset.f){const x=acikEx();if(!x)return;const g=giris(x.e);const v=sayi(t.value);if(t.dataset.f==="kg")g.kg=Math.max(0,v);else g.r=Math.max(1,Math.round(v));gorunumKaydet()}});
 document.addEventListener("change",ev=>{const t=ev.target;
