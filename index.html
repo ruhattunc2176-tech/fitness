@@ -123,13 +123,6 @@ h2{margin:0;font-size:20px;font-weight:900;text-transform:uppercase}
 .sil{height:36px;width:36px;border:2px solid #000;border-radius:8px;background:#fff;color:#000;display:grid;place-items:center;padding:0}
 .sil:active{background:var(--ac)}
 .sil svg{width:18px;height:18px}
-.gb{position:relative;display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:66px;border-top:1.5px solid #000;font-size:15px;font-weight:700;color:#000;overflow:hidden}
-.gb span{min-width:0}
-.gb button{border:2px solid #000;background:#000;color:var(--sari);font-weight:800;font-size:14px;text-transform:uppercase;letter-spacing:.03em;padding:8px 12px;border-radius:8px;flex:none}
-.gb i{position:absolute;left:0;bottom:0;height:5px;background:var(--ac);width:100%;animation:gbaz linear forwards}
-@keyframes gbaz{to{width:0}}
-.gbk{padding:0 14px}.gbk .gb{border-top:0}
-.pad>.gb{margin:0 -14px -14px;padding:0 14px}
 .prg{display:flex;align-items:center;gap:12px}
 .prg>div{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
 .prg small{font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.06em}
@@ -240,7 +233,7 @@ const LIB={
  legraise:{n:"Asılı bacak kaldırma",id:"Hanging_Leg_Raise",g:"karin",tip:"vucut",en:"hanging leg raise",ip:"Sallanmadan, karınla kaldır"}
 };
 const COP=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>`;
-const SURUM="2026-11-09 23:18";
+const SURUM="2026-11-09 23:22";
 const surumYazi=()=>{const [g,sa]=SURUM.split(" ");const [y,m,d]=g.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString("tr-TR",{day:"numeric",month:"long"})+" "+sa};
 const DMB=[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40];
 const WD=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
@@ -588,11 +581,11 @@ function sGelisim(){
 function sProgram(){
   const P=programim();
   return `<h1>Program</h1>
-   <div class="k pad"><div class="prg"><div><small>Programım</small><b>${esc(P.ad)}</b><span>${P.et.slice(0,2).join(" · ")}</span></div><button class="btn ikincil" data-a="git" data-v="hazir">Değiştir</button></div>${BEKLE.sifir?geriSerit("sifir",P.ad+" yüklendi"):""}</div>
-   ${S.plan.days.map(d=>BEKLE[d.id]?`<div class="k gbk">${geriSerit(d.id,gunAd(d)+" silindi")}</div>`:`<section class="k pad">
+   <div class="k pad"><div class="prg"><div><small>Programım</small><b>${esc(P.ad)}</b><span>${P.et.slice(0,2).join(" · ")}</span></div><button class="btn ikincil" data-a="git" data-v="hazir">Değiştir</button></div></div>
+   ${S.plan.days.map(d=>`<section class="k pad">
     <div style="display:flex;gap:8px"><input class="alan" id="gn-${d.id}" data-pf="name" data-gun="${d.id}" value="${esc(gunAd(d))}" aria-label="Gün adı" style="flex:1;font-weight:600">
      <select class="alan" id="gw-${d.id}" data-pf="wd" data-gun="${d.id}" aria-label="Haftanın günü" style="width:auto">${WD.map((w,i)=>`<option value="${i}" ${d.wd===i?"selected":""}>${w}</option>`).join("")}</select></div>
-    <div>${d.ex.map(e=>BEKLE[e.id]?geriSerit(e.id,LIB[e.k].n+" silindi"):`<div class="duz"><span class="buyut" role="button" tabindex="0" data-a="foto" data-k="${e.k}" aria-label="Fotoğrafı büyüt"><img src="${img(e.k,0)}" alt="" ><i aria-hidden="true">⤢</i></span><b>${esc(LIB[e.k].n)}</b>
+    <div>${d.ex.map(e=>`<div class="duz"><span class="buyut" role="button" tabindex="0" data-a="foto" data-k="${e.k}" aria-label="Fotoğrafı büyüt"><img src="${img(e.k,0)}" alt="" ><i aria-hidden="true">⤢</i></span><b>${esc(LIB[e.k].n)}</b>
       <input class="alan" id="es-${e.id}" inputmode="numeric" data-ef="sets" data-gun="${d.id}" data-ex="${e.id}" value="${e.sets}" aria-label="Set sayısı">
       <input class="alan" id="er-${e.id}" data-ef="reps" data-gun="${d.id}" data-ex="${e.id}" value="${esc(e.reps)}" aria-label="Tekrar aralığı">
       <button class="sil" data-a="hsil" data-gun="${d.id}" data-ex="${e.id}" aria-label="${esc(LIB[e.k].n)} sil">${COP}</button></div>`).join("")||`<div class="lb">Henüz hareket yok.</div>`}</div>
@@ -686,7 +679,6 @@ function sGiris(){
 /* ---------- çizim ---------- */
 const SEKME=[["ana","Bugün",IK.bugun],["gelisim","Gelişim",IK.gelisim],["program","Program",IK.program],["sure","Süre",IK.sure]];
 function ciz(yerinde){
-  if(V.v!=="program"&&!(V.v==="hazir"&&BEKLE.sifir))silHepsiniBitir();
   const y=window.scrollY,girisGerek=fbDurum==="hazir"&&((!kul&&!V.yerel)||izinYok);
   $("app").innerHTML=`<div class="surum">Son güncelleme: ${surumYazi()}</div>`+(girisGerek?sGiris():V.v==="ant"?sAnt():V.v==="gelisim"?sGelisim():V.v==="program"?sProgram():V.v==="sec"?sSec():V.v==="sure"?sSure():V.v==="hazir"?sHazir():V.v==="ayar"?sAyar():sAna());
   const t=$("tab");t.hidden=girisGerek||V.v==="ant";
@@ -712,18 +704,6 @@ window.addEventListener("popstate",ev=>{
   if(hedef){V.v=hedef;hedef=null;if(V.v!==st)history.replaceState({v:V.v},"")}else V.v=st;
   ciz();window.scrollTo(0,0)});
 function perdeKapat(){if($("perde").hidden)return;if(history.state&&history.state.perde)history.back();else $("perde").hidden=true}
-const BEKLE={};
-function geriSerit(id,yazi){const p=BEKLE[id];const gecen=Math.max(0,p.sure-(p.bit-Date.now()));return `<div class="gb" id="gb-${id}"><span>${esc(yazi)}</span><button data-a="geriAl" data-id="${id}">Geri al</button><i style="animation-duration:${p.sure}ms;animation-delay:-${gecen}ms"></i></div>`}
-function silBekle(id,tip,gun,sure,kopya){if(BEKLE[id])clearTimeout(BEKLE[id].t);BEKLE[id]={tip,gun,sure,kopya,bit:Date.now()+sure,t:setTimeout(()=>silBitir(id),sure)}}
-function silUygula(id){const p=BEKLE[id];if(!p)return false;clearTimeout(p.t);delete BEKLE[id];
-  if(p.tip==="gun"){S.plan.days=S.plan.days.filter(d=>d.id!==id);if(V.gun===id)V.gun=null}
-  else if(p.tip==="ex"){const d=gunBul(p.gun);if(d)d.ex=d.ex.filter(x=>x.id!==id)}
-  return true}
-function silBitir(id){if(!silUygula(id))return;kaydet(["main"]);
-  const ae=document.activeElement,yaziyor=ae&&/^(INPUT|SELECT|TEXTAREA)$/.test(ae.tagName);
-  if(V.v==="program"&&!yaziyor)ciz(true);else{const el=$("gb-"+id);if(el)(el.parentNode.classList.contains("gbk")?el.parentNode:el).remove()}}
-function silHepsiniBitir(){const ids=Object.keys(BEKLE);if(!ids.length)return;ids.forEach(silUygula);kaydet(["main"])}
-document.addEventListener("visibilitychange",()=>{if(document.hidden)silHepsiniBitir()});
 function tost(t){const el=$("tost");el.textContent=t;el.hidden=false;clearTimeout(tost.t);tost.t=setTimeout(()=>el.hidden=true,2600)}
 function kartaKaydir(){requestAnimationFrame(()=>{const el=document.querySelector(".hk");if(el){const r=el.getBoundingClientRect();if(r.top<0||r.top>window.innerHeight*.5)window.scrollTo({top:window.scrollY+r.top-12,behavior:"smooth"})}})}
 setInterval(()=>{const el=$("gecen");const s=aktif();if(el&&s)el.textContent=gecenSure(s)},1000);
@@ -793,14 +773,15 @@ document.addEventListener("click",async ev=>{
   if(a==="secAc"){V.secGun=b.dataset.gun;V.q="";V.grp="";git("sec");return}
   if(a==="ekle"){const d=gunBul(V.secGun);if(!d)return;const k=b.dataset.k;if(d.ex.some(e=>e.k===k)){tost("Bu hareket zaten bu günde var");return}
     d.ex.push(h(k,3,tipOf(k)==="sure"?"30-45":tipOf(k)==="kule"?"10-12":"8-12"));kaydet(["main"]);tost(`${LIB[k].n} eklendi`);git("program");return}
-  if(a==="geriAl"){const p=BEKLE[b.dataset.id];if(p){clearTimeout(p.t);delete BEKLE[b.dataset.id];if(p.tip==="sifir"){const o=JSON.parse(p.kopya);S.plan.days=o.days;if(o.prog)S.plan.prog=o.prog;else delete S.plan.prog;V.g={};V.gun=null;kaydet(["main"])}ciz(true)}return}
-  if(a==="hsil"){silBekle(b.dataset.ex,"ex",b.dataset.gun,4000);ciz(true);return}
+  if(a==="hsil"){const d=gunBul(b.dataset.gun);if(d){d.ex=d.ex.filter(x=>x.id!==b.dataset.ex);kaydet(["main"])}ciz(true);return}
   if(a==="hzAc"){V.hzAcik=V.hzAcik===b.dataset.p?null:b.dataset.p;V.hzGun=0;ciz(true);return}
   if(a==="hzGun"){V.hzGun=+b.dataset.i;ciz(true);return}
   if(a==="hazirSec"){if(aktif()){tost("Önce açık antrenmanı bitir");return}
-    silHepsiniBitir();const kopya=JSON.stringify({days:S.plan.days,prog:S.plan.prog||""});hazirYukle(b.dataset.p);silBekle("sifir","sifir",null,8000,kopya);kaydet(["main"]);git("program");return}
+    if(b.dataset.on!=="1"){b.dataset.on="1";b.textContent="Emin misin? Tekrar dokun";return}
+    hazirYukle(b.dataset.p);kaydet(["main"]);git("program");tost(`${programim().ad} yüklendi`);return}
   if(a==="gekle"){const n=S.plan.days.length;S.plan.days.push({id:uid(),name:"Gün "+String.fromCharCode(65+n),wd:Math.min(6,n*2+1),ex:[]});kaydet(["main"]);ciz(true);return}
-  if(a==="gsil"){silBekle(b.dataset.gun,"gun",null,6000);ciz(true);return}
+  if(a==="gsil"){if(b.dataset.on!=="1"){b.dataset.on="1";b.textContent="Emin misin?";return}
+    S.plan.days=S.plan.days.filter(d=>d.id!==b.dataset.gun);if(V.gun===b.dataset.gun)V.gun=null;kaydet(["main"]);ciz(true);return}
   if(a==="kayitDegis"){V.kayit=!V.kayit;ciz();return}
   if(a==="giris"){const tel=telNorm($("gt").value),sf=$("gs").value,gh=$("gh");V.tel=$("gt").value;
     if(!tel){gh.textContent="Numarayı 0532 123 45 67 biçiminde yaz.";return}
