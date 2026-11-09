@@ -119,19 +119,21 @@ h2{margin:0;font-size:19px;font-weight:700}
 .duz img{width:44px;height:44px;border-radius:10px;object-fit:cover;display:block}
 .duz b{font-size:15px;font-weight:600;line-height:1.2}
 .duz .alan{padding:8px 6px;font-size:15px;text-align:center}
-.sil{justify-self:end;position:relative;z-index:1;height:36px;min-width:36px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--muted);display:flex;align-items:center;justify-content:center;gap:5px;padding:0 9px;font:600 14px Barlow,system-ui,sans-serif;transition:background .18s,color .18s,border-color .18s,transform .1s}
-.sil:active{transform:scale(.94)}
-.sil.onay{margin-left:-60px;box-shadow:0 4px 12px rgba(220,38,38,.3);background:#DC2626;border-color:#DC2626;color:#fff}
-.sil svg{width:18px;height:18px;flex:none}
+.sil{height:36px;width:36px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--muted);display:grid;place-items:center;padding:0;transition:background .15s,color .15s,transform .1s}
+.sil:active{transform:scale(.92);background:#FEE2E2;color:#DC2626;border-color:#FECACA}
+.sil svg{width:18px;height:18px}
+.gb{position:relative;display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:61px;border-top:1px solid var(--line);font-size:15px;color:var(--muted);overflow:hidden}
+.gb span{min-width:0}
+.gb button{border:0;background:none;color:var(--ac);font-weight:700;font-size:16px;padding:12px 4px 12px 12px;flex:none}
+.gb i{position:absolute;left:0;bottom:0;height:2px;background:var(--ac);width:100%;animation:gbaz linear forwards}
+@keyframes gbaz{to{width:0}}
+.gbk{padding:0 16px}.gbk .gb{border-top:0}
 .grafik{width:100%;height:auto;display:block}
 .satir2{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:16px;padding:7px 0;border-top:1px solid var(--line)}
 .satir2:first-of-type{border-top:0}
 .satir2 .art{color:var(--ok);font-weight:600}
 .hata{font-size:14px;color:#DC2626;font-weight:600;min-height:1.2em}
-.gerial{position:fixed;left:0;right:0;bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:30;display:flex;justify-content:center;padding:0 max(12px,env(safe-area-inset-left,0px))}
-.gerial>div{background:#14171C;color:#fff;border-radius:14px;padding:10px 10px 10px 16px;display:flex;align-items:center;gap:12px;font-weight:600;font-size:15px;max-width:496px;width:100%}
-.gerial span{flex:1;min-width:0}
-.gerial button{border:0;background:var(--ac);color:#fff;font-weight:700;font-size:15px;padding:9px 14px;border-radius:10px}
+
 .tost{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top,0px));transform:translateX(-50%);background:#14171C;color:#fff;padding:11px 18px;border-radius:14px;font-weight:600;z-index:50;max-width:90vw;text-align:center;font-size:15px}
 .surum{font-size:12px;color:var(--muted);font-weight:600;text-align:center;margin:-8px 0 -4px}
 .logo{width:56px;height:56px;border-radius:16px}
@@ -140,7 +142,6 @@ h2{margin:0;font-size:19px;font-weight:700}
 <nav class="tab" id="tab" hidden></nav>
 <div class="din" id="din" hidden></div>
 <div class="perde" id="perde" hidden></div>
-<div class="gerial" id="gerial" hidden></div>
 <div class="tost" id="tost" hidden></div>
 
 <script>
@@ -187,8 +188,7 @@ const LIB={
  legraise:{n:"Asılı bacak kaldırma",id:"Hanging_Leg_Raise",g:"karin",tip:"vucut",en:"hanging leg raise",ip:"Sallanmadan, karınla kaldır"}
 };
 const COP=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>`;
-let copT=null;
-const SURUM="2026-11-09 22:51";
+const SURUM="2026-11-09 22:54";
 const surumYazi=()=>{const [g,sa]=SURUM.split(" ");const [y,m,d]=g.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString("tr-TR",{day:"numeric",month:"long"})+" "+sa};
 const DMB=[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40];
 const WD=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
@@ -446,10 +446,10 @@ function sGelisim(){
 function sProgram(){
   return `<h1>Program</h1>
    <div class="lb">Haftada 2 gün tüm vücut. Bir harekette tüm setlerde tekrar aralığının üstüne çıkınca uygulama kilo artırmanı söyler.</div>
-   ${S.plan.days.map(d=>`<section class="k pad">
+   ${S.plan.days.map(d=>BEKLE[d.id]?`<div class="k gbk">${geriSerit(d.id,gunAd(d)+" silindi")}</div>`:`<section class="k pad">
     <div style="display:flex;gap:8px"><input class="alan" id="gn-${d.id}" data-pf="name" data-gun="${d.id}" value="${esc(gunAd(d))}" aria-label="Gün adı" style="flex:1;font-weight:600">
      <select class="alan" id="gw-${d.id}" data-pf="wd" data-gun="${d.id}" aria-label="Haftanın günü" style="width:auto">${WD.map((w,i)=>`<option value="${i}" ${d.wd===i?"selected":""}>${w}</option>`).join("")}</select></div>
-    <div>${d.ex.map(e=>`<div class="duz"><span class="buyut" role="button" tabindex="0" data-a="foto" data-k="${e.k}" aria-label="Fotoğrafı büyüt"><img src="${img(e.k,0)}" alt="" ><i aria-hidden="true">⤢</i></span><b>${esc(LIB[e.k].n)}</b>
+    <div>${d.ex.map(e=>BEKLE[e.id]?geriSerit(e.id,LIB[e.k].n+" silindi"):`<div class="duz"><span class="buyut" role="button" tabindex="0" data-a="foto" data-k="${e.k}" aria-label="Fotoğrafı büyüt"><img src="${img(e.k,0)}" alt="" ><i aria-hidden="true">⤢</i></span><b>${esc(LIB[e.k].n)}</b>
       <input class="alan" id="es-${e.id}" inputmode="numeric" data-ef="sets" data-gun="${d.id}" data-ex="${e.id}" value="${e.sets}" aria-label="Set sayısı">
       <input class="alan" id="er-${e.id}" data-ef="reps" data-gun="${d.id}" data-ex="${e.id}" value="${esc(e.reps)}" aria-label="Tekrar aralığı">
       <button class="sil" data-a="hsil" data-gun="${d.id}" data-ex="${e.id}" aria-label="${esc(LIB[e.k].n)} sil">${COP}</button></div>`).join("")||`<div class="lb">Henüz hareket yok.</div>`}</div>
@@ -457,7 +457,7 @@ function sProgram(){
     <div style="display:flex;gap:8px"><button class="btn ikincil" data-a="secAc" data-gun="${d.id}" style="flex:1">+ Hareket ekle</button><button class="btn kir" data-a="gsil" data-gun="${d.id}" style="width:auto">Günü sil</button></div>
    </section>`).join("")}
    <button class="btn ikincil" data-a="gekle">+ Gün ekle</button>
-   <div class="k pad"><h2>Önerilen programa dön</h2><div class="lb">Değiştirdiğin ya da sildiğin hareketler, birlikte kurduğumuz 3 günlük programla (A, B, C) değişir. Antrenman geçmişin silinmez.</div><button class="btn kir" data-a="sifirla">Önerilen programı yükle</button></div>`;
+   <div class="k pad"><h2>Önerilen programa dön</h2><div class="lb">Değiştirdiğin ya da sildiğin hareketler, birlikte kurduğumuz 3 günlük programla (A, B, C) değişir. Antrenman geçmişin silinmez.</div>${BEKLE.sifir?geriSerit("sifir","Önerilen program yüklendi"):`<button class="btn kir" data-a="sifirla">Önerilen programı yükle</button>`}</div>`;
 }
 function sSec(){
   const d=gunBul(V.secGun);if(!d){V.v="program";return sProgram()}
@@ -498,6 +498,7 @@ function sGiris(){
 /* ---------- çizim ---------- */
 const SEKME=[["ana","Bugün",IK.bugun],["gelisim","Gelişim",IK.gelisim],["program","Program",IK.program]];
 function ciz(yerinde){
+  if(V.v!=="program")silHepsiniBitir();
   const y=window.scrollY,girisGerek=fbDurum==="hazir"&&((!kul&&!V.yerel)||izinYok);
   $("app").innerHTML=`<div class="surum">Son güncelleme: ${surumYazi()}</div>`+(girisGerek?sGiris():V.v==="ant"?sAnt():V.v==="gelisim"?sGelisim():V.v==="program"?sProgram():V.v==="sec"?sSec():V.v==="ayar"?sAyar():sAna());
   const t=$("tab");t.hidden=girisGerek||V.v==="ant";
@@ -511,7 +512,7 @@ let kT;window.addEventListener("scroll",()=>{clearTimeout(kT);kT=setTimeout(goru
 const DERIN={ana:0,gelisim:1,program:1,ant:1,ayar:1,sec:2};
 const derin=v=>DERIN[v]??0;
 let hedef=null;
-function git(v,ek){const ga=$("gerial");if(ga&&v!==V.v){ga.hidden=true}Object.assign(V,ek||{});const fark=derin(v)-derin(V.v);
+function git(v,ek){Object.assign(V,ek||{});const fark=derin(v)-derin(V.v);
   if(fark<0&&history.state&&history.state.v){hedef=v;history.go(fark);return}
   if(fark>0)history.pushState({v},"");else history.replaceState({v},"");
   V.v=v;ciz();window.scrollTo(0,0)}
@@ -522,9 +523,18 @@ window.addEventListener("popstate",ev=>{
   if(hedef){V.v=hedef;hedef=null;if(V.v!==st)history.replaceState({v:V.v},"")}else V.v=st;
   ciz();window.scrollTo(0,0)});
 function perdeKapat(){if($("perde").hidden)return;if(history.state&&history.state.perde)history.back();else $("perde").hidden=true}
-let geriKopya=null,geriT=null;
-let geriSay=0;
-function geriKaydet(yazi){const acik=!$("gerial").hidden&&geriKopya;if(!acik){geriKopya=JSON.stringify(S.plan.days);geriSay=0}geriSay++;if(geriSay>1)yazi=`${geriSay} değişiklik yapıldı`;const el=$("gerial");el.innerHTML=`<div><span>${esc(yazi)}</span><button data-a="gerial">Geri al</button></div>`;el.hidden=false;clearTimeout(geriT);geriT=setTimeout(()=>{el.hidden=true;geriKopya=null},10000)}
+const BEKLE={};
+function geriSerit(id,yazi){const p=BEKLE[id];const gecen=Math.max(0,p.sure-(p.bit-Date.now()));return `<div class="gb" id="gb-${id}"><span>${esc(yazi)}</span><button data-a="geriAl" data-id="${id}">Geri al</button><i style="animation-duration:${p.sure}ms;animation-delay:-${gecen}ms"></i></div>`}
+function silBekle(id,tip,gun,sure,kopya){if(BEKLE[id])clearTimeout(BEKLE[id].t);BEKLE[id]={tip,gun,sure,kopya,bit:Date.now()+sure,t:setTimeout(()=>silBitir(id),sure)}}
+function silUygula(id){const p=BEKLE[id];if(!p)return false;clearTimeout(p.t);delete BEKLE[id];
+  if(p.tip==="gun"){S.plan.days=S.plan.days.filter(d=>d.id!==id);if(V.gun===id)V.gun=null}
+  else if(p.tip==="ex"){const d=gunBul(p.gun);if(d)d.ex=d.ex.filter(x=>x.id!==id)}
+  return true}
+function silBitir(id){if(!silUygula(id))return;kaydet(["main"]);
+  const ae=document.activeElement,yaziyor=ae&&/^(INPUT|SELECT|TEXTAREA)$/.test(ae.tagName);
+  if(V.v==="program"&&!yaziyor)ciz(true);else{const el=$("gb-"+id);if(el)(el.parentNode.classList.contains("gbk")?el.parentNode:el).remove()}}
+function silHepsiniBitir(){const ids=Object.keys(BEKLE);if(!ids.length)return;ids.forEach(silUygula);kaydet(["main"])}
+document.addEventListener("visibilitychange",()=>{if(document.hidden)silHepsiniBitir()});
 function tost(t){const el=$("tost");el.textContent=t;el.hidden=false;clearTimeout(tost.t);tost.t=setTimeout(()=>el.hidden=true,2600)}
 function kartaKaydir(){requestAnimationFrame(()=>{const el=document.querySelector(".hk");if(el){const r=el.getBoundingClientRect();if(r.top<0||r.top>window.innerHeight*.5)window.scrollTo({top:window.scrollY+r.top-12,behavior:"smooth"})}})}
 setInterval(()=>{const el=$("gecen");const s=aktif();if(el&&s)el.textContent=gecenSure(s)},1000);
@@ -585,13 +595,12 @@ document.addEventListener("click",async ev=>{
   if(a==="secAc"){V.secGun=b.dataset.gun;V.q="";V.grp="";git("sec");return}
   if(a==="ekle"){const d=gunBul(V.secGun);if(!d)return;const k=b.dataset.k;if(d.ex.some(e=>e.k===k)){tost("Bu hareket zaten bu günde var");return}
     d.ex.push(h(k,3,tipOf(k)==="sure"?"30-45":tipOf(k)==="kule"?"10-12":"8-12"));kaydet(["main"]);tost(`${LIB[k].n} eklendi`);git("program");return}
-  if(a==="gerial"){if(geriKopya){S.plan.days=JSON.parse(geriKopya);geriKopya=null;kaydet(["main"]);ciz(true);tost("Geri alındı")}$("gerial").hidden=true;return}
-  if(a==="hsil"){if(!b.classList.contains("onay")){document.querySelectorAll(".sil.onay").forEach(x=>{x.classList.remove("onay");x.innerHTML=COP});b.classList.add("onay");b.innerHTML=COP+"Sil?";clearTimeout(copT);copT=setTimeout(()=>{if(b.isConnected){b.classList.remove("onay");b.innerHTML=COP}},3000);return}clearTimeout(copT);const d=gunBul(b.dataset.gun);const e=d.ex.find(x=>x.id===b.dataset.ex);geriKaydet(`${e?LIB[e.k].n:"Hareket"} silindi`);d.ex=d.ex.filter(x=>x.id!==b.dataset.ex);kaydet(["main"]);ciz(true);return}
+  if(a==="geriAl"){const p=BEKLE[b.dataset.id];if(p){clearTimeout(p.t);delete BEKLE[b.dataset.id];if(p.tip==="sifir"){S.plan.days=JSON.parse(p.kopya);kaydet(["main"])}ciz(true)}return}
+  if(a==="hsil"){silBekle(b.dataset.ex,"ex",b.dataset.gun,4000);ciz(true);return}
   if(a==="sifirla"){if(b.dataset.on!=="1"){b.dataset.on="1";b.textContent="Emin misin? Tekrar dokun";return}
-    geriKaydet("Önerilen program yüklendi");programiYukle();kaydet(["main"]);ciz(true);return}
+    silHepsiniBitir();const kopya=JSON.stringify(S.plan.days);programiYukle();silBekle("sifir","sifir",null,6000,kopya);kaydet(["main"]);ciz(true);return}
   if(a==="gekle"){const n=S.plan.days.length;S.plan.days.push({id:uid(),name:"Gün "+String.fromCharCode(65+n),wd:Math.min(6,n*2+1),ex:[]});kaydet(["main"]);ciz(true);return}
-  if(a==="gsil"){if(b.dataset.on!=="1"){b.dataset.on="1";b.textContent="Emin misin?";return}
-    geriKaydet(`${gunAd(gunBul(b.dataset.gun))} silindi`);S.plan.days=S.plan.days.filter(d=>d.id!==b.dataset.gun);if(V.gun===b.dataset.gun)V.gun=null;kaydet(["main"]);ciz(true);return}
+  if(a==="gsil"){silBekle(b.dataset.gun,"gun",null,6000);ciz(true);return}
   if(a==="kayitDegis"){V.kayit=!V.kayit;ciz();return}
   if(a==="giris"){const tel=telNorm($("gt").value),sf=$("gs").value,gh=$("gh");V.tel=$("gt").value;
     if(!tel){gh.textContent="Numarayı 0532 123 45 67 biçiminde yaz.";return}
