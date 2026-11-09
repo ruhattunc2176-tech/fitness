@@ -170,7 +170,7 @@ const LIB={
  cablecrunch:{n:"Cable crunch",id:"Cable_Crunch",g:"karin",tip:"kule",en:"cable crunch",ip:"Kalça sabit, karınla bük"},
  legraise:{n:"Asılı bacak kaldırma",id:"Hanging_Leg_Raise",g:"karin",tip:"vucut",en:"hanging leg raise",ip:"Sallanmadan, karınla kaldır"}
 };
-const SURUM="2026-11-09 20:54";
+const SURUM="2026-11-09 20:55";
 const surumYazi=()=>{const [g,sa]=SURUM.split(" ");const [y,m,d]=g.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString("tr-TR",{day:"numeric",month:"long"})+" "+sa};
 const DMB=[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40];
 const WD=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
@@ -252,10 +252,16 @@ function baglan(){
     if(!kirli.has("main")&&d.main){const a=JSON.stringify([S.plan,S.body,S.activeSid]),b=JSON.stringify([uzak.plan,uzak.body,uzak.activeSid]); if(a!==b){S.plan=uzak.plan;S.body=uzak.body;S.activeSid=uzak.activeSid;degisti=true}}
     Object.keys(uzak.sessions).forEach(sid=>{if(kirli.has("s/"+sid)||silinecek.has("s/"+sid))return; if(JSON.stringify(S.sessions[sid])!==JSON.stringify(uzak.sessions[sid])){S.sessions[sid]=uzak.sessions[sid];degisti=true}});
     Object.keys(S.sessions).forEach(sid=>{if(!uzak.sessions[sid]&&!kirli.has("s/"+sid)){kirli.add("s/"+sid)}});
+    if(gecis())degisti=true;
     if(kirli.size) yazmaPlanla();
     if(degisti){yerelKaydet(); if(odakta())bekleyenCiz=true; else ciz(true)}
   },()=>{esit=false});
 }
+/* tek seferlik: Blackline makinesi — Gün A bench press → makine bench, Gün B dambıl omuz press → makine omuz press (9 Kasım) */
+function gecis(){if(S.plan.g1)return false;let deg=false;
+  S.plan.days.forEach(d=>d.ex.forEach(e=>{if(e.k==="bench"){e.k="mchest";e.reps="8-12";e.rest=varsayDn("mchest");deg=true;delete V.g[e.id]}else if(e.k==="dbsp"){e.k="mshoulder";e.reps="8-12";e.rest=varsayDn("mshoulder");deg=true;delete V.g[e.id]}}));
+  Object.values(S.sessions).forEach(x=>{if(x.date!=="2026-11-09")return;let sd=false;Object.keys(x.keys||{}).forEach(eid=>{if(x.keys[eid]==="bench"){x.keys[eid]="mchest";sd=true}});if(sd){kirli.add("s/"+x.sid)}});
+  S.plan.g1=1;kirli.add("main");yerelKaydet();return true}
 function yerelKaydet(){try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}}
 function kaydet(keys){yerelKaydet();(keys||[]).forEach(k=>kirli.add(k));yazmaPlanla()}
 function yazmaPlanla(){if(!kok)return;clearTimeout(yazT);yazT=setTimeout(yazdir,600)}
@@ -552,7 +558,7 @@ document.addEventListener("change",ev=>{const t=ev.target;
 document.addEventListener("focusin",ev=>{if(ev.target.dataset&&ev.target.dataset.f)ev.target.select()});
 document.addEventListener("keydown",ev=>{if(ev.key==="Escape")perdeKapat();if(ev.key==="Enter"&&/^(gs|gs2|gt)$/.test(ev.target.id)){const b=document.querySelector('[data-a="giris"]');b&&b.click()}});
 
-tarihceKur();ciz();requestAnimationFrame(()=>window.scrollTo(0,V.y||0));
+if(V.yerel)gecis();tarihceKur();ciz();requestAnimationFrame(()=>window.scrollTo(0,V.y||0));
 fbBaslat();
 </script>
 </body></html>
