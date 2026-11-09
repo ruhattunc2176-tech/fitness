@@ -157,8 +157,8 @@ const LIB={
  dip:{n:"Dips",id:"Dips_-_Chest_Version",g:"itis",tip:"vucut",en:"chest dips",ip:"Gövde hafif öne, omuz dirsek hizasına insin"},
  fly:{n:"Pec fly",ar:"pec deck kelebek butterfly göğüs makine chest fly",id:"Butterfly",g:"itis",tip:"kule",en:"pec deck machine",ip:"Sırt yaslı, omuzlar geride; kolları göğsün önünde birleştir"},
  reardelt:{n:"Rear delt (arka omuz)",ar:"pec fly makinesi ters reverse pec deck arka omuz rear delt",id:"Reverse_Machine_Flyes",g:"itis",tip:"kule",en:"reverse pec deck rear delt fly",ip:"Göğsünü minderine yasla, kolları düz tutup yana ve geriye aç"},
- mchest:{n:"Makine bench press (yatarak)",ar:"horizontal chest press seated horizontal shoulder press blackline göğüs makine bench yatarak",id:"Machine_Bench_Press",g:"itis",tip:"kule",en:"machine chest press",ip:"Mandalı çekip sırtlığı düz yatır; tutamakları göğüs hizasından yukarı it, kolu kilitlemeden geri dön"},
- mshoulder:{n:"Makine omuz press (oturarak)",ar:"seated shoulder press horizontal shoulder press blackline omuz makine",id:"Machine_Shoulder_Military_Press",g:"itis",tip:"kule",en:"machine shoulder press",ip:"Mandalı çekip sırtlığı dik kaldır; tutamakları omuz hizasından başının üstüne it"},
+ mchest:{n:"Makine bench press (yatarak)",ar:"horizontal chest press seated horizontal shoulder press blackline göğüs makine bench yatarak",id:"Blackline_Bench",cap:["Senin makinen","Makinedeki çizim"],g:"itis",tip:"kule",en:"lying chest press machine",ip:"Mandalı çekip sırtlığı düz yatır; tutamakları göğüs hizasından yukarı it, kolu kilitlemeden geri dön"},
+ mshoulder:{n:"Makine omuz press (oturarak)",ar:"seated shoulder press horizontal shoulder press blackline omuz makine",id:"Blackline_Shoulder",cap:["Senin makinen","Makinedeki çizim"],g:"itis",tip:"kule",en:"seated shoulder press machine",ip:"Mandalı çekip sırtlığı dik kaldır; tutamakları omuz hizasından başının üstüne it"},
  pushdown:{n:"Triceps pushdown",id:"Triceps_Pushdown",g:"itis",tip:"kule",en:"triceps pushdown",ip:"Dirsekler yanda sabit, kolu tam aç"},
  latpd:{n:"Lat pulldown",id:"Wide-Grip_Lat_Pulldown",g:"cekis",tip:"kule",en:"lat pulldown",ip:"Barı üst göğse çek, dirsekler aşağı ve geriye"},
  pullup:{n:"Barfiks",id:"Pullups",g:"cekis",tip:"vucut",en:"pull up",ip:"Tam asılıdan başla, çene barın üstüne"},
@@ -172,7 +172,7 @@ const LIB={
  cablecrunch:{n:"Cable crunch",id:"Cable_Crunch",g:"karin",tip:"kule",en:"cable crunch",ip:"Kalça sabit, karınla bük"},
  legraise:{n:"Asılı bacak kaldırma",id:"Hanging_Leg_Raise",g:"karin",tip:"vucut",en:"hanging leg raise",ip:"Sallanmadan, karınla kaldır"}
 };
-const SURUM="2026-11-09 20:56";
+const SURUM="2026-11-09 20:58";
 const surumYazi=()=>{const [g,sa]=SURUM.split(" ");const [y,m,d]=g.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString("tr-TR",{day:"numeric",month:"long"})+" "+sa};
 const DMB=[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40];
 const WD=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
@@ -478,7 +478,7 @@ setInterval(()=>{const el=$("gecen");const s=aktif();if(el&&s)el.textContent=gec
 /* ---------- fotoğraf perdesi ---------- */
 function fotoAc(k){const L=LIB[k],p=$("perde");
   p.innerHTML=`<div role="dialog" aria-label="${esc(L.n)} nasıl yapılır"><div class="ust"><h2>${esc(L.n)}</h2><button class="ikb" data-a="kapat" aria-label="Kapat">✕</button></div>
-   <div class="fotolar"><figure><img src="${img(k,0)}" alt="Başlangıç"><figcaption>Başlangıç</figcaption></figure><figure><img src="${img(k,1)}" alt="Bitiş"><figcaption>Bitiş</figcaption></figure></div>
+   <div class="fotolar"><figure><img src="${img(k,0)}" alt="Başlangıç"><figcaption>${(L.cap||["Başlangıç"])[0]}</figcaption></figure><figure><img src="${img(k,1)}" alt="Bitiş"><figcaption>${(L.cap||[0,"Bitiş"])[1]}</figcaption></figure></div>
    <div style="font-size:16px">${esc(L.ip)}</div>
    <a class="btn ikincil" href="${vidUrl(k)}" target="_blank" rel="noopener" style="text-align:center;text-decoration:none">▶ Videoda izle</a></div>`;
   p.hidden=false;history.pushState({v:V.v,perde:1},"")}
