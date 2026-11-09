@@ -120,6 +120,7 @@ h2{margin:0;font-size:19px;font-weight:700}
 .satir2 .art{color:var(--ok);font-weight:600}
 .hata{font-size:14px;color:#DC2626;font-weight:600;min-height:1.2em}
 .tost{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top,0px));transform:translateX(-50%);background:#14171C;color:#fff;padding:11px 18px;border-radius:14px;font-weight:600;z-index:50;max-width:90vw;text-align:center;font-size:15px}
+.surum{font-size:12px;color:var(--muted);font-weight:600;text-align:center;margin:-8px 0 -4px}
 .logo{width:56px;height:56px;border-radius:16px}
 </style></head><body>
 <div id="app"></div>
@@ -152,8 +153,8 @@ const LIB={
  latraise:{n:"Lateral raise",id:"Side_Lateral_Raise",g:"itis",tip:"dambil",en:"dumbbell lateral raise",ip:"Dirsek hafif bükük, omuz hizasına kadar"},
  pushup:{n:"Şınav",id:"Pushups",g:"itis",tip:"vucut",en:"push up",ip:"Gövde düz, göğüs yere yaklaşsın"},
  dip:{n:"Dips",id:"Dips_-_Chest_Version",g:"itis",tip:"vucut",en:"chest dips",ip:"Gövde hafif öne, omuz dirsek hizasına insin"},
- fly:{n:"Pec deck",id:"Butterfly",g:"itis",tip:"kule",en:"pec deck machine",ip:"Sırt yaslı, omuzlar geride; kolları göğsün önünde birleştir"},
- reardelt:{n:"Arka omuz (ters pec deck)",id:"Reverse_Machine_Flyes",g:"itis",tip:"kule",en:"reverse pec deck rear delt fly",ip:"Göğsünü minderine yasla, kolları düz tutup yana ve geriye aç"},
+ fly:{n:"Pec fly",ar:"pec deck kelebek butterfly göğüs makine chest fly",id:"Butterfly",g:"itis",tip:"kule",en:"pec deck machine",ip:"Sırt yaslı, omuzlar geride; kolları göğsün önünde birleştir"},
+ reardelt:{n:"Rear delt (arka omuz)",ar:"pec fly makinesi ters reverse pec deck arka omuz rear delt",id:"Reverse_Machine_Flyes",g:"itis",tip:"kule",en:"reverse pec deck rear delt fly",ip:"Göğsünü minderine yasla, kolları düz tutup yana ve geriye aç"},
  pushdown:{n:"Triceps pushdown",id:"Triceps_Pushdown",g:"itis",tip:"kule",en:"triceps pushdown",ip:"Dirsekler yanda sabit, kolu tam aç"},
  latpd:{n:"Lat pulldown",id:"Wide-Grip_Lat_Pulldown",g:"cekis",tip:"kule",en:"lat pulldown",ip:"Barı üst göğse çek, dirsekler aşağı ve geriye"},
  pullup:{n:"Barfiks",id:"Pullups",g:"cekis",tip:"vucut",en:"pull up",ip:"Tam asılıdan başla, çene barın üstüne"},
@@ -167,6 +168,8 @@ const LIB={
  cablecrunch:{n:"Cable crunch",id:"Cable_Crunch",g:"karin",tip:"kule",en:"cable crunch",ip:"Kalça sabit, karınla bük"},
  legraise:{n:"Asılı bacak kaldırma",id:"Hanging_Leg_Raise",g:"karin",tip:"vucut",en:"hanging leg raise",ip:"Sallanmadan, karınla kaldır"}
 };
+const SURUM="2026-11-09 20:47";
+const surumYazi=()=>{const [g,sa]=SURUM.split(" ");const [y,m,d]=g.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString("tr-TR",{day:"numeric",month:"long"})+" "+sa};
 const DMB=[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40];
 const WD=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
 const IK={
@@ -398,13 +401,13 @@ function sProgram(){
 function sSec(){
   const d=gunBul(V.secGun);if(!d){V.v="program";return sProgram()}
   return `<button class="geri" data-a="git" data-v="program">‹ Program</button><h1>${esc(gunAd(d))} için hareket seç</h1>
-   <input class="alan" id="q" type="search" placeholder="Ara: pec deck" value="${esc(V.q)}" autocomplete="off">
+   <input class="alan" id="q" type="search" placeholder="Ara: pec fly" value="${esc(V.q)}" autocomplete="off">
    <div class="cipler">${[["","Tümü"],...Object.entries(GRPK)].map(([k,a])=>`<button class="cip ${V.grp===k?"on":""}" data-a="grp" data-g="${k}">${a}</button>`).join("")}</div>
    <div class="k" id="secListe">${secListe()}</div>`;
 }
 function secListe(){
   const q=(V.q||"").toLocaleLowerCase("tr"),d=gunBul(V.secGun);
-  const list=Object.entries(LIB).filter(([k,L])=>(!V.grp||L.g===V.grp)&&(!q||L.n.toLocaleLowerCase("tr").includes(q)||L.en.includes(q)));
+  const list=Object.entries(LIB).filter(([k,L])=>(!V.grp||L.g===V.grp)&&(!q||(L.n+" "+(L.ar||"")+" "+L.en).toLocaleLowerCase("tr").includes(q)));
   if(!list.length)return `<div class="sat lb">Bu adda hareket yok.</div>`;
   return list.map(([k,L])=>{const var_=d&&d.ex.some(e=>e.k===k);return `<button class="sat" data-a="ekle" data-k="${k}"><img src="${img(k,0)}" alt="" loading="lazy"><span class="a"><b>${esc(L.n)}</b><span>${GRP[L.g]}</span></span>${var_?`<span class="ok">✓</span>`:`<span class="v" style="color:var(--ac);font-size:22px">+</span>`}</button>`}).join("");
 }
@@ -435,7 +438,7 @@ function sGiris(){
 const SEKME=[["ana","Bugün",IK.bugun],["gelisim","Gelişim",IK.gelisim],["program","Program",IK.program]];
 function ciz(yerinde){
   const y=window.scrollY,girisGerek=fbDurum==="hazir"&&((!kul&&!V.yerel)||izinYok);
-  $("app").innerHTML=girisGerek?sGiris():V.v==="ant"?sAnt():V.v==="gelisim"?sGelisim():V.v==="program"?sProgram():V.v==="sec"?sSec():V.v==="ayar"?sAyar():sAna();
+  $("app").innerHTML=`<div class="surum">Son güncelleme: ${surumYazi()}</div>`+(girisGerek?sGiris():V.v==="ant"?sAnt():V.v==="gelisim"?sGelisim():V.v==="program"?sProgram():V.v==="sec"?sSec():V.v==="ayar"?sAyar():sAna());
   const t=$("tab");t.hidden=girisGerek||V.v==="ant";
   if(!t.hidden){const akt=V.v==="sec"?"program":V.v==="ayar"?"ana":V.v;t.innerHTML=SEKME.map(([v,a,ik])=>`<button class="${akt===v?"on":""}" data-a="git" data-v="${v}">${ik}${a}</button>`).join("")}
   if(yerinde)window.scrollTo(0,y);
