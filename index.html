@@ -68,6 +68,10 @@ h2{margin:0;font-size:19px;font-weight:700}
 /* antrenman kartı */
 .hk{padding:14px;display:flex;flex-direction:column;gap:12px;border:2px solid var(--ac)}
 .hb{display:flex;gap:12px;align-items:center}
+.hb>div{flex:1;min-width:0}
+.kk{flex:none;align-self:flex-start;width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--soft);color:var(--muted);display:grid;place-items:center;padding:0}
+.kk:active{transform:scale(.94)}
+.kk svg{width:20px;height:20px}
 .hb .foto{width:72px;height:72px;border-radius:14px;overflow:hidden;flex:none;border:0;padding:0;background:var(--soft)}
 .hb .foto img{width:100%;height:100%;object-fit:cover;display:block}
 .hb b{display:block;font-size:21px;font-weight:700;line-height:1.15}
@@ -184,7 +188,7 @@ const LIB={
 };
 const COP=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>`;
 let copT=null;
-const SURUM="2026-11-09 22:41";
+const SURUM="2026-11-09 22:44";
 const surumYazi=()=>{const [g,sa]=SURUM.split(" ");const [y,m,d]=g.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString("tr-TR",{day:"numeric",month:"long"})+" "+sa};
 const DMB=[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40];
 const WD=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
@@ -391,7 +395,7 @@ function sAna(){
 function sAnt(){
   const d=gunBul(V.gun);if(!d){V.v="ana";return sAna()}
   const s=gunSeansi(d.id);
-  if(!V.acik||!d.ex.find(e=>e.id===V.acik)){const e=d.ex.find(e=>!tamamMi(s,e));V.acik=e?e.id:null}
+  if(V.acik!=="-"&&(!V.acik||!d.ex.find(e=>e.id===V.acik))){const e=d.ex.find(e=>!tamamMi(s,e));V.acik=e?e.id:null}
   const nBit=d.ex.filter(e=>tamamMi(s,e)).length;
   const kartlar=d.ex.map((e,i)=>{
     const L=LIB[e.k],kay=kayitli(s,e),bitti=kay.length>=e.sets;
@@ -400,7 +404,7 @@ function sAnt(){
     const satirKg=kiloVar(e.k)?`<div class="ad"><span class="ad-l">Kilo (kg)<small>${LIB[e.k].kgNot?LIB[e.k].kgNot:tip==="dambil"?"tek dambıl":tip==="bar"?"bar dahil":tip==="plaka"?"takılan plakalar":"makine"}</small></span><span class="r"><button data-a="kg-" aria-label="Kiloyu azalt">−</button><input id="kg-${e.id}" inputmode="decimal" value="${yaz(g.kg)}" data-f="kg" aria-label="Kilo"><button data-a="kg+" aria-label="Kiloyu artır">+</button></span></div>`:"";
     const satirR=`<div class="ad"><span class="ad-l">${tip==="sure"?"Süre (sn)":"Tekrar"}</span><span class="r"><button data-a="r-" aria-label="Azalt">−</button><input id="r-${e.id}" inputmode="numeric" value="${g.r}" data-f="r" aria-label="${tip==="sure"?"Süre":"Tekrar"}"><button data-a="r+" aria-label="Artır">+</button></span></div>`;
     return `<section class="k hk">
-     <div class="hb"><button class="foto" data-a="foto" data-k="${e.k}" aria-label="Fotoğrafı büyüt"><img src="${img(e.k,0)}" alt="${esc(L.n)}"></button><div><b>${esc(L.n)}</b><span class="bil">${e.sets} × ${esc(e.reps)}${tip==="sure"?" sn":""} · </span><button class="link" data-a="foto" data-k="${e.k}">▶ Nasıl yapılır</button></div></div>
+     <div class="hb"><button class="foto" data-a="foto" data-k="${e.k}" aria-label="Fotoğrafı büyüt"><img src="${img(e.k,0)}" alt="${esc(L.n)}"></button><div><b>${esc(L.n)}</b><span class="bil">${e.sets} × ${esc(e.reps)}${tip==="sure"?" sn":""} · </span><button class="link" data-a="foto" data-k="${e.k}">▶ Nasıl yapılır</button></div><button class="kk" data-a="kartKapat" aria-label="Kartı kapat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg></button></div>
      ${son?`<div class="gec">Geçen sefer: ${tip==="sure"?son.a.map(x=>x.r+" sn").join(", "):tip==="vucut"?son.a.map(x=>x.r).join(", ")+" tekrar":`${yaz(Math.max(...son.a.map(x=>x.kg)))} kg × ${son.a.map(x=>x.r).join(", ")}`}</div>`:`<div class="gec">İlk kez yapıyorsun; rahat bir kiloyla başla.</div>`}
      ${o.not&&!kay.length?`<div class="oner">${esc(o.not)}</div>`:""}
      ${kay.map((x,j)=>`<div class="yset"><i>✓</i>${j+1}. set · ${setYazi(e.k,x)}${j===kay.length-1?`<button data-a="setsil">sil</button>`:""}</div>`).join("")}
@@ -552,6 +556,7 @@ document.addEventListener("click",async ev=>{
   if(a==="git")return git(b.dataset.v);
   if(a==="gunSec"){V.gun=b.dataset.id;ciz(true);return}
   if(a==="basla"){V.acik=b.dataset.ex||null;git("ant");kartaKaydir();return}
+  if(a==="kartKapat"){V.acik="-";ciz(true);return}
   if(a==="ac"){V.acik=b.dataset.ex;ciz(true);kartaKaydir();return}
   if(a==="foto")return fotoAc(b.dataset.k);
   if(a==="kapat"){perdeKapat();return}
