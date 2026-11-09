@@ -268,7 +268,7 @@ const LIB={
  legraise:{n:"Asılı bacak kaldırma",id:"Hanging_Leg_Raise",g:"karin",tip:"vucut",en:"hanging leg raise",ip:"Sallanmadan, karınla kaldır"}
 };
 const COP=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>`;
-const SURUM="2026-11-09 23:39";
+const SURUM="2026-11-09 23:58";
 const surumYazi=()=>{const [g,sa]=SURUM.split(" ");const [y,m,d]=g.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString("tr-TR",{day:"numeric",month:"long"})+" "+sa};
 const DMB=[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40];
 const WD=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
@@ -341,7 +341,7 @@ const varsayDn=k=>({bar:150,plaka:120,kule:90,dambil:75,vucut:75,sure:60})[tipOf
 const adim=k=>LIB[k].adim||({bar:2.5,plaka:5,kule:5})[tipOf(k)]||1;
 
 /* ---------- veri ---------- */
-const LS="fitness.v2", LSV="fitness.gorunum.v4";
+const LS="fitness.v2", LSV="fitness.gorunum.v4", LSI="fitness.izin";
 const h=(k,sets,reps,rest)=>({id:uid(),k,sets,reps,rest:rest||varsayDn(k)});
 function ilkProgram(){return {plan:{days:[
   {id:"gA",name:"Gün A",wd:0,ex:[h("squat",3,"6-8"),h("bench",3,"6-8"),h("latpd",3,"8-12"),h("rdl",3,"8-10",120),h("latraise",2,"12-15",60),h("plank",2,"30-45",60)]},
@@ -379,9 +379,20 @@ async function fbBaslat(){
     await Promise.race([(async()=>{await betik(b+"firebase-app-compat.js");await betik(b+"firebase-auth-compat.js");await betik(b+"firebase-database-compat.js")})(),
       new Promise((_,no)=>setTimeout(no,8000))]);
     firebase.initializeApp(FB);
-    fbDurum="hazir";
-    firebase.auth().onAuthStateChanged(async u=>{kul=u; izinYok=false; salon=null;
-      if(u){try{const tel=(u.email||"").replace(ALAN,"");const r=firebase.database().ref("izin/"+tel);let v=(await r.get()).val();if(!v&&tel===YONETICI){await r.set("ana");v="ana"}if(v&&typeof v==="string"){salon=v;baglan();firebase.database().ref("giris/"+tel).set(firebase.database.ServerValue.TIMESTAMP).catch(()=>{});if(tel===YONETICI&&!izinRef){girisRef=firebase.database().ref("giris");girisRef.on("value",q=>{girisler=q.val()||{};if(V.v==="ayar"&&!odakta())ciz(true)},()=>{girisler=null});izinRef=firebase.database().ref("izin");izinRef.on("value",q=>{uyeler=q.val()||{};if(V.v==="ayar"&&!odakta())ciz(true)},()=>{})}}else izinYok=true}catch(e){izinYok=true}}
+    /* fbDurum, oturum durumu öğrenilince "hazir" olur; öncesinde giriş ekranı gösterilmez */
+    firebase.auth().onAuthStateChanged(async u=>{fbDurum="hazir"; kul=u; izinYok=false; salon=null;
+      if(u){const tel=(u.email||"").replace(ALAN,""),r=firebase.database().ref("izin/"+tel);
+        const kur=v=>{salon=v;try{localStorage.setItem(LSI,JSON.stringify({tel,v}))}catch(e){}
+          baglan();firebase.database().ref("giris/"+tel).set(firebase.database.ServerValue.TIMESTAMP).catch(()=>{});
+          if(tel===YONETICI&&!izinRef){girisRef=firebase.database().ref("giris");girisRef.on("value",q=>{girisler=q.val()||{};if(V.v==="ayar"&&!odakta())ciz(true)},()=>{girisler=null});
+            izinRef=firebase.database().ref("izin");izinRef.on("value",q=>{uyeler=q.val()||{};if(V.v==="ayar"&&!odakta())ciz(true)},()=>{})}};
+        let onb=null;try{onb=JSON.parse(localStorage.getItem(LSI)||"null")}catch(e){}
+        if(onb&&onb.tel===tel&&typeof onb.v==="string"&&onb.v){
+          /* izin bu cihazda daha önce doğrulandı: beklemeden aç (bağlantı zayıfken de çalışır), arka planda yeniden doğrula */
+          kur(onb.v);
+          r.get().then(q=>{const v=q.val();if(kul!==u)return;if(typeof v!=="string"||!v){try{localStorage.removeItem(LSI)}catch(e){}izinYok=true;salon=null;if(kok){kok.off();kok=null}esit=false;ciz(true)}}).catch(()=>{});
+        }else{
+          try{let v=(await r.get()).val();if(!v&&tel===YONETICI){await r.set("ana");v="ana"}if(v&&typeof v==="string")kur(v);else izinYok=true}catch(e){izinYok=true}}}
       else{if(kok){kok.off();kok=null}esit=false}
       if(!yoneticiMi()&&izinRef){izinRef.off();izinRef=null;uyeler=null;if(girisRef){girisRef.off();girisRef=null}girisler=null} ciz(true)});
   }catch(e){fbDurum="yok"; ciz(true)}
