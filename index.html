@@ -188,7 +188,7 @@ const LIB={
  legraise:{n:"Asılı bacak kaldırma",id:"Hanging_Leg_Raise",g:"karin",tip:"vucut",en:"hanging leg raise",ip:"Sallanmadan, karınla kaldır"}
 };
 const COP=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>`;
-const SURUM="2026-11-09 22:54";
+const SURUM="2026-11-09 22:56";
 const surumYazi=()=>{const [g,sa]=SURUM.split(" ");const [y,m,d]=g.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString("tr-TR",{day:"numeric",month:"long"})+" "+sa};
 const DMB=[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40];
 const WD=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
@@ -445,7 +445,6 @@ function sGelisim(){
 }
 function sProgram(){
   return `<h1>Program</h1>
-   <div class="lb">Haftada 2 gün tüm vücut. Bir harekette tüm setlerde tekrar aralığının üstüne çıkınca uygulama kilo artırmanı söyler.</div>
    ${S.plan.days.map(d=>BEKLE[d.id]?`<div class="k gbk">${geriSerit(d.id,gunAd(d)+" silindi")}</div>`:`<section class="k pad">
     <div style="display:flex;gap:8px"><input class="alan" id="gn-${d.id}" data-pf="name" data-gun="${d.id}" value="${esc(gunAd(d))}" aria-label="Gün adı" style="flex:1;font-weight:600">
      <select class="alan" id="gw-${d.id}" data-pf="wd" data-gun="${d.id}" aria-label="Haftanın günü" style="width:auto">${WD.map((w,i)=>`<option value="${i}" ${d.wd===i?"selected":""}>${w}</option>`).join("")}</select></div>
