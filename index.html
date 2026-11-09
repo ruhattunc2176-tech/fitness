@@ -146,10 +146,20 @@ h2{margin:0;font-size:20px;font-weight:900;text-transform:uppercase}
 .hp .hd{font-size:15px;font-weight:600}
 .hp .c{display:flex;flex-wrap:wrap;gap:6px}
 .hp .c span{font-size:13px;font-weight:700;background:var(--soft);color:#000;border:2px solid #000;border-radius:6px;padding:2px 8px}
-.hp details{font-size:14px;color:var(--muted);font-weight:600}
-.hp summary{font-weight:800;color:#000;padding:6px 0;cursor:pointer}
-.hp details p{margin:4px 0 6px}
-.hp details p b{color:#000;font-weight:800}
+.hgor{align-self:flex-start;border:0;background:none;padding:6px 0;font-weight:800;font-size:15px;color:#000;display:flex;align-items:center;gap:6px}
+.hgor i{font-style:normal;display:inline-block;transition:transform .15s}
+.hgor.on i{transform:rotate(90deg)}
+.gs{display:flex;gap:6px}
+.gs button{flex:1 1 auto;min-width:0;border:2px solid #000;background:#fff;border-radius:8px;padding:7px 5px;font-weight:800;font-size:13.5px;color:#000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gs button.on{background:#000;color:var(--sari)}
+.hl{border:2px solid #000;border-radius:8px;overflow:hidden}
+.hs{display:flex;align-items:center;gap:10px;padding:8px 10px;border-top:1.5px solid #000}
+.hs:first-child{border-top:0}
+.hs .sn{width:18px;font-size:13px;font-weight:900;color:var(--muted);flex:none;text-align:center}
+.hs img{width:42px;height:42px;border-radius:8px;border:2px solid #000;object-fit:cover;display:block;background:var(--soft)}
+.hs b{flex:1;min-width:0;font-size:15px;font-weight:800;line-height:1.2}
+.hs .rz{flex:none;font-size:13px;font-weight:900;background:var(--sari);border:2px solid #000;border-radius:6px;padding:2px 7px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.hoz{font-size:13px;font-weight:700;color:var(--muted)}
 .hp .btn{font-size:15px;padding:11px}
 .bilgi{display:flex;flex-direction:column;gap:9px}
 .bilgi div{font-size:15px;font-weight:600;line-height:1.35}
@@ -230,7 +240,7 @@ const LIB={
  legraise:{n:"Asılı bacak kaldırma",id:"Hanging_Leg_Raise",g:"karin",tip:"vucut",en:"hanging leg raise",ip:"Sallanmadan, karınla kaldır"}
 };
 const COP=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>`;
-const SURUM="2026-11-09 23:12";
+const SURUM="2026-11-09 23:18";
 const surumYazi=()=>{const [g,sa]=SURUM.split(" ");const [y,m,d]=g.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString("tr-TR",{day:"numeric",month:"long"})+" "+sa};
 const DMB=[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40];
 const WD=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
@@ -414,9 +424,9 @@ const HAZIR=[
   ["Çekiş","latpd:3:10-12,cablerow:3:10-12,dbrow:3:10-12:90,reardelt:3:12-15:60,curl:3:10-12:60,hammer:2:10-12:60"],
   ["Bacak","legpress:3:10-12,rdl:3:8-10:120,legext:3:12-15:75,legcurl:3:12-15:75,calf:3:12-15:60,plank:3:30-45:60"]]},
  {id:"bolgesel",ad:"Klasik bölgesel",hedef:"Salon hocalarının verdiği düzen; \"bugün göğüs günü\". 3 günde her kas haftada bir kez çalışır.",et:["3 gün","60 dk","10–12 tekrar"],gun:[
-  ["Göğüs – Triceps","mchest:4:8-12,widechest:3:10-12:120,fly:3:12-15:75,mchestn:3:10-12,pushdown:3:10-12:60,plank:2:30-45:60"],
-  ["Sırt – Biceps","latpd:4:10-12,cablerow:3:10-12,dbrow:3:10-12:90,reardelt:3:12-15:60,curl:3:10-12:60,hammer:2:10-12:60"],
-  ["Bacak – Omuz","legpress:4:10-12,rdl:3:8-10:120,legext:3:12-15:75,legcurl:3:12-15:75,mshoulder:3:10-12,latraise:3:12-15:60"]]},
+  ["Göğüs-Triceps","mchest:4:8-12,widechest:3:10-12:120,fly:3:12-15:75,mchestn:3:10-12,pushdown:3:10-12:60,plank:2:30-45:60"],
+  ["Sırt-Biceps","latpd:4:10-12,cablerow:3:10-12,dbrow:3:10-12:90,reardelt:3:12-15:60,curl:3:10-12:60,hammer:2:10-12:60"],
+  ["Bacak-Omuz","legpress:4:10-12,rdl:3:8-10:120,legext:3:12-15:75,legcurl:3:12-15:75,mshoulder:3:10-12,latraise:3:12-15:60"]]},
  {id:"ust",ad:"Üst vücut vurgulu",hedef:"Göğüs, omuz, kol görünümü öncelikli; bacak korunur.",et:["3 gün","60 dk","8–15 tekrar"],gun:[
   ["Gün A","mchest:4:8-12,latpd:4:10-12,latraise:3:12-15:60,pushdown:3:10-12:60,curl:3:10-12:60,legpress:3:10-12"],
   ["Gün B","mshoulder:4:10-12,cablerow:4:10-12,fly:3:12-15:75,reardelt:3:12-15:60,hammer:2:10-12:60,rdl:3:8-10:120"],
@@ -599,7 +609,10 @@ function sHazir(){
     <div class="u"><span class="no">${i+1}</span><b>${esc(P.ad)}</b>${P.id===sec?`<span class="et">Seçili</span>`:""}</div>
     <div class="hd">${esc(P.hedef)}</div>
     <div class="c">${P.et.map(x=>`<span>${x}</span>`).join("")}</div>
-    <details><summary>Hareketleri gör</summary>${hazirGunler(P).map(d=>`<p><b>${esc(d.name)}:</b> ${d.ex.map(e=>`${esc(LIB[e.k].n)} ${e.sets}×${esc(e.reps)}`).join(" · ")}</p>`).join("")}</details>
+    <button class="hgor ${V.hzAcik===P.id?"on":""}" data-a="hzAc" data-p="${P.id}" aria-expanded="${V.hzAcik===P.id}"><i aria-hidden="true">▸</i>${V.hzAcik===P.id?"Hareketleri gizle":"Hareketleri gör"}</button>
+    ${V.hzAcik===P.id?(()=>{const G=hazirGunler(P),gi=Math.min(V.hzGun||0,G.length-1),g=G[gi];return `<div class="gs">${G.map((d,j)=>`<button class="${j===gi?"on":""}" data-a="hzGun" data-i="${j}">${esc(d.name)}</button>`).join("")}</div>
+     <div class="hl">${g.ex.map((e,j)=>`<div class="hs"><span class="sn">${j+1}</span><span class="buyut" role="button" tabindex="0" data-a="foto" data-k="${e.k}" aria-label="Nasıl yapılır"><img src="${img(e.k,0)}" alt="" loading="lazy"><i aria-hidden="true">⤢</i></span><b>${esc(LIB[e.k].n)}</b><span class="rz">${e.sets}×${esc(e.reps)}${tipOf(e.k)==="sure"?" sn":""}</span></div>`).join("")}</div>
+     <div class="hoz">${g.ex.length} hareket · ${g.ex.reduce((t,e)=>t+e.sets,0)} set</div>`})():""}
     <button class="btn ${P.id===sec?"ikincil":""}" data-a="hazirSec" data-p="${P.id}">${P.id===sec?"Yeniden yükle":"Bu programı seç"}</button>
    </section>`).join("")}`;
 }
@@ -782,6 +795,8 @@ document.addEventListener("click",async ev=>{
     d.ex.push(h(k,3,tipOf(k)==="sure"?"30-45":tipOf(k)==="kule"?"10-12":"8-12"));kaydet(["main"]);tost(`${LIB[k].n} eklendi`);git("program");return}
   if(a==="geriAl"){const p=BEKLE[b.dataset.id];if(p){clearTimeout(p.t);delete BEKLE[b.dataset.id];if(p.tip==="sifir"){const o=JSON.parse(p.kopya);S.plan.days=o.days;if(o.prog)S.plan.prog=o.prog;else delete S.plan.prog;V.g={};V.gun=null;kaydet(["main"])}ciz(true)}return}
   if(a==="hsil"){silBekle(b.dataset.ex,"ex",b.dataset.gun,4000);ciz(true);return}
+  if(a==="hzAc"){V.hzAcik=V.hzAcik===b.dataset.p?null:b.dataset.p;V.hzGun=0;ciz(true);return}
+  if(a==="hzGun"){V.hzGun=+b.dataset.i;ciz(true);return}
   if(a==="hazirSec"){if(aktif()){tost("Önce açık antrenmanı bitir");return}
     silHepsiniBitir();const kopya=JSON.stringify({days:S.plan.days,prog:S.plan.prog||""});hazirYukle(b.dataset.p);silBekle("sifir","sifir",null,8000,kopya);kaydet(["main"]);git("program");return}
   if(a==="gekle"){const n=S.plan.days.length;S.plan.days.push({id:uid(),name:"Gün "+String.fromCharCode(65+n),wd:Math.min(6,n*2+1),ex:[]});kaydet(["main"]);ciz(true);return}
