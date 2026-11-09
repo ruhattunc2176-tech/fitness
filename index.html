@@ -170,7 +170,7 @@ const LIB={
  cablecrunch:{n:"Cable crunch",id:"Cable_Crunch",g:"karin",tip:"kule",en:"cable crunch",ip:"Kalça sabit, karınla bük"},
  legraise:{n:"Asılı bacak kaldırma",id:"Hanging_Leg_Raise",g:"karin",tip:"vucut",en:"hanging leg raise",ip:"Sallanmadan, karınla kaldır"}
 };
-const SURUM="2026-11-09 20:52";
+const SURUM="2026-11-09 20:54";
 const surumYazi=()=>{const [g,sa]=SURUM.split(" ");const [y,m,d]=g.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString("tr-TR",{day:"numeric",month:"long"})+" "+sa};
 const DMB=[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40];
 const WD=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
@@ -448,7 +448,21 @@ function ciz(yerinde){
 }
 function gorunumKaydet(){V.y=window.scrollY;try{localStorage.setItem(LSV,JSON.stringify(V))}catch(e){}}
 let kT;window.addEventListener("scroll",()=>{clearTimeout(kT);kT=setTimeout(gorunumKaydet,200)},{passive:true});
-function git(v,ek){Object.assign(V,{v},ek||{});ciz();window.scrollTo(0,0)}
+/* telefonun geri tuşu: ekran derinliğine göre tarihçe */
+const DERIN={ana:0,gelisim:1,program:1,ant:1,ayar:1,sec:2};
+const derin=v=>DERIN[v]??0;
+let hedef=null;
+function git(v,ek){Object.assign(V,ek||{});const fark=derin(v)-derin(V.v);
+  if(fark<0&&history.state&&history.state.v){hedef=v;history.go(fark);return}
+  if(fark>0)history.pushState({v},"");else history.replaceState({v},"");
+  V.v=v;ciz();window.scrollTo(0,0)}
+function tarihceKur(){try{history.replaceState({v:"ana"},"");if(V.v==="sec"){history.pushState({v:"program"},"");history.pushState({v:"sec"},"")}else if(derin(V.v)>0)history.pushState({v:V.v},"")}catch(e){}}
+window.addEventListener("popstate",ev=>{
+  if(!$("perde").hidden){$("perde").hidden=true;return}
+  const st=ev.state&&ev.state.v?ev.state.v:"ana";
+  if(hedef){V.v=hedef;hedef=null;if(V.v!==st)history.replaceState({v:V.v},"")}else V.v=st;
+  ciz();window.scrollTo(0,0)});
+function perdeKapat(){if($("perde").hidden)return;if(history.state&&history.state.perde)history.back();else $("perde").hidden=true}
 function tost(t){const el=$("tost");el.textContent=t;el.hidden=false;clearTimeout(tost.t);tost.t=setTimeout(()=>el.hidden=true,2600)}
 function kartaKaydir(){requestAnimationFrame(()=>{const el=document.querySelector(".hk");if(el){const r=el.getBoundingClientRect();if(r.top<0||r.top>window.innerHeight*.5)window.scrollTo({top:window.scrollY+r.top-12,behavior:"smooth"})}})}
 setInterval(()=>{const el=$("gecen");const s=aktif();if(el&&s)el.textContent=gecenSure(s)},1000);
@@ -459,7 +473,7 @@ function fotoAc(k){const L=LIB[k],p=$("perde");
    <div class="fotolar"><figure><img src="${img(k,0)}" alt="Başlangıç"><figcaption>Başlangıç</figcaption></figure><figure><img src="${img(k,1)}" alt="Bitiş"><figcaption>Bitiş</figcaption></figure></div>
    <div style="font-size:16px">${esc(L.ip)}</div>
    <a class="btn ikincil" href="${vidUrl(k)}" target="_blank" rel="noopener" style="text-align:center;text-decoration:none">▶ Videoda izle</a></div>`;
-  p.hidden=false}
+  p.hidden=false;history.pushState({v:V.v,perde:1},"")}
 
 /* ---------- dinlenme ---------- */
 let D=null,DI=null;
@@ -482,7 +496,7 @@ document.addEventListener("click",async ev=>{
   if(a==="basla"){V.acik=b.dataset.ex||null;git("ant");kartaKaydir();return}
   if(a==="ac"){V.acik=b.dataset.ex;ciz(true);kartaKaydir();return}
   if(a==="foto")return fotoAc(b.dataset.k);
-  if(a==="kapat"){$("perde").hidden=true;return}
+  if(a==="kapat"){perdeKapat();return}
   if(a==="d15"){if(D){D.son+=15000;D.top+=15;dCiz()}return}
   if(a==="dgec"){D=null;dCiz();return}
   if(a==="grp"){V.grp=b.dataset.g;ciz(true);return}
@@ -525,7 +539,7 @@ document.addEventListener("click",async ev=>{
   if(a==="girisAc"){V.yerel=false;ciz();return}
   if(a==="cikis"){await firebase.auth().signOut();V.yerel=false;izinYok=false;ciz();return}
 });
-$("perde").addEventListener("click",ev=>{if(ev.target.id==="perde")$("perde").hidden=true});
+$("perde").addEventListener("click",ev=>{if(ev.target.id==="perde")perdeKapat()});
 document.addEventListener("input",ev=>{const t=ev.target;
   if(t.id==="q"){V.q=t.value;$("secListe").innerHTML=secListe();return}
   if(t.dataset.f){const x=acikEx();if(!x)return;const g=giris(x.e);const v=sayi(t.value);if(t.dataset.f==="kg")g.kg=Math.max(0,v);else g.r=Math.max(1,Math.round(v));gorunumKaydet()}});
@@ -536,9 +550,9 @@ document.addEventListener("change",ev=>{const t=ev.target;
     if(t.dataset.ef==="sets"){v=Math.max(1,Math.min(10,parseInt(v)||e.sets));t.value=v}
     e[t.dataset.ef]=v;kaydet(["main"])}});
 document.addEventListener("focusin",ev=>{if(ev.target.dataset&&ev.target.dataset.f)ev.target.select()});
-document.addEventListener("keydown",ev=>{if(ev.key==="Escape")$("perde").hidden=true;if(ev.key==="Enter"&&/^(gs|gs2|gt)$/.test(ev.target.id)){const b=document.querySelector('[data-a="giris"]');b&&b.click()}});
+document.addEventListener("keydown",ev=>{if(ev.key==="Escape")perdeKapat();if(ev.key==="Enter"&&/^(gs|gs2|gt)$/.test(ev.target.id)){const b=document.querySelector('[data-a="giris"]');b&&b.click()}});
 
-ciz();requestAnimationFrame(()=>window.scrollTo(0,V.y||0));
+tarihceKur();ciz();requestAnimationFrame(()=>window.scrollTo(0,V.y||0));
 fbBaslat();
 </script>
 </body></html>
