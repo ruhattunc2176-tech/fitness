@@ -208,6 +208,11 @@ h2{margin:0;font-size:20px;font-weight:900;text-transform:uppercase}
 .kr .ok b{background:var(--ok);color:#000}
 .hata{font-size:14px;color:var(--kir);font-weight:700;min-height:1.2em}
 
+@keyframes kaySol{from{transform:translateX(28px);opacity:.4}to{transform:none;opacity:1}}
+@keyframes kaySag{from{transform:translateX(-28px);opacity:.4}to{transform:none;opacity:1}}
+#app.kaySol{animation:kaySol .18s ease-out}
+#app.kaySag{animation:kaySag .18s ease-out}
+@media (prefers-reduced-motion:reduce){#app.kaySol,#app.kaySag{animation:none}}
 .tost{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top,0px));transform:translateX(-50%);background:#000;color:var(--sari);padding:10px 16px;border-radius:8px;font-weight:800;z-index:50;max-width:90vw;text-align:center;font-size:15px;box-shadow:3px 3px 0 var(--ac)}
 .surum{font-size:12px;color:#000;opacity:.65;font-weight:700;text-align:center;margin:-8px 0 -6px}
 .logo{width:60px;height:60px;border-radius:12px;border:2px solid #000;box-shadow:var(--sh-k)}
@@ -263,7 +268,7 @@ const LIB={
  legraise:{n:"Asılı bacak kaldırma",id:"Hanging_Leg_Raise",g:"karin",tip:"vucut",en:"hanging leg raise",ip:"Sallanmadan, karınla kaldır"}
 };
 const COP=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>`;
-const SURUM="2026-11-09 23:32";
+const SURUM="2026-11-09 23:39";
 const surumYazi=()=>{const [g,sa]=SURUM.split(" ");const [y,m,d]=g.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString("tr-TR",{day:"numeric",month:"long"})+" "+sa};
 const DMB=[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40];
 const WD=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
@@ -808,6 +813,19 @@ function dCiz(){const el=$("din");if(!D){el.hidden=true;clearInterval(DI);return
   const k=Math.max(0,(D.son-Date.now())/1000);if(k<=0){D=null;el.hidden=true;clearInterval(DI);try{navigator.vibrate&&navigator.vibrate([200,100,200])}catch(e){}tost("Dinlenme bitti");return}
   const ks=Math.ceil(k);el.hidden=false;
   el.innerHTML=`<div><b>${Math.floor(ks/60)}:${pad(ks%60)}</b><span class="bar"><i style="width:${(k/D.top*100).toFixed(1)}%"></i></span><span style="font-size:14px">Dinlen</span><button data-a="d15">+15</button><button data-a="dgec">Geç</button></div>`}
+
+/* ---------- alt sekmeler arasında parmakla yana kaydırma ---------- */
+let KY=null;
+document.addEventListener("touchstart",ev=>{KY=null;if(ev.touches.length!==1)return;const t=ev.touches[0],w=window.innerWidth;
+  if(!SEKME.some(x=>x[0]===V.v)||!$("perde").hidden||!$("tam").hidden||$("tab").hidden)return;
+  if(t.clientX<24||t.clientX>w-24)return;                      /* kenar: telefonun geri hareketine bırak */
+  if(ev.target.closest(".cipler,input,select,textarea,.tab,.grafik"))return;
+  KY={x:t.clientX,y:t.clientY,t:Date.now()}},{passive:true});
+document.addEventListener("touchend",ev=>{const k=KY;KY=null;if(!k||ev.touches.length)return;const t=ev.changedTouches[0],dx=t.clientX-k.x,dy=t.clientY-k.y;
+  if(Date.now()-k.t>700||Math.abs(dx)<70||Math.abs(dx)<Math.abs(dy)*2)return;
+  const i=SEKME.findIndex(x=>x[0]===V.v),j=i+(dx<0?1:-1);if(i<0||j<0||j>=SEKME.length)return;
+  git(SEKME[j][0]);const a=$("app"),c=dx<0?"kaySol":"kaySag";a.classList.remove("kaySol","kaySag");void a.offsetWidth;a.classList.add(c)},{passive:true});
+document.addEventListener("touchcancel",()=>{KY=null},{passive:true});
 
 /* ---------- olaylar ---------- */
 function acikEx(){const d=gunBul(V.gun);const e=d&&d.ex.find(x=>x.id===V.acik);return e?{d,e}:null}
