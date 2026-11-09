@@ -56,7 +56,9 @@ h2{margin:0;font-size:19px;font-weight:700}
 .st .dikkat{color:var(--warn);font-weight:600;font-size:14px}
 .sat{display:flex;align-items:center;gap:12px;padding:12px 14px;border:0;border-top:1px solid var(--line);background:none;width:100%;text-align:left}
 .sat:first-child{border-top:0}
-.sat img{width:48px;height:48px;border-radius:12px;object-fit:cover;flex:none;background:var(--soft)}
+.sat img{width:48px;height:48px;border-radius:12px;object-fit:cover;flex:none;background:var(--soft);display:block}
+.buyut{position:relative;flex:none;display:block;cursor:zoom-in}
+.buyut i{position:absolute;right:-4px;bottom:-4px;width:20px;height:20px;border-radius:50%;background:var(--card);border:1px solid var(--line);color:var(--ink);font-style:normal;font-size:12px;display:grid;place-items:center;line-height:1}
 .sat .a{flex:1;min-width:0}
 .sat .a b{display:block;font-size:17px;font-weight:600}
 .sat .a span{font-size:14px;color:var(--muted)}
@@ -110,7 +112,7 @@ h2{margin:0;font-size:19px;font-weight:700}
 .alan{width:100%;min-width:0;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;font-size:16px}
 .alan:focus,button:focus-visible,a:focus-visible{outline:2px solid var(--ac);outline-offset:1px}
 .duz{display:grid;grid-template-columns:44px minmax(0,1fr) 46px 64px 30px;gap:8px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}
-.duz img{width:44px;height:44px;border-radius:10px;object-fit:cover}
+.duz img{width:44px;height:44px;border-radius:10px;object-fit:cover;display:block}
 .duz b{font-size:15px;font-weight:600;line-height:1.2}
 .duz .alan{padding:8px 6px;font-size:15px;text-align:center}
 .sil{border:0;background:none;color:#DC2626;font-size:24px;line-height:1;padding:0}
@@ -170,7 +172,7 @@ const LIB={
  cablecrunch:{n:"Cable crunch",id:"Cable_Crunch",g:"karin",tip:"kule",en:"cable crunch",ip:"Kalça sabit, karınla bük"},
  legraise:{n:"Asılı bacak kaldırma",id:"Hanging_Leg_Raise",g:"karin",tip:"vucut",en:"hanging leg raise",ip:"Sallanmadan, karınla kaldır"}
 };
-const SURUM="2026-11-09 20:55";
+const SURUM="2026-11-09 20:56";
 const surumYazi=()=>{const [g,sa]=SURUM.split(" ");const [y,m,d]=g.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString("tr-TR",{day:"numeric",month:"long"})+" "+sa};
 const DMB=[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40];
 const WD=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
@@ -338,7 +340,7 @@ function sAna(){
     <button class="st" data-a="git" data-v="gelisim"><span class="lb">Kilon</span><b>${son?yaz(son.kg)+" kg":"—"}</b>${son?(Math.abs(fark)<=1?`<span class="iyi">Hedefte</span>`:`<span class="dikkat">${fark>0?"+":""}${yaz(fark)} kg</span>`):`<span class="lb">Kilonu gir</span>`}</button>
    </div>
    <div class="lb" style="margin:2px 2px -6px">${s?"Hareketler":"Bugünkü hareketler"}</div>
-   <div class="k">${d.ex.map(e=>{const t=s&&tamamMi(s,e);return `<button class="sat" data-a="basla" data-ex="${e.id}"><img src="${img(e.k,0)}" alt="" loading="lazy"><span class="a"><b>${esc(LIB[e.k].n)}</b><span>${e.sets} × ${esc(e.reps)}${tipOf(e.k)==="sure"?" sn":""}</span></span>${t?`<span class="ok">✓</span>`:`<span class="v">${sonKiloYazi(e)}</span>`}</button>`}).join("")||`<div class="sat lb">Bu günde hareket yok</div>`}</div>`;
+   <div class="k">${d.ex.map(e=>{const t=s&&tamamMi(s,e);return `<button class="sat" data-a="basla" data-ex="${e.id}"><span class="buyut" role="button" tabindex="0" data-a="foto" data-k="${e.k}" aria-label="Fotoğrafı büyüt"><img src="${img(e.k,0)}" alt="" loading="lazy"><i aria-hidden="true">⤢</i></span><span class="a"><b>${esc(LIB[e.k].n)}</b><span>${e.sets} × ${esc(e.reps)}${tipOf(e.k)==="sure"?" sn":""}</span></span>${t?`<span class="ok">✓</span>`:`<span class="v">${sonKiloYazi(e)}</span>`}</button>`}).join("")||`<div class="sat lb">Bu günde hareket yok</div>`}</div>`;
 }
 function sAnt(){
   const d=gunBul(V.gun);if(!d){V.v="ana";return sAna()}
@@ -347,7 +349,7 @@ function sAnt(){
   const nBit=d.ex.filter(e=>tamamMi(s,e)).length;
   const kartlar=d.ex.map((e,i)=>{
     const L=LIB[e.k],kay=kayitli(s,e),bitti=kay.length>=e.sets;
-    if(e.id!==V.acik)return `<button class="k sat" data-a="ac" data-ex="${e.id}" style="border:1px solid var(--line);border-radius:18px"><img src="${img(e.k,0)}" alt="" loading="lazy"><span class="a"><b>${esc(L.n)}</b><span>${bitti?`${kay.length} set tamam · ${setYazi(e.k,kay[kay.length-1])}`:kay.length?`${kay.length}/${e.sets} set`:`${e.sets} × ${esc(e.reps)}${tipOf(e.k)==="sure"?" sn":""} · ${sonKiloYazi(e)}`}</span></span>${bitti?`<span class="ok">✓</span>`:`<span class="bos"></span>`}</button>`;
+    if(e.id!==V.acik)return `<button class="k sat" data-a="ac" data-ex="${e.id}" style="border:1px solid var(--line);border-radius:18px"><span class="buyut" role="button" tabindex="0" data-a="foto" data-k="${e.k}" aria-label="Fotoğrafı büyüt"><img src="${img(e.k,0)}" alt="" loading="lazy"><i aria-hidden="true">⤢</i></span><span class="a"><b>${esc(L.n)}</b><span>${bitti?`${kay.length} set tamam · ${setYazi(e.k,kay[kay.length-1])}`:kay.length?`${kay.length}/${e.sets} set`:`${e.sets} × ${esc(e.reps)}${tipOf(e.k)==="sure"?" sn":""} · ${sonKiloYazi(e)}`}</span></span>${bitti?`<span class="ok">✓</span>`:`<span class="bos"></span>`}</button>`;
     const g=giris(e),o=oneri(e,s&&s.sid),son=oncekiSet(e.k,s&&s.sid),tip=tipOf(e.k);
     const satirKg=kiloVar(e.k)?`<div class="ad"><span class="ad-l">Kilo (kg)<small>${tip==="dambil"?"tek dambıl":tip==="bar"?"bar dahil":tip==="plaka"?"takılan plakalar":"makine"}</small></span><span class="r"><button data-a="kg-" aria-label="Kiloyu azalt">−</button><input id="kg-${e.id}" inputmode="decimal" value="${yaz(g.kg)}" data-f="kg" aria-label="Kilo"><button data-a="kg+" aria-label="Kiloyu artır">+</button></span></div>`:"";
     const satirR=`<div class="ad"><span class="ad-l">${tip==="sure"?"Süre (sn)":"Tekrar"}</span><span class="r"><button data-a="r-" aria-label="Azalt">−</button><input id="r-${e.id}" inputmode="numeric" value="${g.r}" data-f="r" aria-label="${tip==="sure"?"Süre":"Tekrar"}"><button data-a="r+" aria-label="Artır">+</button></span></div>`;
@@ -397,7 +399,7 @@ function sProgram(){
    ${S.plan.days.map(d=>`<section class="k pad">
     <div style="display:flex;gap:8px"><input class="alan" id="gn-${d.id}" data-pf="name" data-gun="${d.id}" value="${esc(gunAd(d))}" aria-label="Gün adı" style="flex:1;font-weight:600">
      <select class="alan" id="gw-${d.id}" data-pf="wd" data-gun="${d.id}" aria-label="Haftanın günü" style="width:auto">${WD.map((w,i)=>`<option value="${i}" ${d.wd===i?"selected":""}>${w}</option>`).join("")}</select></div>
-    <div>${d.ex.map(e=>`<div class="duz"><img src="${img(e.k,0)}" alt=""><b>${esc(LIB[e.k].n)}</b>
+    <div>${d.ex.map(e=>`<div class="duz"><span class="buyut" role="button" tabindex="0" data-a="foto" data-k="${e.k}" aria-label="Fotoğrafı büyüt"><img src="${img(e.k,0)}" alt="" ><i aria-hidden="true">⤢</i></span><b>${esc(LIB[e.k].n)}</b>
       <input class="alan" id="es-${e.id}" inputmode="numeric" data-ef="sets" data-gun="${d.id}" data-ex="${e.id}" value="${e.sets}" aria-label="Set sayısı">
       <input class="alan" id="er-${e.id}" data-ef="reps" data-gun="${d.id}" data-ex="${e.id}" value="${esc(e.reps)}" aria-label="Tekrar aralığı">
       <button class="sil" data-a="hsil" data-gun="${d.id}" data-ex="${e.id}" aria-label="${esc(LIB[e.k].n)} sil">×</button></div>`).join("")||`<div class="lb">Henüz hareket yok.</div>`}</div>
@@ -417,7 +419,7 @@ function secListe(){
   const q=(V.q||"").toLocaleLowerCase("tr"),d=gunBul(V.secGun);
   const list=Object.entries(LIB).filter(([k,L])=>(!V.grp||L.g===V.grp)&&(!q||(L.n+" "+(L.ar||"")+" "+L.en).toLocaleLowerCase("tr").includes(q)));
   if(!list.length)return `<div class="sat lb">Bu adda hareket yok.</div>`;
-  return list.map(([k,L])=>{const var_=d&&d.ex.some(e=>e.k===k);return `<button class="sat" data-a="ekle" data-k="${k}"><img src="${img(k,0)}" alt="" loading="lazy"><span class="a"><b>${esc(L.n)}</b><span>${GRP[L.g]}</span></span>${var_?`<span class="ok">✓</span>`:`<span class="v" style="color:var(--ac);font-size:22px">+</span>`}</button>`}).join("");
+  return list.map(([k,L])=>{const var_=d&&d.ex.some(e=>e.k===k);return `<button class="sat" data-a="ekle" data-k="${k}"><span class="buyut" role="button" tabindex="0" data-a="foto" data-k="${k}" aria-label="Fotoğrafı büyüt"><img src="${img(k,0)}" alt="" loading="lazy"><i aria-hidden="true">⤢</i></span><span class="a"><b>${esc(L.n)}</b><span>${GRP[L.g]}</span></span>${var_?`<span class="ok">✓</span>`:`<span class="v" style="color:var(--ac);font-size:22px">+</span>`}</button>`}).join("");
 }
 function sAyar(){
   const a=aktif();
@@ -556,7 +558,7 @@ document.addEventListener("change",ev=>{const t=ev.target;
     if(t.dataset.ef==="sets"){v=Math.max(1,Math.min(10,parseInt(v)||e.sets));t.value=v}
     e[t.dataset.ef]=v;kaydet(["main"])}});
 document.addEventListener("focusin",ev=>{if(ev.target.dataset&&ev.target.dataset.f)ev.target.select()});
-document.addEventListener("keydown",ev=>{if(ev.key==="Escape")perdeKapat();if(ev.key==="Enter"&&/^(gs|gs2|gt)$/.test(ev.target.id)){const b=document.querySelector('[data-a="giris"]');b&&b.click()}});
+document.addEventListener("keydown",ev=>{if(ev.key==="Escape")perdeKapat();if((ev.key==="Enter"||ev.key===" ")&&ev.target.classList&&ev.target.classList.contains("buyut")){ev.preventDefault();fotoAc(ev.target.dataset.k)}if(ev.key==="Enter"&&/^(gs|gs2|gt)$/.test(ev.target.id)){const b=document.querySelector('[data-a="giris"]');b&&b.click()}});
 
 if(V.yerel)gecis();tarihceKur();ciz();requestAnimationFrame(()=>window.scrollTo(0,V.y||0));
 fbBaslat();
