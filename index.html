@@ -151,6 +151,25 @@ h2{margin:0;font-size:20px;font-weight:900;text-transform:uppercase}
 .hp details p{margin:4px 0 6px}
 .hp details p b{color:#000;font-weight:800}
 .hp .btn{font-size:15px;padding:11px}
+.bilgi{display:flex;flex-direction:column;gap:9px}
+.bilgi div{font-size:15px;font-weight:600;line-height:1.35}
+.bilgi b{display:inline-block;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.05em;background:#000;color:var(--bg);border:2px solid #000;border-radius:6px;padding:1px 8px;margin-bottom:3px}
+.bilgi .iyi b{background:var(--ok);color:#000}
+.bilgi .kotu b{background:var(--ac);color:#000}
+.halka{position:relative;width:216px;height:216px;margin:2px auto}
+.halka svg{width:100%;height:100%;transform:rotate(-90deg)}
+.halka .orta{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}
+.halka small{font-size:14px;font-weight:800;text-transform:uppercase;letter-spacing:.04em}
+.halka b{font-size:46px;font-weight:900;font-variant-numeric:tabular-nums;line-height:1}
+.hedef{display:flex;align-items:center;justify-content:center;gap:10px;font-size:15px;font-weight:800}
+.hedef button{width:34px;height:34px;border:2.5px solid #000;border-radius:8px;background:#fff;font-size:20px;font-weight:900;display:grid;place-items:center;padding:0}
+.hedef button:active{background:var(--bg)}
+.oz{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;text-align:center}
+.oz div{background:var(--soft);border:2.5px solid #000;border-radius:8px;padding:9px 4px}
+.oz b{display:block;font-size:19px;font-weight:900;line-height:1.15}
+.oz span{font-size:12.5px;font-weight:700;color:var(--muted)}
+.zaman{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.zaman label{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:900;text-transform:uppercase}
 .grafik{width:100%;height:auto;display:block}
 .satir2{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:16px;font-weight:600;padding:8px 0;border-top:2px solid #000}
 .satir2:first-of-type{border-top:0}
@@ -211,15 +230,55 @@ const LIB={
  legraise:{n:"Asılı bacak kaldırma",id:"Hanging_Leg_Raise",g:"karin",tip:"vucut",en:"hanging leg raise",ip:"Sallanmadan, karınla kaldır"}
 };
 const COP=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>`;
-const SURUM="2026-11-09 23:06";
+const SURUM="2026-11-09 23:10";
 const surumYazi=()=>{const [g,sa]=SURUM.split(" ");const [y,m,d]=g.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString("tr-TR",{day:"numeric",month:"long"})+" "+sa};
 const DMB=[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40];
 const WD=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
+/* hareket bilgisi: kas = çalışan kas, dogru = doğru yapıldığını nasıl anlarsın, hata = sık yapılan hata */
+const BILGI={
+ squat:["Ön bacak ve kalça; bel ve karın gövdeyi dengeler.","Topuklar yerde kalır, yükü ayağın ortasında hissedersin; ön bacak ve kalça yorulur.","Dizlerin içe kaçması, topukların kalkması, belin yuvarlanması, yarım inmek."],
+ deadlift:["Arka bacak, kalça ve sırtın tamamı.","Bar bacağa sürtünerek dümdüz çıkar; yükü kalça ve arka bacakta hissedersin, belde değil.","Sırtı kamburlaştırmak, barı gövdeden uzak tutmak, kalçayı omuzdan önce kaldırmak, üstte geriye yaslanmak."],
+ rdl:["Arka bacak (hamstring) ve kalça.","İnerken arka bacakta belirgin bir gerilme hissedersin; bar bacağa yakın iner.","Squat gibi dizi bükmek, beli yuvarlamak, barı öne uzaklaştırmak, gereğinden derin inmek."],
+ hipthrust:["Kalça; arka bacak yardım eder.","Üstte gövde yere paralel olur, kalça sımsıkı kasılır.","Beli aşırı çukurlaştırmak, ayakları çok uzağa koymak (yük arka bacağa kayar), üstte sıkmadan inmek."],
+ legpress:["Ön bacak ve kalça; arka bacak yardım eder.","Kalça ve bel sırtlığa yapışık kalır, dizler ayak ucu yönünde gider; topukla itersin.","Üstte dizi kilitlemek, çok derin inip beli kaldırmak, dizleri içe kaçırmak, parmak ucuyla itmek."],
+ goblet:["Ön bacak, kalça ve karın.","Gövde dik, topuklar yerde kalır; dirsekler dizlerin içine iner.","Öne eğilmek, topukları kaldırmak, dizleri içe kaçırmak."],
+ lunge:["Ön bacak ve kalça.","Ön ayağın topuğuyla itersin, gövde dik kalır; öndeki bacağın kalçası yanar.","Adımı çok kısa atmak, öne eğilmek, ön dizin içe kaçması."],
+ legcurl:["Arka bacak (hamstring).","Yalnızca diz bükülür; arka bacakta sıkışma hissedersin.","Kalçayı kaldırmak, ağırlığı savurmak, indirirken bırakıvermek."],
+ legext:["Ön bacak (quadriceps).","Dizin makinenin dönme ekseniyle aynı hizadadır; üstte ön bacak kasılır.","Hızla savurmak, kalçayı koltuktan kaldırmak, çok ağır yükle dize yüklenmek."],
+ calf:["Baldır.","Altta baldır gerilir, üstte parmak ucunda yükselip sıkarsın.","Yarım hareket yapmak, zıplayarak kaldırmak, dizleri bükmek."],
+ backext:["Bel kasları, kalça ve arka bacak.","Kalçadan katlanırsın, gövde düz çizgiye gelince durursun.","Üstte beli aşırı geriye bükmek, savrularak kalkmak."],
+ bench:["Göğüs, ön omuz ve arka kol (triceps).","Bar göğsün alt-orta kısmına iner, dirsekler gövdeye yarı açık durur; göğüste hissedersin.","Barı göğüsten sektirmek, dirsekleri tam yana açmak, kalçayı kaldırmak, omuzları öne yuvarlamak."],
+ dbbench:["Göğüs, ön omuz ve arka kol.","Dambıllar göğüs hizasına iner, bilekler dirseğin tam üstünde kalır.","Çok aşağı indirip omzu zorlamak, bilekleri bükmek, üstte dambılları çarpıştırmak."],
+ incdb:["Üst göğüs, ön omuz ve arka kol.","Dambıllar köprücük kemiğinin altına iner; üst göğüste hissedersin.","Sehpayı çok dik ayarlamak (omuz hareketine döner), beli aşırı çukurlaştırmak."],
+ dbsp:["Omuz (ön ve orta) ve arka kol.","Dirsekler bileğin tam altında, dambıllar baş üstünde biter; bel yaslı kalır.","Beli çukurlaştırıp geriye yaslanmak, yarım inmek, dambılları öne doğru itmek."],
+ latraise:["Orta omuz.","Dirsek bilekle aynı hizada ya da biraz üstünde kalır; omzun yan tarafı yanar.","Sallanarak kaldırmak, omuzları kulağa çekmek, omuz hizasını geçmek, çok ağır almak."],
+ pushup:["Göğüs, ön omuz, arka kol ve karın.","Baştan topuğa düz bir çizgi olursun; göğüs yere yaklaşır.","Kalçanın düşmesi ya da havaya kalkması, dirsekleri yana açmak, yarım inmek."],
+ dip:["Alt göğüs, arka kol ve ön omuz.","Omuz dirsek hizasına iner, omuzlar aşağıda kalır.","Çok derin inmek, omuzları kulağa çekmek, sallanmak."],
+ fly:["Göğüs; ön omuz yardım eder.","Dirsek hafif bükük ve sabit kalır; kollar birleşirken göğüs sıkışır.","Hareketi itişe çevirmek (dirsek bükülür), omuzları öne yuvarlamak, kolları çok geriye açmak."],
+ reardelt:["Arka omuz ve kürek kemikleri arası.","Göğüs minderde kalır; kollar açılırken omzun arkası yanar.","Savurmak, omuzları kulağa çekmek, çok ağır almak, gövdeyi minderden ayırmak."],
+ widechest:["Göğüs, ön omuz ve arka kol.","Tutamaklar göğüs hizasındadır; iterken göğüs sıkışır, sırt yaslı kalır.","Koltuğu yanlış yükseklikte bırakmak (tutamak omuz hizasına çıkar), dirseği sertçe kilitlemek, omuzları öne yuvarlamak, ağırlığı bırakıvermek."],
+ mchest:["Göğüs, ön omuz ve arka kol.","Bar göğüs hizasından yukarı çıkar; omuzlar sehpaya yapışık, göğüste hissedersin.","Barı omuz hizasına almak, dirsekleri tam yana açmak, kalçayı kaldırmak, yarım inmek."],
+ mchestn:["Göğüs ve arka kol; nötr tutuşta arka kol daha çok çalışır.","Dirsekler gövdeye yakın iner; göğüs ve arka kolda hissedersin.","Dirsekleri yana açmak, omuzları kaldırmak, yarım hareket yapmak."],
+ mshoulder:["Omuz (ön ve orta) ve arka kol.","Tutamaklar omuz hizasından başlar, baş üstüne çıkar; sırt ve bel yaslı kalır.","Beli çukurlaştırmak, omuzları kulağa çekmek, yarım inmek, dirseği sertçe kilitlemek."],
+ pushdown:["Arka kol (triceps).","Yalnızca ön kol hareket eder; altta arka kol sıkışır.","Dirsekleri öne arkaya oynatmak, gövdeyle bastırmak, yukarıda yarım bırakmak."],
+ latpd:["Sırt (kanat kası) ve ön kol (biceps).","Önce dirsekleri aşağı çekersin, bar üst göğse gelir; koltuk altının arkasında hissedersin.","Geriye yatıp savurmak, barı ense arkasına çekmek, yalnızca kolla çekmek, yukarıda kolu tam uzatmamak."],
+ pullup:["Sırt ve ön kol.","Tam asılıdan başlarsın, çene barın üstüne çıkar; önce kürek kemikleri aşağı iner.","Sallanıp tekme atmak, yarım inmek, çeneyi uzatarak hile yapmak."],
+ row:["Sırtın ortası, kanat ve ön kol.","Gövde sabit kalır, bar göbeğe gelir; kürek kemikleri birbirine yaklaşır.","Beli yuvarlamak, gövdeyle savurmak, çok dik durmak."],
+ dbrow:["Kanat, sırtın ortası ve ön kol.","Dirsek kalçaya doğru gider, gövde dönmez; sırtın yanında hissedersin.","Gövdeyi döndürerek çekmek, dambılı omza doğru çekmek, sırtı kamburlaştırmak."],
+ cablerow:["Sırtın ortası, kanat ve ön kol.","Gövde dik ve sabit kalır; tutamak karna gelirken kürek kemikleri sıkışır.","İleri geri sallanmak, omuzları öne yuvarlamak, beli kamburlaştırmak, yalnızca kolla çekmek."],
+ facepull:["Arka omuz ve kürek kemiği çevresi.","İp yüze gelirken eller kulak hizasında ayrılır; omzun arkasında hissedersin.","Çok ağır alıp geriye yaslanmak, dirsekleri düşürmek, ipi göğse çekmek."],
+ curl:["Ön kol (biceps).","Dirsek yerinden oynamaz; üstte biceps sıkışır, yavaş indirirsin.","Belden sallanmak, dirseği öne getirmek, yarım indirmek."],
+ hammer:["Biceps ve ön kolun dış kısmı.","Avuçlar hep birbirine bakar, dirsek yerinden oynamaz.","Belden sallanmak, dirseği öne getirmek, bileği çevirmek."],
+ plank:["Karın ve bel çevresi.","Karın ve kalça sıkıdır, rahat nefes alırsın; yükü karında hissedersin, belde değil.","Kalçanın düşmesi ya da havaya kalkması, nefesi tutmak, başı sarkıtmak."],
+ cablecrunch:["Karın.","Kalça sabit kalır; kaburgalar leğen kemiğine yaklaşır, karın sıkışır.","Kalçayı geriye oturtmak, kollarla çekmek, beli düz tutup kalçadan katlanmak."],
+ legraise:["Alt karın ve kalça bükücüler.","Sallanmadan kaldırırsın; üstte leğen kemiği hafifçe yukarı kıvrılır.","Savrulmak, karnı kullanmadan yalnızca bacağı kaldırmak, hızlı indirmek."]
+};
 const IK={
  ayar:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',
  bugun:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h18M6 8v8M18 8v8"/></svg>',
  gelisim:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16M5 15l4-4 3 3 6-7"/></svg>',
- program:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg>'
+ program:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg>',
+ sure:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9 2h6"/></svg>'
 };
 
 /* ---------- yardımcılar ---------- */
@@ -544,6 +603,37 @@ function sHazir(){
     <button class="btn ${P.id===sec?"ikincil":""}" data-a="hazirSec" data-p="${P.id}">${P.id===sec?"Yeniden yükle":"Bu programı seç"}</button>
    </section>`).join("")}`;
 }
+/* ---------- salon süresi (giriş/çıkış elle); kayıtlar plan içinde eşitlenir ---------- */
+const salonlar=()=>(S.plan.salon||[]).slice().sort((a,b)=>b.g-a.g);
+const sureHedef=()=>S.plan.sureHedef||60;
+const saatYaz=ms=>{const d=new Date(ms);return pad(d.getHours())+":"+pad(d.getMinutes())};
+const dkYaz=dk=>dk<60?`${dk} dk`:`${Math.floor(dk/60)} sa ${dk%60} dk`;
+const dkOf=x=>Math.max(0,Math.round((x.c-x.g)/60000));
+function sayacYaz(ms){const sn=Math.max(0,Math.floor(ms/1000)),sa=Math.floor(sn/3600);return (sa?sa+":":"")+pad(Math.floor(sn%3600/60))+":"+pad(sn%60)}
+let sureT=null;
+function sureTik(){const b=S.plan.salonAcik,el=$("ssayac");if(!b||!el||V.v!=="sure"){clearInterval(sureT);sureT=null;return}
+  const ms=Date.now()-b;el.textContent=sayacYaz(ms);$("shalka").style.strokeDashoffset=(276.5*(1-Math.min(1,ms/60000/sureHedef()))).toFixed(1)}
+function sSure(){
+  const b=S.plan.salonAcik,L=salonlar(),hb=Date.parse(haftaBasi()+"T00:00:00"),hf=L.filter(x=>x.g>=hb);
+  const top=hf.reduce((t,x)=>t+dkOf(x),0),ort=L.length?Math.round(L.reduce((t,x)=>t+dkOf(x),0)/L.length):0;
+  const ms=b?Date.now()-b:0,uzun=b&&ms>4*3600000;
+  return `<h1>Salon süresi</h1>
+   <div class="k pad">
+    <div class="halka"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="44" fill="none" stroke="#000" stroke-width="11"/><circle cx="50" cy="50" r="44" fill="none" stroke="#fff" stroke-width="6"/><circle id="shalka" cx="50" cy="50" r="44" fill="none" stroke="var(--ac)" stroke-width="6" stroke-dasharray="276.5" stroke-dashoffset="${(276.5*(1-Math.min(1,ms/60000/sureHedef()))).toFixed(1)}"/></svg>
+     <div class="orta"><small>${b?"Giriş "+saatYaz(b):"Salonda değilsin"}</small><b id="ssayac">${b?sayacYaz(ms):"00:00"}</b></div></div>
+    <div class="hedef"><button data-a="hedef-" aria-label="Hedefi azalt">−</button><span>Hedef ${sureHedef()} dk</span><button data-a="hedef+" aria-label="Hedefi artır">+</button></div>
+    ${uzun?`<div class="oner">Çıkışa basmayı unuttuysan şimdi bitir, sonra geçmişten çıkış saatini düzelt.</div>`:""}
+    <button class="btn ${b?"":"yesil"}" data-a="${b?"salonCik":"salonGir"}">${b?"Salondan çıktım":"Salona girdim"}</button>
+   </div>
+   <div class="oz"><div><b>${hf.length}</b><span>bu hafta giriş</span></div><div><b>${dkYaz(top)}</b><span>bu hafta toplam</span></div><div><b>${ort?dkYaz(ort):"—"}</b><span>ortalama</span></div></div>
+   <div class="lb" style="margin:2px 2px -8px">Geçmiş · düzeltmek için dokun</div>
+   <div class="k">${L.slice(0,30).map(x=>`<button class="sat" data-a="salonDuzen" data-id="${x.id}"><span class="a"><b>${new Date(x.g).toLocaleDateString("tr-TR",{weekday:"short",day:"numeric",month:"short"})}</b><span>${saatYaz(x.g)} – ${saatYaz(x.c)}</span></span><span class="v">${dkYaz(dkOf(x))}</span></button>`).join("")||`<div class="sat lb">Henüz kayıt yok. Salona girince yukarıdaki düğmeye bas.</div>`}</div>`;
+}
+function salonDuzenAc(id){const x=(S.plan.salon||[]).find(q=>q.id===id);if(!x)return;const p=$("perde");
+  p.innerHTML=`<div role="dialog" aria-label="Saati düzelt"><div class="ust"><h2>${new Date(x.g).toLocaleDateString("tr-TR",{weekday:"long",day:"numeric",month:"long"})}</h2><button class="ikb" data-a="kapat" aria-label="Kapat">✕</button></div>
+   <div class="zaman"><label>Giriş<input class="alan" type="time" id="sg" value="${saatYaz(x.g)}"></label><label>Çıkış<input class="alan" type="time" id="sc" value="${saatYaz(x.c)}"></label></div>
+   <button class="btn" data-a="salonKaydet" data-id="${id}">Kaydet</button><button class="btn kir" data-a="salonSil" data-id="${id}">Bu kaydı sil</button></div>`;
+  p.hidden=false;history.pushState({v:V.v,perde:1},"")}
 function sSec(){
   const d=gunBul(V.secGun);if(!d){V.v="program";return sProgram()}
   return `<button class="geri" data-a="git" data-v="program">‹ Program</button><h1>${esc(gunAd(d))} için hareket seç</h1>
@@ -581,20 +671,21 @@ function sGiris(){
 }
 
 /* ---------- çizim ---------- */
-const SEKME=[["ana","Bugün",IK.bugun],["gelisim","Gelişim",IK.gelisim],["program","Program",IK.program]];
+const SEKME=[["ana","Bugün",IK.bugun],["gelisim","Gelişim",IK.gelisim],["program","Program",IK.program],["sure","Süre",IK.sure]];
 function ciz(yerinde){
   if(V.v!=="program"&&!(V.v==="hazir"&&BEKLE.sifir))silHepsiniBitir();
   const y=window.scrollY,girisGerek=fbDurum==="hazir"&&((!kul&&!V.yerel)||izinYok);
-  $("app").innerHTML=`<div class="surum">Son güncelleme: ${surumYazi()}</div>`+(girisGerek?sGiris():V.v==="ant"?sAnt():V.v==="gelisim"?sGelisim():V.v==="program"?sProgram():V.v==="sec"?sSec():V.v==="hazir"?sHazir():V.v==="ayar"?sAyar():sAna());
+  $("app").innerHTML=`<div class="surum">Son güncelleme: ${surumYazi()}</div>`+(girisGerek?sGiris():V.v==="ant"?sAnt():V.v==="gelisim"?sGelisim():V.v==="program"?sProgram():V.v==="sec"?sSec():V.v==="sure"?sSure():V.v==="hazir"?sHazir():V.v==="ayar"?sAyar():sAna());
   const t=$("tab");t.hidden=girisGerek||V.v==="ant";
   if(!t.hidden){const akt=V.v==="sec"||V.v==="hazir"?"program":V.v==="ayar"?"ana":V.v;t.innerHTML=SEKME.map(([v,a,ik])=>`<button class="${akt===v?"on":""}" data-a="git" data-v="${v}">${ik}${a}</button>`).join("")}
   if(yerinde)window.scrollTo(0,y);
+  clearInterval(sureT);sureT=null;if(V.v==="sure"&&S.plan.salonAcik&&!girisGerek)sureT=setInterval(sureTik,1000);
   gorunumKaydet();
 }
 function gorunumKaydet(){V.y=window.scrollY;try{localStorage.setItem(LSV,JSON.stringify(V))}catch(e){}}
 let kT;window.addEventListener("scroll",()=>{clearTimeout(kT);kT=setTimeout(gorunumKaydet,200)},{passive:true});
 /* telefonun geri tuşu: ekran derinliğine göre tarihçe */
-const DERIN={ana:0,gelisim:1,program:1,ant:1,ayar:1,sec:2,hazir:2};
+const DERIN={ana:0,gelisim:1,program:1,sure:1,ant:1,ayar:1,sec:2,hazir:2};
 const derin=v=>DERIN[v]??0;
 let hedef=null;
 function git(v,ek){Object.assign(V,ek||{});const fark=derin(v)-derin(V.v);
@@ -625,10 +716,10 @@ function kartaKaydir(){requestAnimationFrame(()=>{const el=document.querySelecto
 setInterval(()=>{const el=$("gecen");const s=aktif();if(el&&s)el.textContent=gecenSure(s)},1000);
 
 /* ---------- fotoğraf perdesi ---------- */
-function fotoAc(k){const L=LIB[k],p=$("perde");
+function fotoAc(k){const L=LIB[k],B=BILGI[k],p=$("perde");
   p.innerHTML=`<div role="dialog" aria-label="${esc(L.n)} nasıl yapılır"><div class="ust"><h2>${esc(L.n)}</h2><button class="ikb" data-a="kapat" aria-label="Kapat">✕</button></div>
    <div class="fotolar">${(L.fotos||[[img(k,0),"Başlangıç"],[img(k,1),"Bitiş"]]).map(([src,c])=>`<figure><img src="${src}" alt="${esc(c)}"><figcaption>${esc(c)}</figcaption></figure>`).join("")}</div>${L.kaynak?`<div class="lb" style="font-size:12px">${esc(L.kaynak)}</div>`:""}
-   <div style="font-size:16px">${esc(L.ip)}</div>
+   <div class="bilgi">${B?`<div><b>Çalışan kas</b><br>${esc(B[0])}</div>`:""}<div><b>Nasıl yapılır</b><br>${esc(L.ip)}</div>${B?`<div class="iyi"><b>Doğru yapıyorsan</b><br>${esc(B[1])}</div><div class="kotu"><b>Sık yapılan hata</b><br>${esc(B[2])}</div>`:""}</div>
    <a class="btn ikincil" href="${vidUrl(k)}" target="_blank" rel="noopener" style="text-align:center;text-decoration:none">▶ Videoda izle</a></div>`;
   p.hidden=false;history.pushState({v:V.v,perde:1},"")}
 
@@ -677,6 +768,15 @@ document.addEventListener("click",async ev=>{
     const s=aktif();if(s){delete S.sessions[s.sid];S.activeSid=null;silinecek.add("s/"+s.sid);kaydet(["main"])}V.g={};D=null;dCiz();git("ana");return}
   if(a==="kilo"){const v=sayi($("kiloGir").value);if(v<25||v>300){tost("Geçerli bir kilo gir, ör. 78,4");return}
     const t=bugun();S.body=S.body.filter(q=>q.d!==t);S.body.push({d:t,kg:Math.round(v*10)/10});kaydet(["main"]);ciz(true);tost("Kaydedildi");return}
+  if(a==="salonGir"){S.plan.salonAcik=Date.now();kaydet(["main"]);ciz(true);return}
+  if(a==="salonCik"){const g=S.plan.salonAcik;if(!g)return;const c=Date.now();(S.plan.salon=S.plan.salon||[]).push({id:uid(),g,c});delete S.plan.salonAcik;kaydet(["main"]);ciz(true);tost(`${dkYaz(Math.round((c-g)/60000))} salonda kaldın`);return}
+  if(a==="hedef-"||a==="hedef+"){S.plan.sureHedef=Math.min(180,Math.max(15,sureHedef()+(a==="hedef+"?5:-5)));kaydet(["main"]);ciz(true);return}
+  if(a==="salonDuzen")return salonDuzenAc(b.dataset.id);
+  if(a==="salonKaydet"){const x=(S.plan.salon||[]).find(q=>q.id===b.dataset.id),sg=$("sg").value,sc=$("sc").value;if(!x||!sg||!sc)return;
+    const kur=(ms,hm)=>{const d=new Date(ms),[h,m]=hm.split(":").map(Number);d.setHours(h,m,0,0);return d.getTime()};
+    x.g=kur(x.g,sg);x.c=kur(x.g,sc);if(x.c<x.g)x.c+=86400000;kaydet(["main"]);perdeKapat();ciz(true);tost("Kaydedildi");return}
+  if(a==="salonSil"){if(b.dataset.on!=="1"){b.dataset.on="1";b.textContent="Emin misin? Tekrar dokun";return}
+    S.plan.salon=(S.plan.salon||[]).filter(q=>q.id!==b.dataset.id);kaydet(["main"]);perdeKapat();ciz(true);return}
   if(a==="secAc"){V.secGun=b.dataset.gun;V.q="";V.grp="";git("sec");return}
   if(a==="ekle"){const d=gunBul(V.secGun);if(!d)return;const k=b.dataset.k;if(d.ex.some(e=>e.k===k)){tost("Bu hareket zaten bu günde var");return}
     d.ex.push(h(k,3,tipOf(k)==="sure"?"30-45":tipOf(k)==="kule"?"10-12":"8-12"));kaydet(["main"]);tost(`${LIB[k].n} eklendi`);git("program");return}
