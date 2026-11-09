@@ -174,7 +174,7 @@ const LIB={
  cablecrunch:{n:"Cable crunch",id:"Cable_Crunch",g:"karin",tip:"kule",en:"cable crunch",ip:"Kalça sabit, karınla bük"},
  legraise:{n:"Asılı bacak kaldırma",id:"Hanging_Leg_Raise",g:"karin",tip:"vucut",en:"hanging leg raise",ip:"Sallanmadan, karınla kaldır"}
 };
-const SURUM="2026-11-09 22:28";
+const SURUM="2026-11-09 22:31";
 const surumYazi=()=>{const [g,sa]=SURUM.split(" ");const [y,m,d]=g.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString("tr-TR",{day:"numeric",month:"long"})+" "+sa};
 const DMB=[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40];
 const WD=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
@@ -255,11 +255,13 @@ function baglan(){
     let degisti=false;
     if(!kirli.has("main")&&d.main){const a=JSON.stringify([S.plan,S.body,S.activeSid]),b=JSON.stringify([uzak.plan,uzak.body,uzak.activeSid]); if(a!==b){S.plan=uzak.plan;S.body=uzak.body;S.activeSid=uzak.activeSid;degisti=true}}
     Object.keys(uzak.sessions).forEach(sid=>{if(kirli.has("s/"+sid)||silinecek.has("s/"+sid))return; if(JSON.stringify(S.sessions[sid])!==JSON.stringify(uzak.sessions[sid])){S.sessions[sid]=uzak.sessions[sid];degisti=true}});
-    Object.keys(S.sessions).forEach(sid=>{if(!uzak.sessions[sid]&&!kirli.has("s/"+sid)){kirli.add("s/"+sid)}});
+    Object.keys(S.sessions).forEach(sid=>{if(uzak.sessions[sid]||kirli.has("s/"+sid))return;if(S.plan.silT&&(S.sessions[sid].t||0)<S.plan.silT){delete S.sessions[sid];degisti=true;return}kirli.add("s/"+sid)});
+    if(S.plan.silT)Object.keys(uzak.sessions).forEach(sid=>{if((uzak.sessions[sid].t||0)<S.plan.silT){silinecek.add("s/"+sid);delete S.sessions[sid];degisti=true}});
     if(gecis())degisti=true;
     if(gecis2())degisti=true;
     if(gecis3())degisti=true;
-    if(kirli.size) yazmaPlanla();
+    if(gecis4())degisti=true;
+    if(kirli.size||silinecek.size) yazmaPlanla();
     if(degisti){yerelKaydet(); if(odakta())bekleyenCiz=true; else ciz(true)}
   },()=>{esit=false});
 }
@@ -289,6 +291,12 @@ function gecis3(){if(S.plan.g3)return false;
    {id:uid(),name:"Gün B",wd:3,ex:[g("rdl",3,"8-10",120),g("mshoulder",3,"10-12"),g("cablerow",3,"10-12"),g("fly",2,"12-15",75),g("legext",2,"12-15",75),g("pushdown",2,"10-12",60)]},
    {id:uid(),name:"Gün C",wd:5,ex:[g("goblet",3,"10-12",90),g("widechest",3,"8-12",120),g("dbrow",3,"10-12",90),g("reardelt",2,"12-15",60),g("curl",2,"10-12",60),g("cablecrunch",2,"12-15",60)]}];
   S.plan.g1=1;S.plan.g2=1;S.plan.g3=1;V.g={};V.gun=null;kirli.add("main");yerelKaydet();return true}
+/* tek seferlik (9 Kasım): geçmiş silinir, 12 Kasım Perşembe başlangıç; sıra A (Per) → B (Cmt) → C (Pzt) */
+const MILAT="2026-11-12";
+function gecis4(){if(S.plan.g4)return false;
+  Object.keys(S.sessions).forEach(sid=>{silinecek.add("s/"+sid)});S.sessions={};S.activeSid=null;
+  const wd={0:3,1:5,2:0};S.plan.days.forEach((d,i)=>{if(wd[i]!==undefined)d.wd=wd[i]});
+  S.plan.milat=MILAT;S.plan.silT=Date.now();S.plan.g4=1;V.g={};V.gun=null;kirli.add("main");yerelKaydet();return true}
 function yerelKaydet(){try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}}
 function kaydet(keys){yerelKaydet();(keys||[]).forEach(k=>kirli.add(k));yazmaPlanla()}
 function yazmaPlanla(){if(!kok)return;clearTimeout(yazT);yazT=setTimeout(yazdir,600)}
@@ -355,7 +363,7 @@ function sAna(){
   const bw=S.body.slice().sort((x,y)=>x.d.localeCompare(y.d)),son=bw[bw.length-1],ilk=bw[0],fark=son&&ilk?son.kg-ilk.kg:0;
   const dk=Math.round(d.ex.reduce((t,e)=>t+e.sets*(1+e.rest/60),0)/5)*5;
   const bugunAd=new Date().toLocaleDateString("tr-TR",{weekday:"long",day:"numeric",month:"long"});
-  return `<div class="ust"><div><div class="lb">${bugunAd}</div><h1>${s?"Devam: ":d.id===siradakiGun()?"Bugün: ":""}${esc(gunAd(d))}</h1></div><button class="ikb" data-a="git" data-v="ayar" aria-label="Ayarlar">${IK.ayar}</button></div>
+  return `<div class="ust"><div><div class="lb">${S.plan.milat&&bugun()<S.plan.milat?`Başlangıç: ${tarih(S.plan.milat)} Perşembe`:bugunAd}</div><h1>${s?"Devam: ":d.id===siradakiGun()?"Sıradaki: ":""}${esc(gunAd(d))}</h1></div><button class="ikb" data-a="git" data-v="ayar" aria-label="Ayarlar">${IK.ayar}</button></div>
    ${S.plan.days.length>1?`<div class="cipler">${S.plan.days.map(x=>`<button class="cip ${x.id===d.id?"on":""}" data-a="gunSec" data-id="${x.id}">${esc(gunAd(x))}</button>`).join("")}</div>`:""}
    ${a&&a.dayId!==d.id?`<div class="oner">Yarım kalan ${esc(a.dayName)} antrenmanın var. <button class="link" data-a="gunSec" data-id="${a.dayId}">Oraya dön</button></div>`:""}
    <div class="k pad"><span class="lb" style="font-size:15px">${d.ex.length} hareket · yaklaşık ${dk} dakika${s?` · ${biten(s)} set yapıldı`:""}</span>
@@ -585,7 +593,7 @@ document.addEventListener("change",ev=>{const t=ev.target;
 document.addEventListener("focusin",ev=>{if(ev.target.dataset&&ev.target.dataset.f)ev.target.select()});
 document.addEventListener("keydown",ev=>{if(ev.key==="Escape")perdeKapat();if((ev.key==="Enter"||ev.key===" ")&&ev.target.classList&&ev.target.classList.contains("buyut")){ev.preventDefault();fotoAc(ev.target.dataset.k)}if(ev.key==="Enter"&&/^(gs|gs2|gt)$/.test(ev.target.id)){const b=document.querySelector('[data-a="giris"]');b&&b.click()}});
 
-if(V.yerel){gecis();gecis2();gecis3()}tarihceKur();ciz();requestAnimationFrame(()=>window.scrollTo(0,V.y||0));
+if(V.yerel){gecis();gecis2();gecis3();gecis4()}tarihceKur();ciz();requestAnimationFrame(()=>window.scrollTo(0,V.y||0));
 fbBaslat();
 </script>
 </body></html>
