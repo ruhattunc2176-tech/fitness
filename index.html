@@ -213,6 +213,19 @@ h2{margin:0;font-size:20px;font-weight:900;text-transform:uppercase}
 #app.kaySol{animation:kaySol .18s ease-out}
 #app.kaySag{animation:kaySag .18s ease-out}
 @media (prefers-reduced-motion:reduce){#app.kaySol,#app.kaySag{animation:none}}
+.wu{padding:14px;display:flex;flex-direction:column;gap:10px}
+.wu .u{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.wu .u b{font-size:19px;font-weight:900;text-transform:uppercase}
+.wu .u span{font-size:13px;font-weight:800;background:var(--sari);border:2px solid #000;border-radius:6px;padding:1px 8px;white-space:nowrap}
+.wl{border:2px solid #000;border-radius:8px;overflow:hidden}
+.wl button,.wl div{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:10px;border:0;border-top:1.5px solid #000;background:#fff;font-size:15px;font-weight:600;line-height:1.3;color:#000}
+.wl>:first-child{border-top:0}
+.wl i{flex:none;width:24px;height:24px;border:2px solid #000;border-radius:6px;background:#fff;display:grid;place-items:center;font-style:normal;font-size:13px;font-weight:900;color:transparent}
+.wl .on{background:var(--ok-s)}
+.wl .on i{background:var(--ok);color:#000}
+.wl small{margin-left:auto;flex:none;font-size:13px;font-weight:800;color:var(--muted);white-space:nowrap}
+.isn{font-size:15px;font-weight:700;background:var(--soft);border:2px solid #000;border-radius:8px;padding:8px 11px}
+.isn b{font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.05em;background:#000;color:var(--sari);border-radius:5px;padding:1px 7px;margin-right:6px}
 .bitti{position:fixed;left:0;right:0;bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:14;display:flex;justify-content:center;padding:0 max(20px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px));pointer-events:none}
 .bitti .btn{pointer-events:auto;max-width:484px}
 .tost{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top,0px));transform:translateX(-50%);background:#000;color:var(--sari);padding:10px 16px;border-radius:8px;font-weight:800;z-index:50;max-width:90vw;text-align:center;font-size:15px;box-shadow:3px 3px 0 var(--ac)}
@@ -270,7 +283,7 @@ const LIB={
  legraise:{n:"Asılı bacak kaldırma",id:"Hanging_Leg_Raise",g:"karin",tip:"vucut",en:"hanging leg raise",ip:"Sallanmadan, karınla kaldır"}
 };
 const COP=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>`;
-const SURUM="2026-11-10 09:02";
+const SURUM="2026-11-10 09:06";
 const surumYazi=()=>{const [g,sa]=SURUM.split(" ");const [y,m,d]=g.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString("tr-TR",{day:"numeric",month:"long"})+" "+sa};
 const DMB=[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40];
 const WD=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
@@ -597,6 +610,40 @@ function sAna(){
    <div class="lb" style="margin:2px 2px -6px">${s?"Hareketler":"Bugünkü hareketler"}</div>
    <div class="k">${d.ex.map(e=>{const t=s&&tamamMi(s,e);return `<button class="sat" data-a="basla" data-ex="${e.id}"><span class="buyut" role="button" tabindex="0" data-a="foto" data-k="${e.k}" aria-label="Fotoğrafı büyüt"><img src="${img(e.k,0)}" alt="" loading="lazy"><i aria-hidden="true">⤢</i></span><span class="a"><b>${esc(LIB[e.k].n)}</b><span>${e.sets} × ${esc(e.reps)}${tipOf(e.k)==="sure"?" sn":""}</span></span>${t?`<span class="ok">✓</span>`:`<span class="v">${sonKiloYazi(e)}</span>`}</button>`}).join("")||`<div class="sat lb">Bu günde hareket yok</div>`}</div>`;
 }
+/* ---------- ısınma ve soğuma: günün çalışan bölgelerine göre ---------- */
+const ISIN={bacak:[["Ağırlıksız squat","10 tekrar"],["Bacak savurma (öne-arkaya)","her bacak 10"]],
+ itis:[["Kol çevirme","10 öne, 10 arkaya"],["Duvara yaslanarak şınav","10 tekrar"]],
+ cekis:[["Omuzları geriye çevir, kürek kemiklerini sık","10 tekrar"],["Gövdeyi sağa sola döndür","10 tekrar"]],
+ karin:[["Kalça çevirme","her yöne 10"]]};
+const SOGU={bacak:["Ön bacak germe","Arka bacak germe","Kalça germe (ayak bileği dizin üstünde)","Baldır germe"],
+ itis:["Göğüs germe (kol kapı kasasında)","Omuz germe (kol göğsün önünden)","Arka kol germe (dirsek baş üstünde)"],
+ cekis:["Kanat germe (tutunup geriye asıl)","Ön kol germe (kollar arkada kenetli)"],
+ karin:["Karın germe (yüzüstü, ellerle doğrul)"]};
+const KUCUKH=new Set(["latraise","reardelt","fly","curl","hammer","pushdown","facepull","calf","legext","legcurl","backext"]);
+const gunGrup=d=>[...new Set(d.ex.map(e=>LIB[e.k].g))];
+/* tüm vücut günlerinde liste uzamasın: 3+ bölge varsa her bölgeden tek hareket */
+function isinmaListe(d){const G=gunGrup(d),cok=G.length>=3;return [["Yürüyüş bandı ya da bisiklet, hafif tempo","5 dk"],...G.flatMap(g=>(ISIN[g]||[]).slice(0,cok?1:2))]}
+function wuDurum(d,s){const k=d.id+"|"+bugun();if(!V.wu||V.wu.k!==k)V.wu={k,t:{},kapali:!!(s&&Object.values(s.sets||{}).some(a=>a&&a.length)),sg:null};return V.wu}
+function isinmaKart(d,s){const W=wuDurum(d,s),L=isinmaListe(d),n=L.filter((x,i)=>W.t[i]).length;
+  if(W.kapali)return `<button class="k sat" data-a="wuAc"><span class="a"><b>Isınma</b><span>${n===L.length?"tamamlandı":n?`${n} / ${L.length} yapıldı`:"yaklaşık 8 dk · görmek için dokun"}</span></span>${n===L.length?`<span class="ok">✓</span>`:`<span class="bos"></span>`}</button>`;
+  return `<section class="k wu"><div class="u"><b>Isınma</b><span>yaklaşık 8 dk</span></div>
+   <div class="wl">${L.map((x,i)=>`<button class="${W.t[i]?"on":""}" data-a="wuTik" data-i="${i}" aria-pressed="${!!W.t[i]}"><i aria-hidden="true">✓</i><span>${esc(x[0])}</span><small>${esc(x[1])}</small></button>`).join("")}</div>
+   <div class="lb">İlk büyük hareketlerde ısınma seti de var; kilosu hareketin kartında yazıyor.</div>
+   <button class="btn ikincil" data-a="wuKapat">${n===L.length?"Kapat":"Isınmayı geç"}</button></section>`}
+function sogumaKart(d,hepsiBitti){const W=V.wu||{},acik=W.sg==null?hepsiBitti:W.sg,G=gunGrup(d),L=G.flatMap(g=>G.length>=3?(g==="karin"?[]:(SOGU[g]||[]).slice(0,2)):(SOGU[g]||[]));
+  if(!acik)return `<button class="k sat" data-a="sgAc"><span class="a"><b>Soğuma ve germe</b><span>isteğe bağlı · yaklaşık 5 dk · görmek için dokun</span></span></button>`;
+  return `<section class="k wu"><div class="u"><b>Soğuma ve germe</b><span>isteğe bağlı</span></div>
+   <div class="wl"><div><span>Yavaş yürüyüş, nabzın insin</span><small>3–5 dk</small></div>${L.map(x=>`<div><span>${esc(x)}</span><small>20–30 sn</small></div>`).join("")}</div>
+   <div class="lb">Ağrı değil, hafif gerginlik hissedene kadar ger; yaylanma.</div>
+   <button class="btn ikincil" data-a="sgAc">Kapat</button></section>`}
+/* ısınma seti: her bölgenin o günkü ilk ağırlıklı hareketinde, çalışma kilosunun yarısı ve dörtte üçü */
+function isinmaSeti(d,e,kg){const L=LIB[e.k],tip=tipOf(e.k);if(!kiloVar(e.k)||L.g==="karin"||!(kg>0))return "";
+  const ilk=d.ex.find(x=>LIB[x.k].g===L.g&&kiloVar(x.k)&&!KUCUKH.has(x.k));if(!ilk||ilk.id!==e.id)return "";
+  const st=adim(e.k),alt=tip==="bar"?20:tip==="dambil"?DMB[0]:st;
+  const yuv=x=>tip==="dambil"?([...DMB].reverse().find(v=>v<=x)||DMB[0]):Math.max(alt,Math.round(x/st)*st);
+  const a=yuv(kg*.5),b=yuv(kg*.75);
+  if(a>=kg)return `<div class="isn"><b>Isınma</b>Önce çok hafif bir kiloyla 10 tekrar yap.</div>`;
+  return `<div class="isn"><b>Isınma seti</b>${yaz(a)} kg × 10${b>a&&b<kg?`, sonra ${yaz(b)} kg × 5`:""} · kayda girmez</div>`}
 function sAnt(){
   const d=gunBul(V.gun);if(!d){V.v="ana";return sAna()}
   const s=gunSeansi(d.id);
@@ -612,12 +659,15 @@ function sAnt(){
      <div class="hb"><button class="foto" data-a="foto" data-k="${e.k}" aria-label="Fotoğrafı büyüt"><img src="${img(e.k,0)}" alt="${esc(L.n)}"></button><div><b>${esc(L.n)}</b><span class="bil">${e.sets} × ${esc(e.reps)}${tip==="sure"?" sn":""} · </span><button class="link" data-a="foto" data-k="${e.k}">▶ Nasıl yapılır</button></div><button class="kk" data-a="kartKapat" aria-label="Kartı kapat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg></button></div>
      ${son?`<div class="gec">Geçen sefer: ${tip==="sure"?son.a.map(x=>x.r+" sn").join(", "):tip==="vucut"?son.a.map(x=>x.r).join(", ")+" tekrar":`${yaz(Math.max(...son.a.map(x=>x.kg)))} kg × ${son.a.map(x=>x.r).join(", ")}`}</div>`:`<div class="gec">İlk kez yapıyorsun; rahat bir kiloyla başla.</div>`}
      ${o.not&&!kay.length?`<div class="oner">${esc(o.not)}</div>`:""}
+     ${!kay.length?isinmaSeti(d,e,g.kg):""}
      ${kay.map((x,j)=>`<div class="yset"><i>✓</i>${j+1}. set · ${setYazi(e.k,x)}${j===kay.length-1?`<button data-a="setsil">sil</button>`:""}</div>`).join("")}
      ${bitti?`<button class="btn yesil" data-a="sonraki">${d.ex.some(q=>!tamamMi(s,q))?"Sıradaki harekete geç":"Antrenmanı bitir"}</button><button class="btn ikincil" data-a="ekset">Bir set daha ekle</button>`
        :`<div class="akt"><span class="t">${kay.length+1}. set${e.sets>1?` / ${e.sets}`:""}</span>${satirKg}${satirR}<button class="btn" data-a="tamamla">Seti tamamla</button></div>`}
     </section>`}).join("");
   return `<div class="ust"><div><div class="lb">${esc(gunAd(d))} · ${nBit} / ${d.ex.length} hareket</div><h1 style="font-size:26px">Antrenman</h1></div><div style="display:flex;align-items:center;gap:12px">${s?`<span class="sure" id="gecen">${gecenSure(s)}</span>`:""}<button class="btn kucuk yesil" data-a="bitir">${s?"Bitir":"Kapat"}</button></div></div>
-   ${kartlar}`;
+   ${isinmaKart(d,s)}
+   ${kartlar}
+   ${sogumaKart(d,nBit===d.ex.length&&d.ex.length>0)}`;
 }
 function gecenSure(s){const sn=Math.max(0,Math.floor((Date.now()-(s.t||Date.now()))/1000));return `${Math.floor(sn/60)}:${pad(sn%60)}`}
 function cizgi(pts,band){
@@ -864,6 +914,11 @@ document.addEventListener("click",async ev=>{
   if(a==="d15"){if(D){D.son+=15000;D.top+=15;dCiz()}return}
   if(a==="dgec"){D=null;dCiz();return}
   if(a==="grp"){V.grp=b.dataset.g;ciz(true);return}
+  if(a==="wuTik"||a==="wuKapat"||a==="wuAc"||a==="sgAc"){const d=gunBul(V.gun);if(!d)return;const W=wuDurum(d,gunSeansi(d.id));
+    if(a==="wuTik"){const i=+b.dataset.i;if(W.t[i])delete W.t[i];else W.t[i]=1;if(isinmaListe(d).every((x,j)=>W.t[j])){W.kapali=true;tost("Isınma tamam")}}
+    else if(a==="wuKapat")W.kapali=true;else if(a==="wuAc")W.kapali=false;
+    else W.sg=!(W.sg==null?(d.ex.length>0&&d.ex.every(e=>tamamMi(gunSeansi(d.id),e))):W.sg);
+    ciz(true);return}
   const x=V.v==="ant"&&acikEx();
   if(x&&["kg-","kg+","r-","r+","tamamla","setsil","sonraki","ekset"].includes(a)){
     const {d,e}=x,g=giris(e),tip=tipOf(e.k);
