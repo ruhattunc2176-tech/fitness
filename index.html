@@ -229,7 +229,8 @@ h2{margin:0;font-size:20px;font-weight:900;text-transform:uppercase}
 .bitti{position:fixed;left:0;right:0;bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:14;display:flex;justify-content:center;padding:0 max(20px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px));pointer-events:none}
 .bitti .btn{pointer-events:auto;max-width:484px}
 .tost{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top,0px));transform:translateX(-50%);background:#000;color:var(--sari);padding:10px 16px;border-radius:8px;font-weight:800;z-index:50;max-width:90vw;text-align:center;font-size:15px;box-shadow:3px 3px 0 var(--ac)}
-.surum{font-size:12px;color:#000;opacity:.65;font-weight:700;text-align:center;margin:-8px 0 -6px}
+.surum{font-size:12px;color:#000;opacity:.65;font-weight:700;text-align:center;margin:-8px 0 -6px;border:0;background:none;padding:4px}
+.yeni{align-self:center;margin:-8px 0 -6px;border:2px solid #000;border-radius:8px;background:var(--sari);color:#000;font-weight:800;font-size:14px;padding:6px 14px;box-shadow:var(--sh-k)}
 .logo{width:60px;height:60px;border-radius:12px;border:2px solid #000;box-shadow:var(--sh-k)}
 </style></head><body>
 <div id="app"></div>
@@ -283,7 +284,24 @@ const LIB={
  legraise:{n:"Asılı bacak kaldırma",id:"Hanging_Leg_Raise",g:"karin",tip:"vucut",en:"hanging leg raise",ip:"Sallanmadan, karınla kaldır"}
 };
 const COP=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>`;
-const SURUM="2026-11-10 09:06";
+const SURUM="2026-11-10 10:58";
+/* ---------- sürüm denetimi: açılışta ve uygulamaya dönünce yeni sürüm varsa kendiliğinden yenilenir ---------- */
+let yeniSurum=null,surumT=0;
+async function surumBak(elle,oto){
+  if(!elle&&Date.now()-surumT<60000)return;surumT=Date.now();
+  let uz=null;try{const r=await fetch("index.html?_="+Date.now(),{cache:"no-store"});if(r.ok){const m=(await r.text()).match(new RegExp("const SURUM"+'="([^"]+)"'));uz=m&&m[1]}}catch(e){}
+  if(!uz){if(elle)tost("Bağlantı yok, bakılamadı");return}
+  if(uz===SURUM){yeniSurum=null;if(elle)tost("Uygulama güncel");return}
+  yeniSurum=uz;
+  /* aynı sürüm için yalnızca bir kez kendiliğinden yenile (önbellek eskiyi verirse döngü olmasın); yazı yazılırken ya da pencere açıkken bekle */
+  let denendi=null;try{denendi=sessionStorage.getItem("fitness.yenilendi")}catch(e){}
+  const mesgul=!oto||odakta()||!$("perde").hidden||!$("tam").hidden||!!D||kirli.size>0||silinecek.size>0;   /* dinlenme sayacı ya da bekleyen kayıt varken bekle */
+  if(elle||(denendi!==uz&&!mesgul))return yenile();
+  ciz(true)}
+async function yenile(){try{sessionStorage.setItem("fitness.yenilendi",yeniSurum||"")}catch(e){}
+  yerelKaydet();gorunumKaydet();
+  try{await fetch(location.href,{cache:"reload"})}catch(e){}
+  location.reload()}
 const surumYazi=()=>{const [g,sa]=SURUM.split(" ");const [y,m,d]=g.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString("tr-TR",{day:"numeric",month:"long"})+" "+sa};
 const DMB=[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40];
 const WD=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
@@ -819,7 +837,7 @@ function sGiris(){
 const SEKME=[["ana","Bugün",IK.bugun],["gelisim","Gelişim",IK.gelisim],["program","Program",IK.program],["sure","Süre",IK.sure]];
 function ciz(yerinde){
   const y=window.scrollY,girisGerek=fbDurum==="hazir"&&((!kul&&!V.yerel)||izinYok);
-  $("app").innerHTML=`<div class="surum">Son güncelleme: ${surumYazi()}</div>`+(girisGerek?sGiris():V.v==="ant"?sAnt():V.v==="gelisim"?sGelisim():V.v==="program"?sProgram():V.v==="sec"?sSec():V.v==="sure"?sSure():V.v==="hazir"?sHazir():V.v==="ayar"?sAyar():sAna());
+  $("app").innerHTML=(yeniSurum?`<button class="yeni" data-a="yenile">Yeni sürüm hazır · Yenile</button>`:`<button class="surum" data-a="surumBak" aria-label="Güncelleme var mı bak">Son güncelleme: ${surumYazi()} ↻</button>`)+(girisGerek?sGiris():V.v==="ant"?sAnt():V.v==="gelisim"?sGelisim():V.v==="program"?sProgram():V.v==="sec"?sSec():V.v==="sure"?sSure():V.v==="hazir"?sHazir():V.v==="ayar"?sAyar():sAna());
   const t=$("tab");t.hidden=girisGerek||V.v==="ant";
   if(!t.hidden){const akt=V.v==="sec"||V.v==="hazir"?"program":V.v==="ayar"?"ana":V.v;t.innerHTML=SEKME.map(([v,a,ik])=>`<button class="${akt===v?"on":""}" data-a="git" data-v="${v}">${ik}${a}</button>`).join("")}
   if(yerinde)window.scrollTo(0,y);
@@ -913,6 +931,8 @@ document.addEventListener("click",async ev=>{
   if(a==="tamOynat"){if(TAMT){tamDur();return}b.textContent="■ Durdur";TAMT=setInterval(()=>{TAM.i=(TAM.i+1)%TAM.l.length;tamGoster()},900);return}
   if(a==="d15"){if(D){D.son+=15000;D.top+=15;dCiz()}return}
   if(a==="dgec"){D=null;dCiz();return}
+  if(a==="surumBak"){tost("Bakılıyor…");surumBak(true);return}
+  if(a==="yenile"){yenile();return}
   if(a==="grp"){V.grp=b.dataset.g;ciz(true);return}
   if(a==="wuTik"||a==="wuKapat"||a==="wuAc"||a==="sgAc"){const d=gunBul(V.gun);if(!d)return;const W=wuDurum(d,gunSeansi(d.id));
     if(a==="wuTik"){const i=+b.dataset.i;if(W.t[i])delete W.t[i];else W.t[i]=1;if(isinmaListe(d).every((x,j)=>W.t[j])){W.kapali=true;tost("Isınma tamam")}}
@@ -1004,5 +1024,8 @@ document.addEventListener("keydown",ev=>{if(ev.key==="Escape")perdeKapat();if((e
 
 if(V.yerel){gecis();gecis2();gecis3();gecis4();gecis5()}tarihceKur();ciz();requestAnimationFrame(()=>window.scrollTo(0,V.y||0));
 fbBaslat();
+setTimeout(()=>surumBak(false,true),2500);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)surumBak(false,true)});
+setInterval(()=>{if(!document.hidden)surumBak(false,false)},600000);
 </script>
 </body></html>
