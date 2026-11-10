@@ -288,7 +288,7 @@ const LIB={
  legraise:{n:"Asılı bacak kaldırma",id:"Hanging_Leg_Raise",g:"karin",tip:"vucut",en:"hanging leg raise",ip:"Sallanmadan, karınla kaldır"}
 };
 const COP=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>`;
-const SURUM="2026-11-10 11:00";
+const SURUM="2026-11-10 11:04";
 /* ---------- sürüm denetimi: açılışta ve uygulamaya dönünce yeni sürüm varsa kendiliğinden yenilenir ---------- */
 let yeniSurum=null,surumT=0;
 async function surumBak(elle,oto){
@@ -714,7 +714,8 @@ function sGelisim(){
   return `<h1>Gelişim</h1>
    <div class="k pad"><div class="ust"><div><h2>Kilo</h2><div class="lb">${ilk?`Hedef ${yaz(ilk.kg)} ± 1 kg`:"İlk kaydın hedefin olur"}</div></div>${son?`<b style="font-size:26px">${yaz(son.kg)}</b>`:""}</div>
     ${cizgi(bw.map(b=>({d:b.d,y:b.kg})),ilk?[ilk.kg-1,ilk.kg+1]:null)}
-    <div style="display:flex;gap:8px"><input class="alan" id="kiloGir" inputmode="decimal" placeholder="Bugünkü kilo, ör. 78,4" style="flex:1"><button class="btn kucuk" data-a="kilo">Kaydet</button></div></div>
+    <div style="display:flex;gap:8px"><input class="alan" id="kiloGir" inputmode="decimal" placeholder="Bugünkü kilo, ör. 78,4" style="flex:1"><button class="btn kucuk" data-a="kilo">Kaydet</button></div>
+    ${bw.length?`<div>${bw.slice().reverse().slice(0,V.kiloTum?999:5).map(b=>`<div class="satir2"><span>${tarih(b.d)}</span><span class="uyd"><b>${yaz(b.kg)} kg</b><button class="link" data-a="kiloSil" data-d="${b.d}">Sil</button></span></div>`).join("")}${bw.length>5&&!V.kiloTum?`<button class="link" data-a="kiloTum" style="margin-top:8px">Tüm kayıtları göster (${bw.length})</button>`:""}</div>`:""}</div>
    <div class="k pad"><h2>En iyi kilolar</h2>
     ${enIyi.length?enIyi.map(x=>`<div class="satir2"><span>${esc(LIB[x.k].n)}</span><span><b>${yaz(x.best)} kg</b>${x.art>0?` <span class="art">+${yaz(x.art)}</span>`:""}</span></div>`).join(""):`<div class="lb">Antrenman yaptıkça burada görünecek.</div>`}</div>
    <div class="k pad"><h2>Geçmiş</h2>
@@ -979,6 +980,9 @@ document.addEventListener("click",async ev=>{
     const s=aktif();if(s){delete S.sessions[s.sid];S.activeSid=null;silinecek.add("s/"+s.sid);kaydet(["main"])}V.g={};D=null;dCiz();git("ana");return}
   if(a==="seansSil"){if(b.dataset.on!=="1"){b.dataset.on="1";b.textContent="Emin misin?";return}
     seansSil(b.dataset.sid);kaydet(["main"]);ciz(true);tost("Antrenman kaydı silindi");return}
+  if(a==="kiloSil"){if(b.dataset.on!=="1"){b.dataset.on="1";b.textContent="Emin misin?";return}
+    S.body=S.body.filter(x=>x.d!==b.dataset.d);kaydet(["main"]);ciz(true);tost("Kilo kaydı silindi");return}
+  if(a==="kiloTum"){V.kiloTum=true;ciz(true);return}
   if(a==="kilo"){const v=sayi($("kiloGir").value);if(v<25||v>300){tost("Geçerli bir kilo gir, ör. 78,4");return}
     const t=bugun();S.body=S.body.filter(q=>q.d!==t);S.body.push({d:t,kg:Math.round(v*10)/10});kaydet(["main"]);ciz(true);tost("Kaydedildi");return}
   if(a==="salonGir"){S.plan.salonAcik=Date.now();kaydet(["main"]);ciz(true);return}
