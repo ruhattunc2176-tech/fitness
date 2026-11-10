@@ -213,6 +213,8 @@ h2{margin:0;font-size:20px;font-weight:900;text-transform:uppercase}
 #app.kaySol{animation:kaySol .18s ease-out}
 #app.kaySag{animation:kaySag .18s ease-out}
 @media (prefers-reduced-motion:reduce){#app.kaySol,#app.kaySag{animation:none}}
+.bitti{position:fixed;left:0;right:0;bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:14;display:flex;justify-content:center;padding:0 max(20px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px));pointer-events:none}
+.bitti .btn{pointer-events:auto;max-width:484px}
 .tost{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top,0px));transform:translateX(-50%);background:#000;color:var(--sari);padding:10px 16px;border-radius:8px;font-weight:800;z-index:50;max-width:90vw;text-align:center;font-size:15px;box-shadow:3px 3px 0 var(--ac)}
 .surum{font-size:12px;color:#000;opacity:.65;font-weight:700;text-align:center;margin:-8px 0 -6px}
 .logo{width:60px;height:60px;border-radius:12px;border:2px solid #000;box-shadow:var(--sh-k)}
@@ -268,7 +270,7 @@ const LIB={
  legraise:{n:"Asılı bacak kaldırma",id:"Hanging_Leg_Raise",g:"karin",tip:"vucut",en:"hanging leg raise",ip:"Sallanmadan, karınla kaldır"}
 };
 const COP=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>`;
-const SURUM="2026-11-09 23:58";
+const SURUM="2026-11-10 09:02";
 const surumYazi=()=>{const [g,sa]=SURUM.split(" ");const [y,m,d]=g.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString("tr-TR",{day:"numeric",month:"long"})+" "+sa};
 const DMB=[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40];
 const WD=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
@@ -713,7 +715,9 @@ function sSec(){
   return `<button class="geri" data-a="git" data-v="program">‹ Program</button><h1>${esc(gunAd(d))} için hareket seç</h1>
    <input class="alan" id="q" type="search" placeholder="Ara: pec fly" value="${esc(V.q)}" autocomplete="off">
    <div class="cipler">${[["","Tümü"],...Object.entries(GRPK)].map(([k,a])=>`<button class="cip ${V.grp===k?"on":""}" data-a="grp" data-g="${k}">${a}</button>`).join("")}</div>
-   <div class="k" id="secListe">${secListe()}</div>`;
+   <div class="lb" style="margin:-6px 2px">Dokununca eklenir, tekrar dokununca çıkar. İstediğin kadar seç.</div>
+   <div class="k" id="secListe">${secListe()}</div><div style="height:56px"></div>
+   <div class="bitti"><button class="btn" id="secBitti" data-a="git" data-v="program">Bitti · ${d.ex.length} hareket</button></div>`;
 }
 function secListe(){
   const q=(V.q||"").toLocaleLowerCase("tr"),d=gunBul(V.secGun);
@@ -891,8 +895,11 @@ document.addEventListener("click",async ev=>{
   if(a==="salonSil"){if(b.dataset.on!=="1"){b.dataset.on="1";b.textContent="Emin misin? Tekrar dokun";return}
     S.plan.salon=(S.plan.salon||[]).filter(q=>q.id!==b.dataset.id);kaydet(["main"]);perdeKapat();ciz(true);return}
   if(a==="secAc"){V.secGun=b.dataset.gun;V.q="";V.grp="";git("sec");return}
-  if(a==="ekle"){const d=gunBul(V.secGun);if(!d)return;const k=b.dataset.k;if(d.ex.some(e=>e.k===k)){tost("Bu hareket zaten bu günde var");return}
-    d.ex.push(h(k,3,tipOf(k)==="sure"?"30-45":tipOf(k)==="kule"?"10-12":"8-12"));kaydet(["main"]);tost(`${LIB[k].n} eklendi`);git("program");return}
+  if(a==="ekle"){const d=gunBul(V.secGun);if(!d)return;const k=b.dataset.k;
+    /* çoklu seçim: ekranda kalınır; dokununca eklenir, tekrar dokununca çıkar */
+    if(d.ex.some(e=>e.k===k)){d.ex=d.ex.filter(e=>e.k!==k);tost(`${LIB[k].n} çıkarıldı`)}
+    else{d.ex.push(h(k,3,tipOf(k)==="sure"?"30-45":tipOf(k)==="kule"?"10-12":"8-12"));tost(`${LIB[k].n} eklendi`)}
+    kaydet(["main"]);const l=$("secListe");if(l)l.innerHTML=secListe();const sb=$("secBitti");if(sb)sb.textContent=`Bitti · ${d.ex.length} hareket`;return}
   if(a==="hsil"){const d=gunBul(b.dataset.gun);if(d){d.ex=d.ex.filter(x=>x.id!==b.dataset.ex);kaydet(["main"])}ciz(true);return}
   if(a==="hzAc"){V.hzAcik=V.hzAcik===b.dataset.p?null:b.dataset.p;V.hzGun=0;ciz(true);return}
   if(a==="hzGun"){V.hzGun=+b.dataset.i;ciz(true);return}
