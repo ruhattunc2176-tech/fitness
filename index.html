@@ -21,9 +21,6 @@
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html{-webkit-text-size-adjust:100%}
-html,body{overscroll-behavior-y:contain}   /* tarayıcının kendi 'çek-yenile'si kapalı; uygulamanınki aşağıda */
-.cek{position:fixed;left:50%;top:env(safe-area-inset-top,0px);z-index:45;transform:translate(-50%,-60px);background:#000;color:var(--sari);border-radius:999px;padding:8px 16px;font-weight:800;font-size:14px;white-space:nowrap;box-shadow:3px 3px 0 var(--ac);pointer-events:none}
-.cek.don{transition:transform .2s}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f);font-size:16px;font-weight:500;line-height:1.4;-webkit-tap-highlight-color:transparent}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
 button,input,select{font:inherit;color:inherit}
@@ -240,7 +237,6 @@ h2{margin:0;font-size:20px;font-weight:900;text-transform:uppercase}
 <nav class="tab" id="tab" hidden></nav>
 <div class="din" id="din" hidden></div>
 <div class="perde" id="perde" hidden></div>
-<div class="cek" id="cek" hidden></div>
 <div class="tam" id="tam" hidden></div>
 <div class="tost" id="tost" hidden></div>
 
@@ -914,23 +910,6 @@ document.addEventListener("touchend",ev=>{const k=KY;KY=null;if(!k||ev.touches.l
   const i=SEKME.findIndex(x=>x[0]===V.v),j=i+(dx<0?1:-1);if(i<0||j<0||j>=SEKME.length)return;
   git(SEKME[j][0]);const a=$("app"),c=dx<0?"kaySol":"kaySag";a.classList.remove("kaySol","kaySag");void a.offsetWidth;a.classList.add(c)},{passive:true});
 document.addEventListener("touchcancel",()=>{KY=null},{passive:true});
-
-/* ---------- aşağı çekince yenile: sayfa yeniden yüklenmez; sürüm denetlenir, yeni sürüm varsa yenilenir ---------- */
-let PT=null,ptMesgul=false;
-document.addEventListener("touchstart",ev=>{PT=null;if(ptMesgul||ev.touches.length!==1||window.scrollY>0||!$("perde").hidden||!$("tam").hidden)return;
-  const t=ev.touches[0];PT={x:t.clientX,y:t.clientY,d:0}},{passive:true});
-document.addEventListener("touchmove",ev=>{if(!PT)return;const t=ev.touches[0],dy=t.clientY-PT.y,dx=t.clientX-PT.x,el=$("cek");
-  if(window.scrollY>0||(PT.d===0&&Math.abs(dx)>Math.abs(dy))){PT=null;el.hidden=true;return}
-  if(dy<=0){PT.d=0;el.hidden=true;return}
-  PT.d=Math.min(110,dy*.5);el.classList.remove("don");el.hidden=false;el.style.transform=`translate(-50%,${Math.round(PT.d-46)}px)`;
-  el.textContent=PT.d>=60?"↻ Bırak, yenilensin":"↓ Yenilemek için çek"},{passive:true});
-document.addEventListener("touchend",async()=>{const p=PT;PT=null;const el=$("cek");if(!p||el.hidden)return;
-  el.classList.add("don");
-  if(p.d<60){el.style.transform="translate(-50%,-60px)";setTimeout(()=>{if(!PT&&!ptMesgul)el.hidden=true},220);return}
-  KY=null;ptMesgul=true;el.textContent="Yenileniyor…";el.style.transform="translate(-50%,14px)";
-  const t0=Date.now();await surumBak(true);                       /* yeni sürüm varsa burada sayfa yenilenir */
-  setTimeout(()=>{ptMesgul=false;el.hidden=true;ciz(true)},Math.max(0,500-(Date.now()-t0)))},{passive:true});
-document.addEventListener("touchcancel",()=>{PT=null;if(!ptMesgul)$("cek").hidden=true},{passive:true});
 
 /* ---------- olaylar ---------- */
 function acikEx(){const d=gunBul(V.gun);const e=d&&d.ex.find(x=>x.id===V.acik);return e?{d,e}:null}
