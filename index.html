@@ -177,6 +177,8 @@ h2{margin:0;font-size:20px;font-weight:900;text-transform:uppercase}
 .halka b{font-size:46px;font-weight:900;font-variant-numeric:tabular-nums;line-height:1}
 .hedef{display:flex;align-items:center;justify-content:center;gap:10px;font-size:15px;font-weight:800}
 .hedef button{width:34px;height:34px;border:2px solid #000;border-radius:8px;background:#fff;font-size:20px;font-weight:900;display:grid;place-items:center;padding:0}
+.hedef input{width:64px;text-align:center;font-size:20px;font-weight:900;border:2px solid #000;border-radius:8px;background:#fff;padding:4px 2px;font-variant-numeric:tabular-nums}
+.hedef input:focus{outline:3px solid var(--ac);outline-offset:1px}
 .hedef button:active{background:var(--sari)}
 .oz{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;text-align:center}
 .oz div{background:var(--soft);border:2px solid #000;border-radius:8px;padding:9px 4px}
@@ -283,7 +285,7 @@ const LIB={
  legraise:{n:"Asılı bacak kaldırma",id:"Hanging_Leg_Raise",g:"karin",tip:"vucut",en:"hanging leg raise",ip:"Sallanmadan, karınla kaldır"}
 };
 const COP=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>`;
-const SURUM="2026-11-10 11:06";
+const SURUM="2026-11-10 11:11";
 const surumYazi=()=>{const [g,sa]=SURUM.split(" ");const [y,m,d]=g.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString("tr-TR",{day:"numeric",month:"long"})+" "+sa};
 const DMB=[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40];
 const WD=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
@@ -748,7 +750,7 @@ function sSure(){
    <div class="k pad">
     <div class="halka"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="44" fill="none" stroke="#000" stroke-width="10"/><circle cx="50" cy="50" r="44" fill="none" stroke="#fff" stroke-width="6"/><circle id="shalka" cx="50" cy="50" r="44" fill="none" stroke="var(--ac)" stroke-width="6" stroke-dasharray="276.5" stroke-dashoffset="${(276.5*(1-Math.min(1,ms/60000/sureHedef()))).toFixed(1)}"/></svg>
      <div class="orta"><small>${b?"Giriş "+saatYaz(b):"Salonda değilsin"}</small><b id="ssayac">${b?sayacYaz(ms):"00:00"}</b></div></div>
-    <div class="hedef"><button data-a="hedef-" aria-label="Hedefi azalt">−</button><span>Hedef ${sureHedef()} dk</span><button data-a="hedef+" aria-label="Hedefi artır">+</button></div>
+    <div class="hedef"><button data-a="hedef-" aria-label="Hedefi azalt">−</button><span>Hedef</span><input id="hedefGir" inputmode="numeric" value="${sureHedef()}" aria-label="Hedef süre, dakika"><span>dk</span><button data-a="hedef+" aria-label="Hedefi artır">+</button></div>
     ${uzun?`<div class="oner">Çıkışa basmayı unuttuysan şimdi bitir, sonra geçmişten çıkış saatini düzelt.</div>`:""}
     <button class="btn ${b?"":"yesil"}" data-a="${b?"salonCik":"salonGir"}">${b?"Salondan çıktım":"Salona girdim"}</button>
    </div>
@@ -946,7 +948,7 @@ document.addEventListener("click",async ev=>{
     const t=bugun();S.body=S.body.filter(q=>q.d!==t);S.body.push({d:t,kg:Math.round(v*10)/10});kaydet(["main"]);ciz(true);tost("Kaydedildi");return}
   if(a==="salonGir"){S.plan.salonAcik=Date.now();kaydet(["main"]);ciz(true);return}
   if(a==="salonCik"){const g=S.plan.salonAcik;if(!g)return;const c=Date.now();(S.plan.salon=S.plan.salon||[]).push({id:uid(),g,c});delete S.plan.salonAcik;kaydet(["main"]);ciz(true);tost(`${dkYaz(Math.round((c-g)/60000))} salonda kaldın`);return}
-  if(a==="hedef-"||a==="hedef+"){S.plan.sureHedef=Math.min(180,Math.max(15,sureHedef()+(a==="hedef+"?5:-5)));kaydet(["main"]);ciz(true);return}
+  if(a==="hedef-"||a==="hedef+"){S.plan.sureHedef=Math.min(300,Math.max(5,sureHedef()+(a==="hedef+"?5:-5)));kaydet(["main"]);ciz(true);return}
   if(a==="salonDuzen")return salonDuzenAc(b.dataset.id);
   if(a==="salonKaydet"){const x=(S.plan.salon||[]).find(q=>q.id===b.dataset.id),sg=$("sg").value,sc=$("sc").value;if(!x||!sg||!sc)return;
     const kur=(ms,hm)=>{const d=new Date(ms),[h,m]=hm.split(":").map(Number);d.setHours(h,m,0,0);return d.getTime()};
@@ -998,12 +1000,13 @@ document.addEventListener("input",ev=>{const t=ev.target;
   if(t.id==="q"){V.q=t.value;$("secListe").innerHTML=secListe();return}
   if(t.dataset.f){const x=acikEx();if(!x)return;const g=giris(x.e);const v=sayi(t.value);if(t.dataset.f==="kg")g.kg=Math.max(0,v);else g.r=Math.max(1,Math.round(v));gorunumKaydet()}});
 document.addEventListener("change",ev=>{const t=ev.target;
+  if(t.id==="hedefGir"){const v=Math.round(sayi(t.value));if(v>0){S.plan.sureHedef=Math.min(300,Math.max(5,v));kaydet(["main"])}ciz(true);return}
   if(t.dataset.f){ciz(true);return}
   if(t.dataset.pf){const d=gunBul(t.dataset.gun);d[t.dataset.pf]=t.dataset.pf==="wd"?+t.value:t.value;kaydet(["main"]);return}
   if(t.dataset.ef){const d=gunBul(t.dataset.gun),e=d.ex.find(q=>q.id===t.dataset.ex);let v=t.value;
     if(t.dataset.ef==="sets"){v=Math.max(1,Math.min(10,parseInt(v)||e.sets));t.value=v}
     e[t.dataset.ef]=v;kaydet(["main"])}});
-document.addEventListener("focusin",ev=>{if(ev.target.dataset&&ev.target.dataset.f)ev.target.select()});
+document.addEventListener("focusin",ev=>{if(ev.target.id==="hedefGir"||(ev.target.dataset&&ev.target.dataset.f))ev.target.select()});
 document.addEventListener("keydown",ev=>{if(ev.key==="Escape")perdeKapat();if((ev.key==="Enter"||ev.key===" ")&&ev.target.classList&&ev.target.classList.contains("buyut")){ev.preventDefault();fotoAc(ev.target.dataset.k)}if(ev.key==="Enter"&&/^(gs|gs2|gt)$/.test(ev.target.id)){const b=document.querySelector('[data-a="giris"]');b&&b.click()}});
 
 if(V.yerel){gecis();gecis2();gecis3();gecis4();gecis5()}tarihceKur();ciz();requestAnimationFrame(()=>window.scrollTo(0,V.y||0));
