@@ -117,6 +117,7 @@ h2{margin:0;font-size:20px;font-weight:900;text-transform:uppercase}
 .tam .tres img{width:100%;max-height:100%;object-fit:contain;border-radius:8px;background:#111}
 .tam .talt{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .tam .talt span{font-size:15px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;text-align:center}
+.tam .tac{font-size:17px;font-weight:600;line-height:1.4;background:#fff;color:#000;border-radius:8px;padding:10px 12px}
 .tam .ikb{color:#000;font-size:22px;font-weight:900;box-shadow:2px 2px 0 var(--ac)}
 .tam .btn{box-shadow:3px 3px 0 #fff}
 .perde h2{text-transform:none;font-size:22px}
@@ -234,6 +235,7 @@ h2{margin:0;font-size:20px;font-weight:900;text-transform:uppercase}
 .wl .wf{position:relative;flex:none;display:block}
 .wl .wf img{width:44px;height:44px;border-radius:7px;border:2px solid #000;object-fit:cover;display:block;background:var(--soft)}
 .wl .wf i{position:absolute;right:-5px;bottom:-5px;width:18px;height:18px;border-radius:5px;background:var(--sari);border:2px solid #000;color:#000;font-size:10px;display:grid;place-items:center;font-weight:900}
+.wl .wq{flex:none;width:44px;height:44px;border-radius:7px;border:2px solid #000;background:var(--sari);display:grid;place-items:center;font-weight:900;font-size:20px}
 .wl .on{background:var(--ok-s)}
 .wl .on i{background:var(--ok);color:#000}
 .wl small{margin-left:auto;flex:none;font-size:13px;font-weight:800;color:var(--muted);white-space:nowrap}
@@ -296,7 +298,7 @@ const LIB={
  legraise:{n:"Asılı bacak kaldırma",id:"Hanging_Leg_Raise",g:"karin",tip:"vucut",en:"hanging leg raise",ip:"Sallanmadan, karınla kaldır"}
 };
 const COP=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>`;
-const SURUM="2026-11-12 18:15";
+const SURUM="2026-11-12 18:19";
 const surumYazi=()=>{const [g,sa]=SURUM.split(" ");const [y,m,d]=g.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString("tr-TR",{day:"numeric",month:"long"})+" "+sa};
 const DMB=[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40];
 const WD=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
@@ -629,6 +631,27 @@ const ISF={"Yürüyüş bandı ya da bisiklet, hafif tempo":"Walking_Treadmill",
  "Kol çevirme":"Arm_Circles","Duvara yaslanarak şınav":"Incline_Push-Up","Omuzları geriye çevir, kürek kemiklerini sık":"Shoulder_Circles",
  "Gövdeyi sağa sola döndür":"Torso_Rotation","Kalça çevirme":"Standing_Hip_Circles","Ön bacak germe":"Quad_Stretch","Arka bacak germe":"Hamstring_Stretch",
  "Baldır germe":"Calf_Stretch_Hands_Against_Wall","Omuz germe (kol göğsün önünden)":"Shoulder_Stretch","Arka kol germe (dirsek baş üstünde)":"Triceps_Stretch"};
+/* ısınma/germe: nasıl yapılır + video arama terimi */
+const ISA={"Yürüyüş bandı ya da bisiklet, hafif tempo":["Konuşabileceğin kadar rahat tempoda yürü ya da pedal çevir; hafif terleyince yeter.","treadmill warm up walk"],
+ "Yavaş yürüyüş":["Bitişte 3–5 dakika yavaş yürü, nabzın insin.","cool down walk treadmill"],
+ "Ağırlıksız squat":["Ayaklar omuz genişliğinde, eller önde ya da başın arkasında. Kalçayı geriye iterek otur, topuklar yerde kalsın, dizler ayak ucu yönünde; yavaşça kalk.","bodyweight squat warm up"],
+ "Bacak savurma (öne-arkaya)":["Bir yere tutun, tek ayak üstünde dur. Diğer bacağı sarkaç gibi öne ve arkaya rahatça savur; her seferinde biraz daha yükseğe. Sonra diğer bacak.","leg swings warm up"],
+ "Kol çevirme":["Kolları yana, omuz hizasına aç. Önce avuç içi büyüklüğünde küçük daireler çiz, 10 kez öne doğru, sonra 10 kez arkaya doğru. Daireleri yavaş yavaş büyütebilirsin; omuzlar kulağa kalkmasın.","arm circles forward backward warm up"],
+ "Duvara yaslanarak şınav":["Duvara bir adım uzakta dur, ellerini omuz hizasında duvara koy. Vücut düz kalırken göğsünü duvara yaklaştır, sonra it. Sehpa ya da bankta da yapabilirsin.","wall push up"],
+ "Omuzları geriye çevir, kürek kemiklerini sık":["Kollar yanda serbest. Omuzlarını kulağa doğru kaldır, geriye çevir ve aşağı indir; her turda kürek kemiklerini birbirine yaklaştırıp bir an sık.","shoulder rolls backward warm up"],
+ "Gövdeyi sağa sola döndür":["Ayaklar omuz genişliğinde, kollar önde ya da göğüste. Kalça sabit, gövdeni yavaşça sağa sonra sola döndür.","standing torso rotation warm up"],
+ "Kalça çevirme":["Bir yere tutun. Bir dizi kalça hizasına kaldır, dizle dışa doğru büyük bir daire çiz; 10 kez dışa, 10 kez içe. Sonra diğer bacak.","standing hip circles warm up"],
+ "Ön bacak germe":["Ayakta bir yere tutun, bir ayağını arkadan tutup topuğu kalçana doğru çek. Dizler yan yana, kalça hafif öne. Ön bacakta gerilmeyi hisset.","standing quad stretch"],
+ "Arka bacak germe":["Bir bacağı düz biçimde öne uzat, topuk yerde. Sırtı düz tutarak kalçadan öne eğil. Bacağın arkasında gerilmeyi hisset.","standing hamstring stretch"],
+ "Kalça germe (ayak bileği dizin üstünde)":["Sırtüstü ya da oturarak bir ayak bileğini diğer dizin üstüne koy, alttaki bacağı göğsüne doğru çek. Kalçanın dışında gerilmeyi hisset.","figure four stretch"],
+ "Baldır germe":["Ellerin duvarda, bir ayak geride ve düz, topuğu yerde. Öndeki dizi bükerek öne yaslan. Arka bacağın baldırında gerilmeyi hisset.","calf stretch wall"],
+ "Göğüs germe (kol kapı kasasında)":["Kolunu dirsek omuz hizasında olacak şekilde kapı kasasına ya da direğe daya, gövdeni yavaşça öbür yöne çevir. Göğüste gerilmeyi hisset.","doorway chest stretch"],
+ "Omuz germe (kol göğsün önünden)":["Bir kolu göğsünün önünden karşıya uzat, diğer elinle dirseğin üstünden kendine doğru çek. Omzun arkasında gerilmeyi hisset.","cross body shoulder stretch"],
+ "Arka kol germe (dirsek baş üstünde)":["Bir kolu kaldır, dirseği bükerek elini sırtına sarkıt. Diğer elinle dirseği hafifçe başının arkasına doğru it.","overhead triceps stretch"],
+ "Kanat germe (tutunup geriye asıl)":["Bir direğe ya da makineye iki elle göğüs hizasında tutun, kalçanı geriye it ve sırtını yuvarlayarak asıl. Sırtın yanlarında gerilmeyi hisset.","lat stretch pole"],
+ "Ön kol germe (kollar arkada kenetli)":["Ellerini arkada kenetle, kolları düz tutarak hafifçe yukarı kaldır, göğsünü aç. Kolların önünde ve göğüste gerilmeyi hisset.","standing biceps stretch hands behind back"],
+ "Karın germe (yüzüstü, ellerle doğrul)":["Yüzüstü uzan, ellerini omuz hizasında yere koy. Kalça yerde kalırken kollarınla gövdeni yavaşça kaldır. Karında gerilmeyi hisset, bel ağrırsa daha az kalk.","cobra stretch abs"]};
+const isfBilgi=ad=>`<span class="wq" role="button" tabindex="0" data-a="isfFoto" data-ad="${esc(ad)}" aria-label="${esc(ad)} nasıl yapılır">?</span>`;
 const isfImg=(ad,f)=>`<span class="wf" role="button" tabindex="0" data-a="isfFoto" data-ad="${esc(ad)}" aria-label="${esc(ad)} görseli"><img src="img/${f}-1.webp" alt="" loading="lazy"><i aria-hidden="true">⤢</i></span>`;
 const ISIN={bacak:[["Ağırlıksız squat","10 tekrar"],["Bacak savurma (öne-arkaya)","her bacak 10"]],
  itis:[["Kol çevirme","10 öne, 10 arkaya"],["Duvara yaslanarak şınav","10 tekrar"]],
@@ -646,13 +669,13 @@ function wuDurum(d,s){const k=d.id+"|"+bugun();if(!V.wu||V.wu.k!==k)V.wu={k,t:{}
 function isinmaKart(d,s){const W=wuDurum(d,s),L=isinmaListe(d),n=L.filter((x,i)=>W.t[i]).length;
   if(W.kapali)return `<button class="k sat" data-a="wuAc"><span class="a"><b>Isınma</b><span>${n===L.length?"tamamlandı":n?`${n} / ${L.length} yapıldı`:"yaklaşık 8 dk · görmek için dokun"}</span></span>${n===L.length?`<span class="ok">✓</span>`:`<span class="bos"></span>`}</button>`;
   return `<section class="k wu"><div class="u"><b>Isınma</b><span>yaklaşık 8 dk</span></div>
-   <div class="wl">${L.map((x,i)=>`<button class="${W.t[i]?"on":""}" data-a="wuTik" data-i="${i}" aria-pressed="${!!W.t[i]}"><i aria-hidden="true">✓</i>${ISF[x[0]]?isfImg(x[0],ISF[x[0]]):""}<span>${esc(x[0])}</span><small>${esc(x[1])}</small></button>`).join("")}</div>
+   <div class="wl">${L.map((x,i)=>`<button class="${W.t[i]?"on":""}" data-a="wuTik" data-i="${i}" aria-pressed="${!!W.t[i]}"><i aria-hidden="true">✓</i>${ISF[x[0]]?isfImg(x[0],ISF[x[0]]):isfBilgi(x[0])}<span>${esc(x[0])}</span><small>${esc(x[1])}</small></button>`).join("")}</div>
    <div class="lb">İlk büyük hareketlerde ısınma seti de var; kilosu hareketin kartında yazıyor.</div>
    <button class="btn ikincil" data-a="wuKapat">${n===L.length?"Kapat":"Isınmayı geç"}</button></section>`}
 function sogumaKart(d,hepsiBitti){const W=V.wu||{},acik=W.sg==null?hepsiBitti:W.sg,G=gunGrup(d),L=G.flatMap(g=>G.length>=3?(g==="karin"?[]:(SOGU[g]||[]).slice(0,2)):(SOGU[g]||[]));
   if(!acik)return `<button class="k sat" data-a="sgAc"><span class="a"><b>Soğuma ve germe</b><span>isteğe bağlı · yaklaşık 5 dk · görmek için dokun</span></span></button>`;
   return `<section class="k wu"><div class="u"><b>Soğuma ve germe</b><span>isteğe bağlı</span></div>
-   <div class="wl"><div>${isfImg("Yavaş yürüyüş","Walking_Treadmill")}<span>Yavaş yürüyüş, nabzın insin</span><small>3–5 dk</small></div>${L.map(x=>`<div>${ISF[x]?isfImg(x,ISF[x]):""}<span>${esc(x)}</span><small>20–30 sn</small></div>`).join("")}</div>
+   <div class="wl"><div>${isfImg("Yavaş yürüyüş","Walking_Treadmill")}<span>Yavaş yürüyüş, nabzın insin</span><small>3–5 dk</small></div>${L.map(x=>`<div>${ISF[x]?isfImg(x,ISF[x]):isfBilgi(x)}<span>${esc(x)}</span><small>20–30 sn</small></div>`).join("")}</div>
    <div class="lb">Ağrı değil, hafif gerginlik hissedene kadar ger; yaylanma.</div>
    <button class="btn ikincil" data-a="sgAc">Kapat</button></section>`}
 /* ısınma seti: her bölgenin o günkü ilk ağırlıklı hareketinde, çalışma kilosunun yarısı ve dörtte üçü */
@@ -888,7 +911,9 @@ function tamAc(i){if(!TAM)return;TAM.i=i;const el=$("tam");
   el.innerHTML=`<div class="tust"><b>${esc(TAM.ad)}</b><button class="ikb" data-a="tamKapat" aria-label="Kapat">✕</button></div>
    <div class="tres"><img id="tamImg" data-a="tamSonra" alt=""></div>
    <div class="talt"><button class="ikb" data-a="tamOnce" aria-label="Önceki fotoğraf">‹</button><span id="tamCap"></span><button class="ikb" data-a="tamSonra" aria-label="Sonraki fotoğraf">›</button></div>
-   ${TAM.l.length>1?`<button class="btn" id="tamOy" data-a="tamOynat">▶ Hareketi oynat</button>`:""}`;
+   ${TAM.ac?`<div class="tac">${esc(TAM.ac)}</div>`:""}
+   ${TAM.l.length>1?`<button class="btn" id="tamOy" data-a="tamOynat">▶ Hareketi oynat</button>`:""}
+   ${TAM.en?`<a class="btn ikincil" style="text-align:center;text-decoration:none" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=${encodeURIComponent(TAM.en)}">▶ Videoda izle</a>`:""}`;
   el.hidden=false;tamGoster();TAM.l.forEach(([src])=>{const o=new Image();o.src=buyukSrc(src)});history.pushState({v:V.v,perde:1,tam:1},"")}
 function tamKapat(){tamDur();if($("tam").hidden)return;if(history.state&&history.state.tam)history.back();else $("tam").hidden=true}
 function fotoAc(k){const L=LIB[k],B=BILGI[k],p=$("perde");
@@ -936,7 +961,7 @@ document.addEventListener("click",async ev=>{
   if(a==="foto")return fotoAc(b.dataset.k);
   if(a==="kapat"){perdeKapat();return}
   if(a==="tam")return tamAc(+b.dataset.i);
-  if(a==="isfFoto"){const ad=b.dataset.ad,f=ISF[ad]||"Walking_Treadmill";TAM={ad,i:0,l:[[`img/${f}-0.webp`,"Başlangıç"],[`img/${f}-1.webp`,"Bitiş"]]};return tamAc(0)}
+  if(a==="isfFoto"){const ad=b.dataset.ad,f=ISF[ad]||"Walking_Treadmill";const A=ISA[ad]||[];TAM={ad,i:0,ac:A[0],en:A[1],l:ISF[ad]||ad==="Yavaş yürüyüş"?[[`img/${f}-0.webp`,"Başlangıç"],[`img/${f}-1.webp`,"Bitiş"]]:[]};return tamAc(0)}
   if(a==="tamKapat")return tamKapat();
   if(a==="tamOnce"||a==="tamSonra"){if(!TAM)return;tamDur();const n=TAM.l.length;TAM.i=(TAM.i+(a==="tamSonra"?1:n-1))%n;tamGoster();return}
   if(a==="tamOynat"){if(TAMT){tamDur();return}b.textContent="■ Durdur";TAMT=setInterval(()=>{TAM.i=(TAM.i+1)%TAM.l.length;tamGoster()},900);return}
