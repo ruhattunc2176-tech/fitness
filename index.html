@@ -172,6 +172,22 @@ h2{margin:0;font-size:20px;font-weight:900;text-transform:uppercase}
 .bilgi b{display:inline-block;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.05em;background:#000;color:var(--sari);border:2px solid #000;border-radius:6px;padding:1px 8px;margin-bottom:3px}
 .trad{display:block;font-size:13.5px;font-weight:600;color:#6B6B6B;line-height:1.25;text-transform:none;letter-spacing:0}
 .trb{font-size:15px;font-weight:600;color:#6B6B6B;margin-top:2px}
+.onay{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.5);display:flex;align-items:flex-end;justify-content:center;padding:0 max(12px,env(safe-area-inset-right,0px)) calc(14px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px))}
+.onay .pn{width:100%;max-width:496px;background:#fff;border:2px solid #000;border-radius:14px;box-shadow:4px 4px 0 var(--ac);padding:16px;display:flex;flex-direction:column;gap:12px;animation:onyuk .2s ease-out}
+@keyframes onyuk{from{transform:translateY(40px);opacity:.3}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.onay .pn{animation:none}}
+.oik{width:48px;height:48px;border-radius:12px;background:#FEE2E2;border:2px solid #000;display:grid;place-items:center;color:var(--kir)}
+.oik svg{width:24px;height:24px}
+.onay b{font-size:21px;font-weight:900}
+.onay p{margin:2px 0 0;font-size:15px;font-weight:600;color:var(--muted)}
+.odg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.odg button{border:2px solid #000;border-radius:10px;padding:13px;font-weight:800;font-size:16px;text-transform:uppercase;letter-spacing:.03em;box-shadow:3px 3px 0 #000}
+.odg button:active{transform:translate(3px,3px);box-shadow:none}
+.ovz{background:#fff;color:#000}
+.osl{background:var(--kir);color:#fff}
+.satir2 .sil{flex:none}
+.satir2:has(.sil){align-items:center}
+.satir2 .uyd{align-items:center}
 .sgc{flex:1;min-width:0;display:flex;justify-content:space-between;align-items:baseline;gap:8px;border:0;background:none;padding:0;text-align:left;font-size:16px}
 .sgc b{font-weight:700}
 .sd{padding:12px 13px;border-top:1.5px solid #000}
@@ -267,6 +283,7 @@ h2{margin:0;font-size:20px;font-weight:900;text-transform:uppercase}
 <div class="din" id="din" hidden></div>
 <div class="perde" id="perde" hidden></div>
 <div class="tam" id="tam" hidden></div>
+<div class="onay" id="onay" hidden></div>
 <div class="tost" id="tost" hidden></div>
 
 <script>
@@ -313,7 +330,7 @@ const LIB={
  legraise:{n:"Asılı bacak kaldırma",id:"Hanging_Leg_Raise",g:"karin",tip:"vucut",en:"hanging leg raise",ip:"Sallanmadan, karınla kaldır"}
 };
 const COP=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>`;
-const SURUM="2026-11-12 19:21";
+const SURUM="2026-11-12 22:10";
 const surumYazi=()=>{const [g,sa]=SURUM.split(" ");const [y,m,d]=g.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString("tr-TR",{day:"numeric",month:"long"})+" "+sa};
 const DMB=[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40];
 const WD=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
@@ -788,11 +805,11 @@ function sGelisim(){
    <div class="k pad"><div class="ust"><div><h2>Kilo</h2><div class="lb">${ilk?`Hedef ${yaz(ilk.kg)} ± 1 kg`:"İlk kaydın hedefin olur"}</div></div>${son?`<b style="font-size:26px">${yaz(son.kg)}</b>`:""}</div>
     ${cizgi(bw.map(b=>({d:b.d,y:b.kg})),ilk?[ilk.kg-1,ilk.kg+1]:null)}
     <div style="display:flex;gap:8px"><input class="alan" id="kiloGir" inputmode="decimal" placeholder="Bugünkü kilo, ör. 78,4" style="flex:1"><button class="btn kucuk" data-a="kilo">Kaydet</button></div>
-    ${bw.length?`<div>${bw.slice().reverse().slice(0,V.kiloTum?999:5).map(b=>`<div class="satir2"><span>${tarih(b.d)}</span><span class="uyd"><b>${yaz(b.kg)} kg</b><button class="link" data-a="kiloSil" data-d="${b.d}">Sil</button></span></div>`).join("")}${bw.length>5&&!V.kiloTum?`<button class="link" data-a="kiloTum" style="margin-top:8px">Tüm kayıtları göster (${bw.length})</button>`:""}</div>`:""}</div>
+    ${bw.length?`<div>${bw.slice().reverse().slice(0,V.kiloTum?999:5).map(b=>`<div class="satir2"><span>${tarih(b.d)}</span><span class="uyd"><b>${yaz(b.kg)} kg</b><button data-a="kiloSil" data-d="${b.d}" class="sil" aria-label="Kilo kaydını sil">${COP}</button></span></div>`).join("")}${bw.length>5&&!V.kiloTum?`<button class="link" data-a="kiloTum" style="margin-top:8px">Tüm kayıtları göster (${bw.length})</button>`:""}</div>`:""}</div>
    <div class="k pad"><h2>En iyi kilolar</h2>
     ${enIyi.length?enIyi.map(x=>`<div class="satir2"><span>${esc(LIB[x.k].n)}</span><span><b>${yaz(x.best)} kg</b>${x.art>0?` <span class="art">+${yaz(x.art)}</span>`:""}</span></div>`).join(""):`<div class="lb">Antrenman yaptıkça burada görünecek.</div>`}</div>
    <div class="k pad"><h2>Geçmiş</h2>
-    ${gec.length?gec.map(s=>`<div class="satir2"><button class="sgc" data-a="seansAc" data-sid="${s.sid}"><b>${esc(s.dayName)} · ${tarih(s.date)}</b><span class="lb">${biten(s)} set ›</span></button><button class="link" data-a="seansSil" data-sid="${s.sid}">Sil</button></div>`).join(""):`<div class="lb">Bitirdiğin antrenmanlar burada listelenir.</div>`}</div>`;
+    ${gec.length?gec.map(s=>`<div class="satir2"><button class="sgc" data-a="seansAc" data-sid="${s.sid}"><b>${esc(s.dayName)} · ${tarih(s.date)}</b><span class="lb">${biten(s)} set ›</span></button><button class="sil" data-a="seansSil" data-sid="${s.sid}" aria-label="Antrenmanı sil">${COP}</button></div>`).join(""):`<div class="lb">Bitirdiğin antrenmanlar burada listelenir.</div>`}</div>`;
 }
 function sProgram(){
   const P=programim();
@@ -961,6 +978,7 @@ function git(v,ek){Object.assign(V,ek||{});const fark=derin(v)-derin(V.v);
   V.v=v;ciz();window.scrollTo(0,0)}
 function tarihceKur(){try{history.replaceState({v:"ana"},"");if(V.v==="sec"||V.v==="hazir"||V.v==="seans"){history.pushState({v:V.v==="seans"?"gelisim":"program"},"");history.pushState({v:V.v},"")}else if(derin(V.v)>0)history.pushState({v:V.v},"")}catch(e){}}
 window.addEventListener("popstate",ev=>{
+  if(!$("onay").hidden){ONAY=null;onayBitti();return}
   if(!$("tam").hidden){tamDur();$("tam").hidden=true;return}
   if(!$("perde").hidden){$("perde").hidden=true;return}
   const st=ev.state&&ev.state.v?ev.state.v:"ana";
@@ -1023,8 +1041,21 @@ function bitir(){const s=aktif();
   if(!s||!biten(s)){if(s){delete S.sessions[s.sid];S.activeSid=null;silinecek.add("s/"+s.sid);kaydet(["main"])}V.g={};D=null;dCiz();git("ana");return}
   s.done=true;s.end=Date.now();S.activeSid=null;V.g={};V.gun=null;D=null;dCiz();kaydet(["main","s/"+s.sid]);
   git("ana");tost(`Bravo! ${biten(s)} set tamamlandı`)}
+/* ---------- silme onayı: alttan açılan "Silinsin mi?" penceresi ---------- */
+let ONAY=null;
+function onayla(b,msg,baslik,dugme){if(b._ok){b._ok=false;return true}
+  ONAY=b;const o=$("onay");
+  o.innerHTML=`<div class="pn" role="alertdialog" aria-modal="true" aria-labelledby="onB"><div class="oik">${COP}</div><div><b id="onB">${esc(baslik||"Silinsin mi?")}</b><p>${esc(msg)}</p></div>
+   <div class="odg"><button class="ovz" data-a="onayHayir">Vazgeç</button><button class="osl" data-a="onayEvet">${esc(dugme||"Sil")}</button></div></div>`;
+  o.hidden=false;history.pushState({v:V.v,perde:1,onay:1},"");setTimeout(()=>{const x=o.querySelector(".ovz");if(x)x.focus()},50);return false}
+let ONAYP=null;   /* onaylanınca çalıştırılacak düğme; pencere kapanınca (geri tuşu kaydı silindikten sonra) tıklanır */
+function onayBitti(){const o=$("onay");o.hidden=true;const x=ONAYP;ONAYP=null;if(x&&x.isConnected){x._ok=true;x.click()}}
+function onayKapat(){const o=$("onay");if(o.hidden)return;if(history.state&&history.state.onay)history.back();else onayBitti()}
+document.addEventListener("click",ev=>{if(ev.target.id==="onay"){ONAY=null;onayKapat()}});
 document.addEventListener("click",async ev=>{
   const b=ev.target.closest("[data-a]");if(!b||b.disabled)return;const a=b.dataset.a;
+  if(a==="onayHayir"){ONAY=null;onayKapat();return}
+  if(a==="onayEvet"){ONAYP=ONAY;ONAY=null;onayKapat();return}
   if(a==="git")return git(b.dataset.v);
   if(a==="gunSec"){V.gun=b.dataset.id;ciz(true);return}
   if(a==="basla"){V.acik=b.dataset.ex||null;git("ant");kartaKaydir();return}
@@ -1061,17 +1092,17 @@ document.addEventListener("click",async ev=>{
     else if(a==="sonraki"){const s=gunSeansi(d.id);const nx=d.ex.find(q=>!tamamMi(s,q));if(!nx)return bitir();V.acik=nx.id;ciz(true);kartaKaydir();return}
     ciz(true);return}
   if(a==="bitir")return bitir();
-  if(a==="iptal"){if(b.dataset.on!=="1"){b.dataset.on="1";b.textContent="Emin misin? Tekrar dokun";return}
+  if(a==="iptal"){if(!onayla(b,"Bu antrenmanda girdiğin setler silinecek.","Antrenman iptal edilsin mi?","İptal et"))return;
     const s=aktif();if(s){delete S.sessions[s.sid];S.activeSid=null;silinecek.add("s/"+s.sid);kaydet(["main"])}V.g={};D=null;dCiz();git("ana");return}
   if(a==="seansAc"){V.sid=b.dataset.sid;git("seans");return}
   if(a==="setDuz")return setDuzAc(b.dataset.id,+b.dataset.j);
   if(a==="setKaydet"||a==="setSil"){const s=S.sessions[V.sid],id=b.dataset.id,j=+b.dataset.j;if(!s||!s.sets[id])return;
-    if(a==="setSil"){if(b.dataset.on!=="1"){b.dataset.on="1";b.textContent="Emin misin? Tekrar dokun";return}s.sets[id].splice(j,1);if(!s.sets[id].length){delete s.sets[id];delete s.keys[id]}}
+    if(a==="setSil"){if(!onayla(b,`${LIB[s.keys[id]].n}: ${j+1}. set silinecek.`))return;s.sets[id].splice(j,1);if(!s.sets[id].length){delete s.sets[id];delete s.keys[id]}}
     else{const x=s.sets[id][j],r=Math.round(sayi($("dr").value));if(!(r>0)){tost("Geçerli bir sayı yaz");return}x.r=r;if($("dkg")){const kg=sayi($("dkg").value);if(!(kg>=0)){tost("Geçerli bir kilo yaz");return}x.kg=kg}}
     kaydet(["s/"+s.sid]);perdeKapat();ciz(true);tost(a==="setSil"?"Set silindi":"Kaydedildi");return}
-  if(a==="seansSil"){if(b.dataset.on!=="1"){b.dataset.on="1";b.textContent="Emin misin?";return}
+  if(a==="seansSil"){const x=S.sessions[b.dataset.sid];if(x&&!onayla(b,`${tarih(x.date)} tarihli ${x.dayName} antrenmanı ve içindeki ${biten(x)} set silinecek. Bu geri alınamaz.`))return;
     seansSil(b.dataset.sid);kaydet(["main"]);ciz(true);tost("Antrenman kaydı silindi");return}
-  if(a==="kiloSil"){if(b.dataset.on!=="1"){b.dataset.on="1";b.textContent="Emin misin?";return}
+  if(a==="kiloSil"){const x=S.body.find(q=>q.d===b.dataset.d);if(x&&!onayla(b,`${tarih(x.d)} tarihli ${yaz(x.kg)} kg kaydı silinecek.`))return;
     S.body=S.body.filter(x=>x.d!==b.dataset.d);kaydet(["main"]);ciz(true);tost("Kilo kaydı silindi");return}
   if(a==="kiloTum"){V.kiloTum=true;ciz(true);return}
   if(a==="kilo"){const v=sayi($("kiloGir").value);if(v<25||v>300){tost("Geçerli bir kilo gir, ör. 78,4");return}
@@ -1083,7 +1114,7 @@ document.addEventListener("click",async ev=>{
   if(a==="salonKaydet"){const x=(S.plan.salon||[]).find(q=>q.id===b.dataset.id),sg=$("sg").value,sc=$("sc").value;if(!x||!sg||!sc)return;
     const kur=(ms,hm)=>{const d=new Date(ms),[h,m]=hm.split(":").map(Number);d.setHours(h,m,0,0);return d.getTime()};
     x.g=kur(x.g,sg);x.c=kur(x.g,sc);if(x.c<x.g)x.c+=86400000;kaydet(["main"]);perdeKapat();ciz(true);tost("Kaydedildi");return}
-  if(a==="salonSil"){if(b.dataset.on!=="1"){b.dataset.on="1";b.textContent="Emin misin? Tekrar dokun";return}
+  if(a==="salonSil"){if(!onayla(b,"Bu salon süresi kaydı silinecek."))return;
     S.plan.salon=(S.plan.salon||[]).filter(q=>q.id!==b.dataset.id);kaydet(["main"]);perdeKapat();ciz(true);return}
   if(a==="secAc"){V.secGun=b.dataset.gun;V.q="";V.grp="";git("sec");return}
   if(a==="ekle"){const d=gunBul(V.secGun);if(!d)return;const k=b.dataset.k;
@@ -1095,10 +1126,10 @@ document.addEventListener("click",async ev=>{
   if(a==="hzAc"){V.hzAcik=V.hzAcik===b.dataset.p?null:b.dataset.p;V.hzGun=0;ciz(true);return}
   if(a==="hzGun"){V.hzGun=+b.dataset.i;ciz(true);return}
   if(a==="hazirSec"){if(aktif()){tost("Önce açık antrenmanı bitir");return}
-    if(b.dataset.on!=="1"){b.dataset.on="1";b.textContent="Emin misin? Tekrar dokun";return}
+    {const P=HAZIR.find(x=>x.id===b.dataset.p);if(!onayla(b,`Günlerin ve hareketlerin "${P?P.ad:""}" programına göre yeniden kurulacak. Antrenman geçmişin ve kiloların silinmez.`,"Program değiştirilsin mi?","Yükle"))return}
     hazirYukle(b.dataset.p);kaydet(["main"]);git("program");tost(`${programim().ad} yüklendi`);return}
   if(a==="gekle"){const n=S.plan.days.length;S.plan.days.push({id:uid(),name:"Gün "+String.fromCharCode(65+n),wd:Math.min(6,n*2+1),ex:[]});kaydet(["main"]);ciz(true);return}
-  if(a==="gsil"){if(b.dataset.on!=="1"){b.dataset.on="1";b.textContent="Emin misin?";return}
+  if(a==="gsil"){const x=gunBul(b.dataset.gun);if(x&&!onayla(b,`${gunAd(x)} ve içindeki ${x.ex.length} hareket programdan silinecek. Antrenman geçmişin silinmez.`))return;
     S.plan.days=S.plan.days.filter(d=>d.id!==b.dataset.gun);if(V.gun===b.dataset.gun)V.gun=null;kaydet(["main"]);ciz(true);return}
   if(a==="goz"){const i=$(b.dataset.i);if(!i)return;const ac=i.type==="password";i.type=ac?"text":"password";b.innerHTML=ac?IK.gozK:IK.goz;b.setAttribute("aria-label",ac?"Şifreyi gizle":"Şifreyi göster");return}
   if(a==="kayitDegis"){V.kayit=!V.kayit;ciz();return}
@@ -1117,7 +1148,7 @@ document.addEventListener("click",async ev=>{
     if(uyeler&&uyeler[tel]){h.textContent="Bu numara zaten ekli.";return}
     try{await firebase.database().ref("izin/"+tel).set(salon||"ana");$("uyeTel").value="";$("uyeTel").blur();tost(telGoster(tel)+" eklendi");ciz(true)}catch(e){h.textContent="Eklenemedi, bağlantını kontrol et."}
     return}
-  if(a==="uyeSil"){if(!yoneticiMi()||b.dataset.tel===YONETICI)return;if(b.dataset.on!=="1"){b.dataset.on="1";b.textContent="Emin misin?";return}
+  if(a==="uyeSil"){if(!yoneticiMi()||b.dataset.tel===YONETICI)return;if(!onayla(b,`${telGoster(b.dataset.tel)} numarasının giriş izni kaldırılacak. Kayıtları silinmez.`,"Üye kaldırılsın mı?","Kaldır"))return;
     try{await firebase.database().ref("izin/"+b.dataset.tel).remove();tost("Giriş izni kaldırıldı")}catch(e){tost("Kaldırılamadı")}
     return}
   if(a==="yerel"){V.yerel=true;ciz();return}
