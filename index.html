@@ -170,6 +170,9 @@ h2{margin:0;font-size:20px;font-weight:900;text-transform:uppercase}
 .bilgi{display:flex;flex-direction:column;gap:9px}
 .bilgi div{font-size:15px;font-weight:600;line-height:1.35}
 .bilgi b{display:inline-block;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.05em;background:#000;color:var(--sari);border:2px solid #000;border-radius:6px;padding:1px 8px;margin-bottom:3px}
+.trad{display:block;font-size:13.5px;font-weight:600;color:#6B6B6B;line-height:1.25;text-transform:none;letter-spacing:0}
+.trb{font-size:15px;font-weight:600;color:#6B6B6B;margin-top:2px}
+.bilgi .ne b{background:var(--sari);color:#000}
 .bilgi .iyi b{background:var(--ok);color:#000}
 .bilgi .kotu b{background:var(--ac);color:#000}
 .halka{position:relative;width:216px;height:216px;margin:2px auto}
@@ -299,10 +302,48 @@ const LIB={
  legraise:{n:"Asılı bacak kaldırma",id:"Hanging_Leg_Raise",g:"karin",tip:"vucut",en:"hanging leg raise",ip:"Sallanmadan, karınla kaldır"}
 };
 const COP=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>`;
-const SURUM="2026-11-12 18:29";
+const SURUM="2026-11-12 18:58";
 const surumYazi=()=>{const [g,sa]=SURUM.split(" ");const [y,m,d]=g.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString("tr-TR",{day:"numeric",month:"long"})+" "+sa};
 const DMB=[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40];
 const WD=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
+/* Türkçe ad ve kısa "ne işe yarar" */
+const TRA={squat:["Çömelme (barla)","Bacak ve kalçanın tamamını güçlendirir; temel kuvvet hareketi."],
+ deadlift:["Ölü kaldırma","Arka bacak, kalça ve sırtın tamamını güçlendirir; yerden kaldırma gücü kazandırır."],
+ rdl:["Düz bacak ölü kaldırma","Arka bacak ve kalçayı çalıştırır, bel çevresini sağlamlaştırır."],
+ hipthrust:["Kalça itme","Kalça kasını büyütür ve güçlendirir."],
+ legpress:["Bacak itme (makinede)","Ön bacak ve kalçayı güçlendirir; bacağın ana gücü buradan gelir."],
+ goblet:["Dambılla göğüste tutarak çömelme","Bacak ve kalçayı birlikte çalıştırır, dik duruşu ve dengeyi geliştirir."],
+ lunge:["Öne adım çömelme","Bacak ve kalçayı tek tek çalıştırır, dengeyi geliştirir."],
+ legcurl:["Arka bacak bükme","Arka bacağı tek başına çalıştırır; diz sağlığı için ön bacakla dengeler."],
+ legext:["Ön bacak açma","Ön bacağı tek başına çalıştırır ve şekillendirir."],
+ calf:["Parmak ucuna yükselme","Baldırı güçlendirir ve büyütür."],
+ backext:["Bel kaldırma","Bel ve kalça kaslarını güçlendirir, belin dayanıklılığını artırır."],
+ bench:["Göğüs itme (barla, yatarak)","Göğsü büyütür, itme gücünü artırır."],
+ dbbench:["Dambılla göğüs itme","Göğsü büyütür; iki kol ayrı çalıştığı için dengesizliği giderir."],
+ incdb:["Eğik sehpada dambılla göğüs itme","Üst göğsü vurgular."],
+ dbsp:["Dambılla omuz itme","Omzu güçlendirir, yukarı itme gücü kazandırır."],
+ latraise:["Yana kol kaldırma","Omzun yan tarafını büyütür; omuzları geniş gösterir."],
+ pushup:["Şınav","Göğüs, omuz ve arka kolu vücut ağırlığıyla çalıştırır."],
+ dip:["Paralel barda dips","Alt göğüs ve arka kolu güçlendirir."],
+ fly:["Göğüs açma (kelebek makinesi)","Göğsü ortaya doğru sıkarak şekillendirir."],
+ reardelt:["Arka omuz açma","Omzun arkasını çalıştırır; öne kapanık omuz duruşunu düzeltir."],
+ widechest:["Geniş tutuşlu göğüs itme (plakalı makine)","Göğsü büyütür, itme gücünü artırır."],
+ mchest:["Makinede göğüs itme (yatarak)","Göğsü büyütür, itme gücünü artırır."],
+ mchestn:["Makinede dar tutuşla göğüs itme","Göğüs ve arka kolu birlikte çalıştırır, omzu daha az zorlar."],
+ mshoulder:["Makinede omuz itme (oturarak)","Omzu güçlendirir, yukarı itme gücü kazandırır."],
+ pushdown:["Kabloyla arka kol itme","Kolun arkasını çalıştırır; kol hacminin çoğu bu kastır."],
+ latpd:["Önden sırt çekişi","Sırtı genişletir, V görünümünü verir."],
+ pullup:["Barfiks","Sırtı genişletir ve ön kolu güçlendirir; vücut ağırlığıyla çekme gücü."],
+ row:["Barla eğilerek kürek çekme","Sırtın ortasını kalınlaştırır, duruşu düzeltir."],
+ dbrow:["Tek kolla dambıl kürek çekme","Sırtı kalınlaştırır, omuzları geriye toplar."],
+ cablerow:["Oturarak kabloyla kürek çekme","Sırtın ortasını kalınlaştırır, omuzları geriye toplayıp duruşu düzeltir."],
+ facepull:["Kabloyu yüze çekme","Arka omuz ve kürek kemiği kaslarını güçlendirir, omuz sağlığını korur."],
+ curl:["Ön kol bükme (dambılla)","Kolun önünü (biceps) büyütür."],
+ hammer:["Çekiç tutuşla ön kol bükme","Kolun önünü ve ön kolu güçlendirir."],
+ plank:["Önden köprü","Gövdeyi sabit tutan kasları güçlendirir, beli korur."],
+ cablecrunch:["Kabloyla diz çökerek karın bükme","Karın kasını büyütür ve belirginleştirir."],
+ legraise:["Asılı bacak kaldırma","Alt karını ve kalça bükücüleri güçlendirir."]};
+const trAd=k=>TRA[k]&&TRA[k][0]&&TRA[k][0]!==LIB[k].n?`<span class="trad">${esc(TRA[k][0])}</span>`:"";
 /* hareket bilgisi: kas = çalışan kas, dogru = doğru yapıldığını nasıl anlarsın, hata = sık yapılan hata */
 const BILGI={
  squat:["Ön bacak ve kalça; bel ve karın gövdeyi dengeler.","Topuklar yerde kalır, yükü ayağın ortasında hissedersin; ön bacak ve kalça yorulur.","Dizlerin içe kaçması, topukların kalkması, belin yuvarlanması, yarım inmek."],
@@ -624,7 +665,7 @@ function sAna(){
     <button class="st" data-a="git" data-v="gelisim"><span class="lb">Kilon</span><b>${son?yaz(son.kg)+" kg":"—"}</b>${son?(Math.abs(fark)<=1?`<span class="iyi">Hedefte</span>`:`<span class="dikkat">${fark>0?"+":""}${yaz(fark)} kg</span>`):`<span class="lb">Kilonu gir</span>`}</button>
    </div>
    <div class="lb" style="margin:2px 2px -6px">${s?"Hareketler":"Bugünkü hareketler"}</div>
-   <div class="k">${d.ex.map(e=>{const t=s&&tamamMi(s,e);return `<button class="sat" data-a="basla" data-ex="${e.id}"><span class="buyut" role="button" tabindex="0" data-a="foto" data-k="${e.k}" aria-label="Fotoğrafı büyüt"><img src="${img(e.k,0)}" alt="" loading="lazy"><i aria-hidden="true">⤢</i></span><span class="a"><b>${esc(LIB[e.k].n)}</b><span>${e.sets} × ${esc(e.reps)}${tipOf(e.k)==="sure"?" sn":""}</span></span>${t?`<span class="ok">✓</span>`:`<span class="v">${sonKiloYazi(e)}</span>`}</button>`}).join("")||`<div class="sat lb">Bu günde hareket yok</div>`}</div>`;
+   <div class="k">${d.ex.map(e=>{const t=s&&tamamMi(s,e);return `<button class="sat" data-a="basla" data-ex="${e.id}"><span class="buyut" role="button" tabindex="0" data-a="foto" data-k="${e.k}" aria-label="Fotoğrafı büyüt"><img src="${img(e.k,0)}" alt="" loading="lazy"><i aria-hidden="true">⤢</i></span><span class="a"><b>${esc(LIB[e.k].n)}</b>${trAd(e.k)}<span>${e.sets} × ${esc(e.reps)}${tipOf(e.k)==="sure"?" sn":""}</span></span>${t?`<span class="ok">✓</span>`:`<span class="v">${sonKiloYazi(e)}</span>`}</button>`}).join("")||`<div class="sat lb">Bu günde hareket yok</div>`}</div>`;
 }
 /* ---------- ısınma ve soğuma: günün çalışan bölgelerine göre ---------- */
 /* ısınma/germe görselleri (free-exercise-db, kamu malı) */
@@ -694,12 +735,12 @@ function sAnt(){
   const nBit=d.ex.filter(e=>tamamMi(s,e)).length;
   const kartlar=d.ex.map((e,i)=>{
     const L=LIB[e.k],kay=kayitli(s,e),bitti=kay.length>=e.sets;
-    if(e.id!==V.acik)return `<button class="k sat" data-a="ac" data-ex="${e.id}"><span class="buyut" role="button" tabindex="0" data-a="foto" data-k="${e.k}" aria-label="Fotoğrafı büyüt"><img src="${img(e.k,0)}" alt="" loading="lazy"><i aria-hidden="true">⤢</i></span><span class="a"><b>${esc(L.n)}</b><span>${bitti?`${kay.length} set tamam · ${setYazi(e.k,kay[kay.length-1])}`:kay.length?`${kay.length}/${e.sets} set`:`${e.sets} × ${esc(e.reps)}${tipOf(e.k)==="sure"?" sn":""} · ${sonKiloYazi(e)}`}</span></span>${bitti?`<span class="ok">✓</span>`:`<span class="bos"></span>`}</button>`;
+    if(e.id!==V.acik)return `<button class="k sat" data-a="ac" data-ex="${e.id}"><span class="buyut" role="button" tabindex="0" data-a="foto" data-k="${e.k}" aria-label="Fotoğrafı büyüt"><img src="${img(e.k,0)}" alt="" loading="lazy"><i aria-hidden="true">⤢</i></span><span class="a"><b>${esc(L.n)}</b>${trAd(e.k)}<span>${bitti?`${kay.length} set tamam · ${setYazi(e.k,kay[kay.length-1])}`:kay.length?`${kay.length}/${e.sets} set`:`${e.sets} × ${esc(e.reps)}${tipOf(e.k)==="sure"?" sn":""} · ${sonKiloYazi(e)}`}</span></span>${bitti?`<span class="ok">✓</span>`:`<span class="bos"></span>`}</button>`;
     const g=giris(e),o=oneri(e,s&&s.sid),son=oncekiSet(e.k,s&&s.sid),tip=tipOf(e.k);
     const satirKg=kiloVar(e.k)?`<div class="ad"><span class="ad-l">Kilo (kg)<small>${LIB[e.k].kgNot?LIB[e.k].kgNot:tip==="dambil"?"tek dambıl":tip==="bar"?"bar dahil":tip==="plaka"?"takılan plakalar":"makine"}</small></span><span class="r"><button data-a="kg-" aria-label="Kiloyu azalt">−</button><input id="kg-${e.id}" inputmode="decimal" value="${yaz(g.kg)}" data-f="kg" aria-label="Kilo"><button data-a="kg+" aria-label="Kiloyu artır">+</button></span></div>`:"";
     const satirR=`<div class="ad"><span class="ad-l">${tip==="sure"?"Süre (sn)":"Tekrar"}</span><span class="r"><button data-a="r-" aria-label="Azalt">−</button><input id="r-${e.id}" inputmode="numeric" value="${g.r}" data-f="r" aria-label="${tip==="sure"?"Süre":"Tekrar"}"><button data-a="r+" aria-label="Artır">+</button></span></div>`;
     return `<section class="k hk">
-     <div class="hb"><button class="foto" data-a="foto" data-k="${e.k}" aria-label="Fotoğrafı büyüt"><img src="${img(e.k,0)}" alt="${esc(L.n)}"></button><div><b>${esc(L.n)}</b><span class="bil">${e.sets} × ${esc(e.reps)}${tip==="sure"?" sn":""} · </span><button class="link" data-a="foto" data-k="${e.k}">▶ Nasıl yapılır</button></div><button class="kk" data-a="kartKapat" aria-label="Kartı kapat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg></button></div>
+     <div class="hb"><button class="foto" data-a="foto" data-k="${e.k}" aria-label="Fotoğrafı büyüt"><img src="${img(e.k,0)}" alt="${esc(L.n)}"></button><div><b>${esc(L.n)}</b>${trAd(e.k)}<span class="bil">${e.sets} × ${esc(e.reps)}${tip==="sure"?" sn":""} · </span><button class="link" data-a="foto" data-k="${e.k}">▶ Nasıl yapılır</button></div><button class="kk" data-a="kartKapat" aria-label="Kartı kapat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg></button></div>
      ${son?`<div class="gec">Geçen sefer: ${tip==="sure"?son.a.map(x=>x.r+" sn").join(", "):tip==="vucut"?son.a.map(x=>x.r).join(", ")+" tekrar":`${yaz(Math.max(...son.a.map(x=>x.kg)))} kg × ${son.a.map(x=>x.r).join(", ")}`}</div>`:`<div class="gec">İlk kez yapıyorsun; rahat bir kiloyla başla.</div>`}
      ${o.not&&!kay.length?`<div class="oner">${esc(o.not)}</div>`:""}
      ${!kay.length?isinmaSeti(d,e,g.kg):""}
@@ -749,7 +790,7 @@ function sProgram(){
    ${S.plan.days.map(d=>`<section class="k pad">
     <div style="display:flex;gap:8px"><input class="alan" id="gn-${d.id}" data-pf="name" data-gun="${d.id}" value="${esc(gunAd(d))}" aria-label="Gün adı" style="flex:1;font-weight:600">
      <select class="alan" id="gw-${d.id}" data-pf="wd" data-gun="${d.id}" aria-label="Haftanın günü" style="width:auto">${WD.map((w,i)=>`<option value="${i}" ${d.wd===i?"selected":""}>${w}</option>`).join("")}</select></div>
-    <div>${d.ex.map(e=>`<div class="duz"><span class="buyut" role="button" tabindex="0" data-a="foto" data-k="${e.k}" aria-label="Fotoğrafı büyüt"><img src="${img(e.k,0)}" alt="" ><i aria-hidden="true">⤢</i></span><b>${esc(LIB[e.k].n)}</b>
+    <div>${d.ex.map(e=>`<div class="duz"><span class="buyut" role="button" tabindex="0" data-a="foto" data-k="${e.k}" aria-label="Fotoğrafı büyüt"><img src="${img(e.k,0)}" alt="" ><i aria-hidden="true">⤢</i></span><b>${esc(LIB[e.k].n)}${trAd(e.k)}</b>
       <input class="alan" id="es-${e.id}" inputmode="numeric" data-ef="sets" data-gun="${d.id}" data-ex="${e.id}" value="${e.sets}" aria-label="Set sayısı">
       <input class="alan" id="er-${e.id}" data-ef="reps" data-gun="${d.id}" data-ex="${e.id}" value="${esc(e.reps)}" aria-label="Tekrar aralığı">
       <button class="sil" data-a="hsil" data-gun="${d.id}" data-ex="${e.id}" aria-label="${esc(LIB[e.k].n)} sil">${COP}</button></div>`).join("")||`<div class="lb">Henüz hareket yok.</div>`}</div>
@@ -768,7 +809,7 @@ function sHazir(){
     <div class="c">${P.et.map(x=>`<span>${x}</span>`).join("")}</div>
     <button class="hgor ${V.hzAcik===P.id?"on":""}" data-a="hzAc" data-p="${P.id}" aria-expanded="${V.hzAcik===P.id}"><i aria-hidden="true">▸</i>${V.hzAcik===P.id?"Hareketleri gizle":"Hareketleri gör"}</button>
     ${V.hzAcik===P.id?(()=>{const G=hazirGunler(P),gi=Math.min(V.hzGun||0,G.length-1),g=G[gi];return `<div class="gs">${G.map((d,j)=>`<button class="${j===gi?"on":""}" data-a="hzGun" data-i="${j}">${esc(d.name)}</button>`).join("")}</div>
-     <div class="hl">${g.ex.map((e,j)=>`<div class="hs"><span class="sn">${j+1}</span><span class="buyut" role="button" tabindex="0" data-a="foto" data-k="${e.k}" aria-label="Nasıl yapılır"><img src="${img(e.k,0)}" alt="" loading="lazy"><i aria-hidden="true">⤢</i></span><b>${esc(LIB[e.k].n)}</b><span class="rz">${e.sets}×${esc(e.reps)}${tipOf(e.k)==="sure"?" sn":""}</span></div>`).join("")}</div>
+     <div class="hl">${g.ex.map((e,j)=>`<div class="hs"><span class="sn">${j+1}</span><span class="buyut" role="button" tabindex="0" data-a="foto" data-k="${e.k}" aria-label="Nasıl yapılır"><img src="${img(e.k,0)}" alt="" loading="lazy"><i aria-hidden="true">⤢</i></span><b>${esc(LIB[e.k].n)}${trAd(e.k)}</b><span class="rz">${e.sets}×${esc(e.reps)}${tipOf(e.k)==="sure"?" sn":""}</span></div>`).join("")}</div>
      <div class="hoz">${g.ex.length} hareket · ${g.ex.reduce((t,e)=>t+e.sets,0)} set</div>`})():""}
     <button class="btn ${P.id===sec?"ikincil":""}" data-a="hazirSec" data-p="${P.id}">${P.id===sec?"Yeniden yükle":"Bu programı seç"}</button>
    </section>`).join("")}`;
@@ -823,9 +864,9 @@ function sSec(){
 }
 function secListe(){
   const q=(V.q||"").toLocaleLowerCase("tr"),d=gunBul(V.secGun);
-  const list=Object.entries(LIB).filter(([k,L])=>(!V.grp||L.g===V.grp)&&(!q||(L.n+" "+(L.ar||"")+" "+L.en).toLocaleLowerCase("tr").includes(q)));
+  const list=Object.entries(LIB).filter(([k,L])=>(!V.grp||L.g===V.grp)&&(!q||(L.n+" "+(L.ar||"")+" "+L.en+" "+(TRA[k]?TRA[k][0]:"")).toLocaleLowerCase("tr").includes(q)));
   if(!list.length)return `<div class="sat lb">Bu adda hareket yok.</div>`;
-  return list.map(([k,L])=>{const var_=d&&d.ex.some(e=>e.k===k);return `<button class="sat" data-a="ekle" data-k="${k}"><span class="buyut" role="button" tabindex="0" data-a="foto" data-k="${k}" aria-label="Fotoğrafı büyüt"><img src="${img(k,0)}" alt="" loading="lazy"><i aria-hidden="true">⤢</i></span><span class="a"><b>${esc(L.n)}</b><span>${GRP[L.g]}</span></span>${var_?`<span class="ok">✓</span>`:`<span class="v" style="color:var(--ac);font-size:22px">+</span>`}</button>`}).join("");
+  return list.map(([k,L])=>{const var_=d&&d.ex.some(e=>e.k===k);return `<button class="sat" data-a="ekle" data-k="${k}"><span class="buyut" role="button" tabindex="0" data-a="foto" data-k="${k}" aria-label="Fotoğrafı büyüt"><img src="${img(k,0)}" alt="" loading="lazy"><i aria-hidden="true">⤢</i></span><span class="a"><b>${esc(L.n)}</b>${trAd(k)}<span>${GRP[L.g]}</span></span>${var_?`<span class="ok">✓</span>`:`<span class="v" style="color:var(--ac);font-size:22px">+</span>`}</button>`}).join("");
 }
 function sAyar(){
   const a=aktif();
@@ -919,9 +960,9 @@ function tamAc(i){if(!TAM)return;TAM.i=i;const el=$("tam");
 function tamKapat(){tamDur();if($("tam").hidden)return;if(history.state&&history.state.tam)history.back();else $("tam").hidden=true}
 function fotoAc(k){const L=LIB[k],B=BILGI[k],p=$("perde");
   TAM={ad:L.n,i:0,l:L.fotos||[[img(k,0),"Başlangıç"],[img(k,1),"Bitiş"]]};
-  p.innerHTML=`<div role="dialog" aria-label="${esc(L.n)} nasıl yapılır"><div class="ust"><h2>${esc(L.n)}</h2><button class="ikb" data-a="kapat" aria-label="Kapat">✕</button></div>
+  p.innerHTML=`<div role="dialog" aria-label="${esc(L.n)} nasıl yapılır"><div class="ust"><div><h2>${esc(L.n)}</h2>${TRA[k]&&TRA[k][0]!==L.n?`<div class="trb">${esc(TRA[k][0])}</div>`:""}</div><button class="ikb" data-a="kapat" aria-label="Kapat">✕</button></div>
    <div class="fotolar">${(L.fotos||[[img(k,0),"Başlangıç"],[img(k,1),"Bitiş"]]).map(([src,c],i)=>`<figure role="button" tabindex="0" data-a="tam" data-i="${i}" aria-label="${esc(c)} fotoğrafını tam ekran aç"><img src="${src}" alt="${esc(c)}"><i aria-hidden="true">⤢</i><figcaption>${esc(c)}</figcaption></figure>`).join("")}</div>${L.kaynak?`<div class="lb" style="font-size:12px">${esc(L.kaynak)}</div>`:""}
-   <div class="bilgi">${B?`<div><b>Çalışan kas</b><br>${esc(B[0])}</div>`:""}<div><b>Nasıl yapılır</b><br>${esc(L.ip)}</div>${B?`<div class="iyi"><b>Doğru yapıyorsan</b><br>${esc(B[1])}</div><div class="kotu"><b>Sık yapılan hata</b><br>${esc(B[2])}</div>`:""}</div>
+   <div class="bilgi">${TRA[k]?`<div class="ne"><b>Ne işe yarar</b><br>${esc(TRA[k][1])}</div>`:""}${B?`<div><b>Çalışan kas</b><br>${esc(B[0])}</div>`:""}<div><b>Nasıl yapılır</b><br>${esc(L.ip)}</div>${B?`<div class="iyi"><b>Doğru yapıyorsan</b><br>${esc(B[1])}</div><div class="kotu"><b>Sık yapılan hata</b><br>${esc(B[2])}</div>`:""}</div>
    <a class="btn ikincil" href="${vidUrl(k)}" target="_blank" rel="noopener" style="text-align:center;text-decoration:none">▶ Videoda izle</a></div>`;
   p.hidden=false;history.pushState({v:V.v,perde:1},"")}
 
