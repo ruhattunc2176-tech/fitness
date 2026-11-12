@@ -122,6 +122,7 @@ h2{margin:0;font-size:20px;font-weight:900;text-transform:uppercase}
 .tam .btn{box-shadow:3px 3px 0 #fff}
 .perde h2{text-transform:none;font-size:22px}
 .fotolar{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fotolar:has(figure:only-child){grid-template-columns:1fr}
 .fotolar figure{margin:0;display:flex;flex-direction:column;gap:4px}
 .fotolar img{width:100%;aspect-ratio:3/2;object-fit:contain;border:2px solid #000;border-radius:8px;background:var(--soft)}
 .fotolar figcaption{font-size:13px;color:#000;font-weight:800;text-align:center;text-transform:uppercase}
@@ -293,12 +294,12 @@ const LIB={
  facepull:{n:"Face pull",id:"Face_Pull",g:"cekis",tip:"kule",en:"face pull",ip:"İpi yüze çek, dirsekler yüksekte"},
  curl:{n:"Biceps curl",id:"Dumbbell_Bicep_Curl",g:"cekis",tip:"dambil",en:"dumbbell biceps curl",ip:"Dirsek gövdeye sabit, sallanma"},
  hammer:{n:"Hammer curl",id:"Hammer_Curls",g:"cekis",tip:"dambil",en:"hammer curl",ip:"Avuçlar birbirine bakar, dirsek sabit"},
- plank:{n:"Plank",id:"Plank",g:"karin",tip:"sure",en:"plank",ip:"Baş, kalça ve topuk tek çizgide, karın sıkı"},
+ plank:{n:"Plank",id:"Plank",g:"karin",tip:"sure",en:"plank",fotos:[["img/Plank-1.webp","Doğru duruş"]],ip:"Baş, kalça ve topuk tek çizgide, karın sıkı"},
  cablecrunch:{n:"Cable crunch",id:"Cable_Crunch",g:"karin",tip:"kule",en:"cable crunch",ip:"Kalça sabit, karınla bük"},
  legraise:{n:"Asılı bacak kaldırma",id:"Hanging_Leg_Raise",g:"karin",tip:"vucut",en:"hanging leg raise",ip:"Sallanmadan, karınla kaldır"}
 };
 const COP=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>`;
-const SURUM="2026-11-12 18:19";
+const SURUM="2026-11-12 18:29";
 const surumYazi=()=>{const [g,sa]=SURUM.split(" ");const [y,m,d]=g.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString("tr-TR",{day:"numeric",month:"long"})+" "+sa};
 const DMB=[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40];
 const WD=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
