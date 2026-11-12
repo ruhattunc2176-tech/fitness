@@ -231,6 +231,9 @@ h2{margin:0;font-size:20px;font-weight:900;text-transform:uppercase}
 .wl button,.wl div{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:10px;border:0;border-top:1.5px solid #000;background:#fff;font-size:15px;font-weight:600;line-height:1.3;color:#000}
 .wl>:first-child{border-top:0}
 .wl i{flex:none;width:24px;height:24px;border:2px solid #000;border-radius:6px;background:#fff;display:grid;place-items:center;font-style:normal;font-size:13px;font-weight:900;color:transparent}
+.wl .wf{position:relative;flex:none;display:block}
+.wl .wf img{width:44px;height:44px;border-radius:7px;border:2px solid #000;object-fit:cover;display:block;background:var(--soft)}
+.wl .wf i{position:absolute;right:-5px;bottom:-5px;width:18px;height:18px;border-radius:5px;background:var(--sari);border:2px solid #000;color:#000;font-size:10px;display:grid;place-items:center;font-weight:900}
 .wl .on{background:var(--ok-s)}
 .wl .on i{background:var(--ok);color:#000}
 .wl small{margin-left:auto;flex:none;font-size:13px;font-weight:800;color:var(--muted);white-space:nowrap}
@@ -293,7 +296,7 @@ const LIB={
  legraise:{n:"Asılı bacak kaldırma",id:"Hanging_Leg_Raise",g:"karin",tip:"vucut",en:"hanging leg raise",ip:"Sallanmadan, karınla kaldır"}
 };
 const COP=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>`;
-const SURUM="2026-11-12 18:00";
+const SURUM="2026-11-12 18:13";
 const surumYazi=()=>{const [g,sa]=SURUM.split(" ");const [y,m,d]=g.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString("tr-TR",{day:"numeric",month:"long"})+" "+sa};
 const DMB=[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40];
 const WD=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
@@ -621,6 +624,12 @@ function sAna(){
    <div class="k">${d.ex.map(e=>{const t=s&&tamamMi(s,e);return `<button class="sat" data-a="basla" data-ex="${e.id}"><span class="buyut" role="button" tabindex="0" data-a="foto" data-k="${e.k}" aria-label="Fotoğrafı büyüt"><img src="${img(e.k,0)}" alt="" loading="lazy"><i aria-hidden="true">⤢</i></span><span class="a"><b>${esc(LIB[e.k].n)}</b><span>${e.sets} × ${esc(e.reps)}${tipOf(e.k)==="sure"?" sn":""}</span></span>${t?`<span class="ok">✓</span>`:`<span class="v">${sonKiloYazi(e)}</span>`}</button>`}).join("")||`<div class="sat lb">Bu günde hareket yok</div>`}</div>`;
 }
 /* ---------- ısınma ve soğuma: günün çalışan bölgelerine göre ---------- */
+/* ısınma/germe görselleri (free-exercise-db, kamu malı) */
+const ISF={"Yürüyüş bandı ya da bisiklet, hafif tempo":"Walking_Treadmill","Ağırlıksız squat":"Bodyweight_Squat","Bacak savurma (öne-arkaya)":"Front_Leg_Raises",
+ "Kol çevirme":"Arm_Circles","Duvara yaslanarak şınav":"Incline_Push-Up","Omuzları geriye çevir, kürek kemiklerini sık":"Shoulder_Circles",
+ "Gövdeyi sağa sola döndür":"Torso_Rotation","Kalça çevirme":"Standing_Hip_Circles","Ön bacak germe":"Quad_Stretch","Arka bacak germe":"Hamstring_Stretch",
+ "Baldır germe":"Calf_Stretch_Hands_Against_Wall","Omuz germe (kol göğsün önünden)":"Shoulder_Stretch","Arka kol germe (dirsek baş üstünde)":"Triceps_Stretch"};
+const isfImg=(ad,f)=>`<span class="wf" role="button" tabindex="0" data-a="isfFoto" data-ad="${esc(ad)}" aria-label="${esc(ad)} görseli"><img src="img/${f}-1.webp" alt="" loading="lazy"><i aria-hidden="true">⤢</i></span>`;
 const ISIN={bacak:[["Ağırlıksız squat","10 tekrar"],["Bacak savurma (öne-arkaya)","her bacak 10"]],
  itis:[["Kol çevirme","10 öne, 10 arkaya"],["Duvara yaslanarak şınav","10 tekrar"]],
  cekis:[["Omuzları geriye çevir, kürek kemiklerini sık","10 tekrar"],["Gövdeyi sağa sola döndür","10 tekrar"]],
@@ -637,13 +646,13 @@ function wuDurum(d,s){const k=d.id+"|"+bugun();if(!V.wu||V.wu.k!==k)V.wu={k,t:{}
 function isinmaKart(d,s){const W=wuDurum(d,s),L=isinmaListe(d),n=L.filter((x,i)=>W.t[i]).length;
   if(W.kapali)return `<button class="k sat" data-a="wuAc"><span class="a"><b>Isınma</b><span>${n===L.length?"tamamlandı":n?`${n} / ${L.length} yapıldı`:"yaklaşık 8 dk · görmek için dokun"}</span></span>${n===L.length?`<span class="ok">✓</span>`:`<span class="bos"></span>`}</button>`;
   return `<section class="k wu"><div class="u"><b>Isınma</b><span>yaklaşık 8 dk</span></div>
-   <div class="wl">${L.map((x,i)=>`<button class="${W.t[i]?"on":""}" data-a="wuTik" data-i="${i}" aria-pressed="${!!W.t[i]}"><i aria-hidden="true">✓</i><span>${esc(x[0])}</span><small>${esc(x[1])}</small></button>`).join("")}</div>
+   <div class="wl">${L.map((x,i)=>`<button class="${W.t[i]?"on":""}" data-a="wuTik" data-i="${i}" aria-pressed="${!!W.t[i]}"><i aria-hidden="true">✓</i>${ISF[x[0]]?isfImg(x[0],ISF[x[0]]):""}<span>${esc(x[0])}</span><small>${esc(x[1])}</small></button>`).join("")}</div>
    <div class="lb">İlk büyük hareketlerde ısınma seti de var; kilosu hareketin kartında yazıyor.</div>
    <button class="btn ikincil" data-a="wuKapat">${n===L.length?"Kapat":"Isınmayı geç"}</button></section>`}
 function sogumaKart(d,hepsiBitti){const W=V.wu||{},acik=W.sg==null?hepsiBitti:W.sg,G=gunGrup(d),L=G.flatMap(g=>G.length>=3?(g==="karin"?[]:(SOGU[g]||[]).slice(0,2)):(SOGU[g]||[]));
   if(!acik)return `<button class="k sat" data-a="sgAc"><span class="a"><b>Soğuma ve germe</b><span>isteğe bağlı · yaklaşık 5 dk · görmek için dokun</span></span></button>`;
   return `<section class="k wu"><div class="u"><b>Soğuma ve germe</b><span>isteğe bağlı</span></div>
-   <div class="wl"><div><span>Yavaş yürüyüş, nabzın insin</span><small>3–5 dk</small></div>${L.map(x=>`<div><span>${esc(x)}</span><small>20–30 sn</small></div>`).join("")}</div>
+   <div class="wl"><div>${isfImg("Yavaş yürüyüş","Walking_Treadmill")}<span>Yavaş yürüyüş, nabzın insin</span><small>3–5 dk</small></div>${L.map(x=>`<div>${ISF[x]?isfImg(x,ISF[x]):""}<span>${esc(x)}</span><small>20–30 sn</small></div>`).join("")}</div>
    <div class="lb">Ağrı değil, hafif gerginlik hissedene kadar ger; yaylanma.</div>
    <button class="btn ikincil" data-a="sgAc">Kapat</button></section>`}
 /* ısınma seti: her bölgenin o günkü ilk ağırlıklı hareketinde, çalışma kilosunun yarısı ve dörtte üçü */
@@ -927,6 +936,7 @@ document.addEventListener("click",async ev=>{
   if(a==="foto")return fotoAc(b.dataset.k);
   if(a==="kapat"){perdeKapat();return}
   if(a==="tam")return tamAc(+b.dataset.i);
+  if(a==="isfFoto"){const ad=b.dataset.ad,f=ISF[ad]||"Walking_Treadmill";TAM={ad,i:0,l:[[`img/${f}-0.webp`,"Başlangıç"],[`img/${f}-1.webp`,"Bitiş"]]};return tamAc(0)}
   if(a==="tamKapat")return tamKapat();
   if(a==="tamOnce"||a==="tamSonra"){if(!TAM)return;tamDur();const n=TAM.l.length;TAM.i=(TAM.i+(a==="tamSonra"?1:n-1))%n;tamGoster();return}
   if(a==="tamOynat"){if(TAMT){tamDur();return}b.textContent="■ Durdur";TAMT=setInterval(()=>{TAM.i=(TAM.i+1)%TAM.l.length;tamGoster()},900);return}
