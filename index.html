@@ -177,6 +177,14 @@ h2{margin:0;font-size:20px;font-weight:900;text-transform:uppercase}
 .halka b{font-size:46px;font-weight:900;font-variant-numeric:tabular-nums;line-height:1}
 .hedef{display:flex;align-items:center;justify-content:center;gap:10px;font-size:15px;font-weight:800}
 .hedef button{width:34px;height:34px;border:2px solid #000;border-radius:8px;background:#fff;font-size:20px;font-weight:900;display:grid;place-items:center;padding:0}
+.sat:has(.fk){flex-wrap:wrap}
+.fk{flex-basis:100%;display:flex;flex-direction:column;gap:6px}
+.cb{display:block;height:20px;border:2px solid #000;border-radius:6px;background:#fff;position:relative;overflow:hidden}
+.cb i{position:absolute;top:0;bottom:0;background:var(--ac);border-left:2px solid #000;border-right:2px solid #000}
+.fk .al{display:flex;gap:12px;flex-wrap:wrap;font-size:13px;font-weight:700;align-items:center}
+.fk .al em{font-style:normal;display:inline-flex;align-items:center;gap:5px}
+.fk .al em::before{content:"";width:12px;height:12px;border:2px solid #000;border-radius:3px;background:var(--c)}
+.fk .f{font-size:13px;font-weight:800;background:var(--sari);border:2px solid #000;border-radius:6px;padding:1px 7px}
 .hedef input{width:64px;text-align:center;font-size:20px;font-weight:900;border:2px solid #000;border-radius:8px;background:#fff;padding:4px 2px;font-variant-numeric:tabular-nums}
 .hedef input:focus{outline:3px solid var(--ac);outline-offset:1px}
 .hedef button:active{background:var(--sari)}
@@ -285,7 +293,7 @@ const LIB={
  legraise:{n:"Asılı bacak kaldırma",id:"Hanging_Leg_Raise",g:"karin",tip:"vucut",en:"hanging leg raise",ip:"Sallanmadan, karınla kaldır"}
 };
 const COP=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>`;
-const SURUM="2026-11-10 11:11";
+const SURUM="2026-11-12 18:00";
 const surumYazi=()=>{const [g,sa]=SURUM.split(" ");const [y,m,d]=g.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString("tr-TR",{day:"numeric",month:"long"})+" "+sa};
 const DMB=[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40];
 const WD=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
@@ -742,9 +750,17 @@ function sayacYaz(ms){const sn=Math.max(0,Math.floor(ms/1000)),sa=Math.floor(sn/
 let sureT=null;
 function sureTik(){const b=S.plan.salonAcik,el=$("ssayac");if(!b||!el||V.v!=="sure"){clearInterval(sureT);sureT=null;return}
   const ms=Date.now()-b;el.textContent=sayacYaz(ms);$("shalka").style.strokeDashoffset=(276.5*(1-Math.min(1,ms/60000/sureHedef()))).toFixed(1)}
+/* salonda kaldığın sürenin içine düşen bitmiş antrenmanlar: ilk set ile "Antrenmanı bitir" arası */
+function antSeans(x){return Object.values(S.sessions).filter(s=>s.done&&s.t&&s.end&&s.t>=x.g-600000&&s.t<=x.c)}
+function antOf(x){const L=antSeans(x);if(!L.length)return null;return L.reduce((t,s)=>t+Math.max(0,Math.round((Math.min(s.end,x.c)-s.t)/60000)),0)}
+function farkSatir(x){const L=antSeans(x),top=x.c-x.g;if(!L.length||top<=0)return `<span class="fk"><span class="lb">Antrenman kaydı yok</span></span>`;
+  const a=antOf(x),bas=Math.max(0,Math.min(...L.map(s=>s.t))-x.g);
+  return `<span class="fk"><span class="cb"><i style="left:${(bas/top*100).toFixed(1)}%;width:${Math.min(100,a*60000/top*100).toFixed(1)}%"></i></span>
+   <span class="al"><em style="--c:#fff">Salonda ${dkYaz(dkOf(x))}</em><em style="--c:var(--ac)">Antrenman ${dkYaz(a)}</em><span class="f">Fark ${dkYaz(Math.max(0,dkOf(x)-a))}</span></span></span>`}
 function sSure(){
   const b=S.plan.salonAcik,L=salonlar(),hb=Date.parse(haftaBasi()+"T00:00:00"),hf=L.filter(x=>x.g>=hb);
-  const top=hf.reduce((t,x)=>t+dkOf(x),0),ort=L.length?Math.round(L.reduce((t,x)=>t+dkOf(x),0)/L.length):0;
+  const top=hf.reduce((t,x)=>t+dkOf(x),0),ant=hf.reduce((t,x)=>t+(antOf(x)||0),0);
+  const eslesen=L.map(x=>[dkOf(x),antOf(x)]).filter(([a,b])=>b!=null),ortFark=eslesen.length?Math.round(eslesen.reduce((t,[a,b])=>t+Math.max(0,a-b),0)/eslesen.length):null;
   const ms=b?Date.now()-b:0,uzun=b&&ms>4*3600000;
   return `<h1>Salon süresi</h1>
    <div class="k pad">
@@ -754,9 +770,9 @@ function sSure(){
     ${uzun?`<div class="oner">Çıkışa basmayı unuttuysan şimdi bitir, sonra geçmişten çıkış saatini düzelt.</div>`:""}
     <button class="btn ${b?"":"yesil"}" data-a="${b?"salonCik":"salonGir"}">${b?"Salondan çıktım":"Salona girdim"}</button>
    </div>
-   <div class="oz"><div><b>${hf.length}</b><span>bu hafta giriş</span></div><div><b>${dkYaz(top)}</b><span>bu hafta toplam</span></div><div><b>${ort?dkYaz(ort):"—"}</b><span>ortalama</span></div></div>
+   <div class="oz"><div><b>${dkYaz(top)}</b><span>bu hafta salonda</span></div><div><b>${ant?dkYaz(ant):"—"}</b><span>bu hafta antrenman</span></div><div><b>${ortFark!=null?dkYaz(ortFark):"—"}</b><span>ortalama fark</span></div></div>
    <div class="lb" style="margin:2px 2px -8px">Geçmiş · düzeltmek için dokun</div>
-   <div class="k">${L.slice(0,30).map(x=>`<button class="sat" data-a="salonDuzen" data-id="${x.id}"><span class="a"><b>${new Date(x.g).toLocaleDateString("tr-TR",{weekday:"short",day:"numeric",month:"short"})}</b><span>${saatYaz(x.g)} – ${saatYaz(x.c)}</span></span><span class="v">${dkYaz(dkOf(x))}</span></button>`).join("")||`<div class="sat lb">Henüz kayıt yok. Salona girince yukarıdaki düğmeye bas.</div>`}</div>`;
+   <div class="k">${L.slice(0,30).map(x=>`<button class="sat" data-a="salonDuzen" data-id="${x.id}"><span class="a"><b>${new Date(x.g).toLocaleDateString("tr-TR",{weekday:"short",day:"numeric",month:"short"})}</b><span>${saatYaz(x.g)} – ${saatYaz(x.c)}</span></span><span class="v">${dkYaz(dkOf(x))}</span>${farkSatir(x)}</button>`).join("")||`<div class="sat lb">Henüz kayıt yok. Salona girince yukarıdaki düğmeye bas.</div>`}</div>`;
 }
 function salonDuzenAc(id){const x=(S.plan.salon||[]).find(q=>q.id===id);if(!x)return;const p=$("perde");
   p.innerHTML=`<div role="dialog" aria-label="Saati düzelt"><div class="ust"><h2>${new Date(x.g).toLocaleDateString("tr-TR",{weekday:"long",day:"numeric",month:"long"})}</h2><button class="ikb" data-a="kapat" aria-label="Kapat">✕</button></div>
