@@ -296,7 +296,7 @@ const LIB={
  legraise:{n:"Asılı bacak kaldırma",id:"Hanging_Leg_Raise",g:"karin",tip:"vucut",en:"hanging leg raise",ip:"Sallanmadan, karınla kaldır"}
 };
 const COP=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>`;
-const SURUM="2026-11-12 18:13";
+const SURUM="2026-11-12 18:15";
 const surumYazi=()=>{const [g,sa]=SURUM.split(" ");const [y,m,d]=g.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString("tr-TR",{day:"numeric",month:"long"})+" "+sa};
 const DMB=[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40];
 const WD=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
@@ -944,7 +944,8 @@ document.addEventListener("click",async ev=>{
   if(a==="dgec"){D=null;dCiz();return}
   if(a==="grp"){V.grp=b.dataset.g;ciz(true);return}
   if(a==="wuTik"||a==="wuKapat"||a==="wuAc"||a==="sgAc"){const d=gunBul(V.gun);if(!d)return;const W=wuDurum(d,gunSeansi(d.id));
-    if(a==="wuTik"){const i=+b.dataset.i;if(W.t[i])delete W.t[i];else W.t[i]=1;if(isinmaListe(d).every((x,j)=>W.t[j])){W.kapali=true;tost("Isınma tamam")}}
+    if(a==="wuTik"){const i=+b.dataset.i;if(W.t[i])delete W.t[i];else{W.t[i]=1;if(!gunSeansi(d.id)){seansAc(d.id);kaydet(["main"])}}   /* ısınma antrenmana dahil: süre ilk ısınma işaretinde başlar */
+      if(isinmaListe(d).every((x,j)=>W.t[j])){W.kapali=true;tost("Isınma tamam")}}
     else if(a==="wuKapat")W.kapali=true;else if(a==="wuAc")W.kapali=false;
     else W.sg=!(W.sg==null?(d.ex.length>0&&d.ex.every(e=>tamamMi(gunSeansi(d.id),e))):W.sg);
     ciz(true);return}
