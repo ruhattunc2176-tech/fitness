@@ -188,6 +188,19 @@ h2{margin:0;font-size:20px;font-weight:900;text-transform:uppercase}
 .satir2 .sil{flex:none}
 .satir2:has(.sil){align-items:center}
 .satir2 .uyd{align-items:center}
+.gn{display:grid;grid-template-columns:repeat(auto-fit,minmax(92px,1fr));gap:8px}
+.gnk{border:2px solid #000;border-radius:10px;padding:8px 6px;text-align:center;background:#fff;color:#000;display:flex;flex-direction:column;gap:1px;min-width:0}
+.gnk b{font-size:17px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gnk span{font-size:12.5px;font-weight:800}
+.gnk.ok{background:var(--ok-s)}
+.gnk.ok span{color:var(--ok-yazi)}
+.gnk.sira{background:var(--ac);box-shadow:var(--sh-k)}
+.gnk.bek{background:#FDE2E2;border-color:var(--kir)}
+.gnk.bek span{color:#B91C1C}
+.gnk.sec{outline:3px solid #000;outline-offset:2px}
+.yap{display:flex;align-items:center;gap:10px;background:var(--ok-s);border:2px solid #000;border-radius:8px;padding:10px}
+.yap>i{width:26px;height:26px;border-radius:6px;background:var(--ok);border:2px solid #000;display:grid;place-items:center;font-style:normal;font-weight:900;flex:none}
+.yap b{font-size:16px;font-weight:800}
 .sgc{flex:1;min-width:0;display:flex;justify-content:space-between;align-items:baseline;gap:8px;border:0;background:none;padding:0;text-align:left;font-size:16px}
 .sgc b{font-weight:700}
 .sd{padding:12px 13px;border-top:1.5px solid #000}
@@ -330,7 +343,7 @@ const LIB={
  legraise:{n:"Asılı bacak kaldırma",id:"Hanging_Leg_Raise",g:"karin",tip:"vucut",en:"hanging leg raise",ip:"Sallanmadan, karınla kaldır"}
 };
 const COP=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>`;
-const SURUM="2026-11-12 22:10";
+const SURUM="2026-11-13 08:43";
 const surumYazi=()=>{const [g,sa]=SURUM.split(" ");const [y,m,d]=g.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString("tr-TR",{day:"numeric",month:"long"})+" "+sa};
 const DMB=[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40];
 const WD=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
@@ -593,7 +606,7 @@ function hazirYukle(pid){const P=HAZIR.find(x=>x.id===pid);if(!P)return;const da
   const set=n>=4?[0,1,3,5]:n===2?[0,3]:[0,3,5];
   const b=new Date(Math.max(Date.now(),Date.parse((S.plan.milat||"1970-01-01")+"T00:00:00"))),w=(b.getDay()+6)%7;
   let k=set.findIndex(x=>x>=w);if(k<0)k=0;
-  days.forEach((d,i)=>{d.id=uid();d.wd=set[(k+i)%set.length]});
+  const kul=new Set();days.forEach((d,i)=>{const o=S.plan.days.find(x=>x.name===d.name&&!kul.has(x.id));d.id=o?o.id:uid();kul.add(d.id);d.wd=set[(k+i)%set.length]});   /* aynı adlı günün kimliği korunur, sıra kaybolmaz */
   S.plan.days=days;S.plan.prog=pid;V.g={};V.gun=null}
 /* tek seferlik (9 Kasım): 3 günlük tüm vücut programı */
 function gecis3(){if(S.plan.g3)return false;
@@ -667,8 +680,19 @@ function giris(e){
 const hacim=s=>{let v=0;Object.values(s.sets).forEach(a=>a.forEach(x=>{v+=x.kg*x.r}));return v};
 const biten=s=>{let n=0;Object.values(s.sets).forEach(a=>{n+=a.length});return n};
 const tamamMi=(s,e)=>kayitli(s,e).length>=e.sets;
-function siradakiGun(){const a=aktif();if(a&&gunBul(a.dayId))return a.dayId;const n=S.plan.days.length;if(!n)return null;
-  const sb=seanslar().find(s=>s.done);let i=0;if(sb){const j=S.plan.days.findIndex(d=>d.id===sb.dayId);i=(j+1)%n}return S.plan.days[i].id}
+/* bitmiş sayılan antrenman: "bitir"e basılmış ya da önceki bir günden kalmış ve set girilmiş */
+const bittiMi=x=>x.done||(x.date<bugun()&&biten(x)>0);
+/* antrenmanın programdaki günü: kimlikle, bulunamazsa (program yeniden yüklendiyse) gün adıyla */
+const gunEsle=x=>gunBul(x.dayId)||S.plan.days.find(d=>d.name===x.dayName)||null;
+/* döngü: günler sırayla yapılır; hepsi yapılınca yeni döngü başlar. Dönen: gün kimliği → o döngüdeki son antrenman */
+function dongu(){const n=S.plan.days.length;let M=new Map();
+  seanslar().filter(bittiMi).reverse().forEach(x=>{const d=gunEsle(x);if(!d)return;M.set(d.id,x);if(M.size>=n)M=new Map()});return M}
+function siradakiGun(){const a=aktif();if(a&&gunEsle(a))return gunEsle(a).id;const n=S.plan.days.length;if(!n)return null;
+  const sb=seanslar().filter(bittiMi).find(x=>gunEsle(x));let i=0;if(sb){const j=S.plan.days.indexOf(gunEsle(sb));i=(j+1)%n}return S.plan.days[i].id}
+/* önceki günden açık kalan antrenman: set varsa bitmiş sayılır, yoksa silinir */
+function eskiKapat(){const x=S.activeSid&&S.sessions[S.activeSid];if(!x||x.done||x.date>=bugun())return;
+  if(biten(x)){x.done=true;kaydet(["main","s/"+x.sid])}else{delete S.sessions[x.sid];silinecek.add("s/"+x.sid)}
+  S.activeSid=null;V.gun=null;kaydet(["main"])}
 function sonKiloYazi(e){const tip=tipOf(e.k),son=oncekiSet(e.k);
   if(tip==="sure")return son?`${son.a[0].r} sn`:"";if(tip==="vucut")return son?`${son.a[0].r} tekrar`:"";
   return son?`${yaz(Math.max(...son.a.map(x=>x.kg)))} kg`:"yeni"}
@@ -677,17 +701,21 @@ const setYazi=(k,x)=>tipOf(k)==="sure"?`${x.r} sn`:tipOf(k)==="vucut"?`${x.r} te
 /* ---------- ekranlar ---------- */
 function sAna(){
   if(!S.plan.days.length)return `<h1>Fitness</h1><div class="k pad"><h2>Program boş</h2><span class="lb">Program sekmesinden bir gün ekle.</span></div>`;
+  if(V.gunG!==bugun()){V.gun=null;V.gunG=bugun()}   /* yeni günde sıradaki günle aç */
   if(!V.gun||!gunBul(V.gun))V.gun=siradakiGun();
-  const d=gunBul(V.gun),s=gunSeansi(d.id),a=aktif();
+  const d=gunBul(V.gun),s=gunSeansi(d.id),a=aktif(),DG=dongu(),sira=siradakiGun(),yd=!s&&DG.get(d.id);
   const hb=haftaBasi(),haftaYap=new Set(seanslar().filter(x=>x.date>=hb&&(x.done||biten(x))).map(x=>x.dayId+x.date)).size;
   const bw=S.body.slice().sort((x,y)=>x.d.localeCompare(y.d)),son=bw[bw.length-1],ilk=bw[0],fark=son&&ilk?son.kg-ilk.kg:0;
   const dk=Math.round(d.ex.reduce((t,e)=>t+e.sets*(1+e.rest/60),0)/5)*5;
   const bugunAd=new Date().toLocaleDateString("tr-TR",{weekday:"long",day:"numeric",month:"long"});
-  return `<div class="ust"><div><div class="lb">${S.plan.milat&&bugun()<S.plan.milat?`Başlangıç: ${tarih(S.plan.milat)} Perşembe`:bugunAd}</div><h1>${s?"Devam: ":d.id===siradakiGun()?"Sıradaki: ":""}${esc(gunAd(d))}</h1></div><button class="ikb" data-a="git" data-v="ayar" aria-label="Ayarlar">${IK.ayar}</button></div>
-   ${S.plan.days.length>1?`<div class="cipler">${S.plan.days.map(x=>`<button class="cip ${x.id===d.id?"on":""}" data-a="gunSec" data-id="${x.id}">${esc(gunAd(x))}</button>`).join("")}</div>`:""}
+  return `<div class="ust"><div><div class="lb">${S.plan.milat&&bugun()<S.plan.milat?`Başlangıç: ${tarih(S.plan.milat)} Perşembe`:bugunAd}</div><h1>${s?"Devam: ":d.id===sira?"Sıradaki: ":""}${esc(gunAd(d))}</h1></div><button class="ikb" data-a="git" data-v="ayar" aria-label="Ayarlar">${IK.ayar}</button></div>
+   ${S.plan.days.length>1?`<div class="gn">${S.plan.days.map(x=>{const y=DG.get(x.id),dr=a&&gunEsle(a)===x?["sira","Devam"]:y?["ok","✓ "+tarih(y.date)]:x.id===sira?["sira","Sıradaki"]:["bek","Bekliyor"];
+     return `<button class="gnk ${dr[0]} ${x.id===d.id?"sec":""}" data-a="gunSec" data-id="${x.id}" aria-pressed="${x.id===d.id}"><b>${esc(gunAd(x))}</b><span>${dr[1]}</span></button>`}).join("")}</div>`:""}
    ${a&&a.dayId!==d.id?`<div class="oner">Yarım kalan ${esc(a.dayName)} antrenmanın var. <button class="link" data-a="gunSec" data-id="${a.dayId}">Oraya dön</button></div>`:""}
-   <div class="k pad"><span class="lb" style="font-size:15px">${d.ex.length} hareket · yaklaşık ${dk} dakika${s?` · ${biten(s)} set yapıldı`:""}</span>
-    <button class="btn" data-a="basla" ${d.ex.length?"":"disabled"}>${s?"Antrenmana devam et":"Antrenmanı başlat"}</button></div>
+   ${yd?`<div class="k pad"><div class="yap"><i aria-hidden="true">✓</i><div><b>${new Date(yd.date+"T12:00:00").toLocaleDateString("tr-TR",{day:"numeric",month:"long",weekday:"long"})} yapıldı</b><div class="lb">${biten(yd)} set${yd.t&&yd.end?" · "+dkYaz(Math.max(1,Math.round((yd.end-yd.t)/60000))):""}</div></div></div>
+    <div class="iki"><button class="btn ikincil" data-a="seansAc" data-sid="${yd.sid}">Ayrıntıyı gör</button><button class="btn ikincil" data-a="basla" ${d.ex.length?"":"disabled"}>Yeniden yap</button></div></div>`
+   :`<div class="k pad"><span class="lb" style="font-size:15px">${d.ex.length} hareket · yaklaşık ${dk} dakika${s?` · ${biten(s)} set yapıldı`:""}</span>
+    <button class="btn" data-a="basla" ${d.ex.length?"":"disabled"}>${s?"Antrenmana devam et":"Antrenmanı başlat"}</button></div>`}
    <div class="iki">
     <button class="st" data-a="git" data-v="gelisim"><span class="lb">Bu hafta</span><b>${haftaYap} / ${S.plan.days.length}</b><span class="lb">antrenman</span></button>
     <button class="st" data-a="git" data-v="gelisim"><span class="lb">Kilon</span><b>${son?yaz(son.kg)+" kg":"—"}</b>${son?(Math.abs(fark)<=1?`<span class="iyi">Hedefte</span>`:`<span class="dikkat">${fark>0?"+":""}${yaz(fark)} kg</span>`):`<span class="lb">Kilonu gir</span>`}</button>
@@ -958,6 +986,7 @@ function sGiris(){
 /* ---------- çizim ---------- */
 const SEKME=[["ana","Bugün",IK.bugun],["gelisim","Gelişim",IK.gelisim],["program","Program",IK.program],["sure","Süre",IK.sure]];
 function ciz(yerinde){
+  try{eskiKapat()}catch(e){}
   const y=window.scrollY,girisGerek=fbDurum==="hazir"&&((!kul&&!V.yerel)||izinYok);
   $("app").innerHTML=`<div class="surum">Son güncelleme: ${surumYazi()}</div>`+(girisGerek?sGiris():V.v==="ant"?sAnt():V.v==="gelisim"?sGelisim():V.v==="program"?sProgram():V.v==="sec"?sSec():V.v==="sure"?sSure():V.v==="hazir"?sHazir():V.v==="seans"?sSeans():V.v==="ayar"?sAyar():sAna());
   const t=$("tab");t.hidden=girisGerek||V.v==="ant";
