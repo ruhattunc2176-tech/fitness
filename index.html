@@ -343,7 +343,7 @@ const LIB={
  legraise:{n:"Asılı bacak kaldırma",id:"Hanging_Leg_Raise",g:"karin",tip:"vucut",en:"hanging leg raise",ip:"Sallanmadan, karınla kaldır"}
 };
 const COP=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>`;
-const SURUM="2026-11-13 08:43";
+const SURUM="2026-11-13 08:45";
 const surumYazi=()=>{const [g,sa]=SURUM.split(" ");const [y,m,d]=g.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString("tr-TR",{day:"numeric",month:"long"})+" "+sa};
 const DMB=[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40];
 const WD=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
@@ -470,6 +470,8 @@ let S; try{S=JSON.parse(localStorage.getItem(LS)||"null")}catch(e){S=null}
 S=duzenle(S&&S.plan?S:ilkProgram());
 let V={v:"ana",gun:null,acik:null,grp:"",q:"",y:0,g:{}};
 try{Object.assign(V,JSON.parse(localStorage.getItem(LSV)||"{}"))}catch(e){}
+/* yenileyince / açınca başlangıç: Bugün sekmesi, sıradaki gün, en üst; arama ve açık kartlar sıfır (girilen değerler ve ısınma işaretleri korunur) */
+Object.assign(V,{v:"ana",gun:null,acik:null,grp:"",q:"",y:0,hzAcik:null,hzGun:0,kiloTum:false,sid:null,secGun:null});
 V.g=V.g||{};
 
 /* ---------- Firebase (fitness projesi; salon/<salonId>/uye/<uid>) ---------- */
@@ -1199,7 +1201,7 @@ document.addEventListener("change",ev=>{const t=ev.target;
 document.addEventListener("focusin",ev=>{if(ev.target.id==="hedefGir"||(ev.target.dataset&&ev.target.dataset.f))ev.target.select()});
 document.addEventListener("keydown",ev=>{if(ev.key==="Escape")perdeKapat();if((ev.key==="Enter"||ev.key===" ")&&ev.target.classList&&ev.target.classList.contains("buyut")){ev.preventDefault();fotoAc(ev.target.dataset.k)}if(ev.key==="Enter"&&/^(gs|gs2|gt)$/.test(ev.target.id)){const b=document.querySelector('[data-a="giris"]');b&&b.click()}});
 
-if(V.yerel){gecis();gecis2();gecis3();gecis4();gecis5()}tarihceKur();ciz();requestAnimationFrame(()=>window.scrollTo(0,V.y||0));
+if(V.yerel){gecis();gecis2();gecis3();gecis4();gecis5()}try{history.scrollRestoration="manual"}catch(e){}tarihceKur();ciz();window.scrollTo(0,0);requestAnimationFrame(()=>window.scrollTo(0,0));
 fbBaslat();
 </script>
 </body></html>
