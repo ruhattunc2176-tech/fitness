@@ -343,7 +343,7 @@ const LIB={
  legraise:{n:"Asılı bacak kaldırma",id:"Hanging_Leg_Raise",g:"karin",tip:"vucut",en:"hanging leg raise",ip:"Sallanmadan, karınla kaldır"}
 };
 const COP=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>`;
-const SURUM="2026-11-13 08:45";
+const SURUM="2026-11-16 19:53";
 const surumYazi=()=>{const [g,sa]=SURUM.split(" ");const [y,m,d]=g.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString("tr-TR",{day:"numeric",month:"long"})+" "+sa};
 const DMB=[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40];
 const WD=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
@@ -732,7 +732,8 @@ const ISF={"Yürüyüş bandı ya da bisiklet, hafif tempo":"Walking_Treadmill",
  "Gövdeyi sağa sola döndür":"Torso_Rotation","Kalça çevirme":"Standing_Hip_Circles","Ön bacak germe":"Quad_Stretch","Arka bacak germe":"Hamstring_Stretch",
  "Baldır germe":"Calf_Stretch_Hands_Against_Wall","Omuz germe (kol göğsün önünden)":"Shoulder_Stretch","Arka kol germe (dirsek baş üstünde)":"Triceps_Stretch"};
 /* ısınma/germe: nasıl yapılır + video arama terimi */
-const ISA={"Yürüyüş bandı ya da bisiklet, hafif tempo":["Konuşabileceğin kadar rahat tempoda yürü ya da pedal çevir; hafif terleyince yeter.","treadmill warm up walk"],
+const ISA={"Ağırlıksız kalça menteşesi":["Ayaklar kalça genişliğinde, dizler hafif bükük, eller kalçada. Beli düz tutarak kalçanı geriye it ve gövdeni öne eğ; arka bacakta gerilme hissedince kalçanı öne iterek doğrul. Romanian deadlift'in ağırlıksız provası.","bodyweight hip hinge warm up"],
+ "Yürüyüş bandı ya da bisiklet, hafif tempo":["Konuşabileceğin kadar rahat tempoda yürü ya da pedal çevir; hafif terleyince yeter.","treadmill warm up walk"],
  "Yavaş yürüyüş":["Bitişte 3–5 dakika yavaş yürü, nabzın insin.","cool down walk treadmill"],
  "Ağırlıksız squat":["Ayaklar omuz genişliğinde, eller önde ya da başın arkasında. Kalçayı geriye iterek otur, topuklar yerde kalsın, dizler ayak ucu yönünde; yavaşça kalk.","bodyweight squat warm up"],
  "Bacak savurma (öne-arkaya)":["Bir yere tutun, tek ayak üstünde dur. Diğer bacağı sarkaç gibi öne ve arkaya rahatça savur; her seferinde biraz daha yükseğe. Sonra diğer bacak.","leg swings warm up"],
@@ -764,7 +765,21 @@ const SOGU={bacak:["Ön bacak germe","Arka bacak germe","Kalça germe (ayak bile
 const KUCUKH=new Set(["latraise","reardelt","fly","curl","hammer","pushdown","facepull","calf","legext","legcurl","backext"]);
 const gunGrup=d=>[...new Set(d.ex.map(e=>LIB[e.k].g))];
 /* tüm vücut günlerinde liste uzamasın: 3+ bölge varsa her bölgeden tek hareket */
-function isinmaListe(d){const G=gunGrup(d),cok=G.length>=3;return [["Yürüyüş bandı ya da bisiklet, hafif tempo","5 dk"],...G.flatMap(g=>(ISIN[g]||[]).slice(0,cok?1:2))]}
+/* ısınma: 5 dk kardiyo + o gün çalışan her bölge için, o bölgenin günkü İLK hareketine uyan hazırlık.
+   Tüm vücut günlerinde (3+ bölge) bölge başına bir hareket; bölgesel günlerde bölge başına iki. */
+const MENTESE=new Set(["rdl","deadlift","hipthrust","backext","legcurl"]),DIKITIS=new Set(["mshoulder","dbsp","latraise"]);
+const ISH={squat:["Ağırlıksız squat","10 tekrar"],mentese:["Ağırlıksız kalça menteşesi","10 tekrar"],savur:["Bacak savurma (öne-arkaya)","her bacak 10"],
+ sinav:["Duvara yaslanarak şınav","10 tekrar"],kol:["Kol çevirme","10 öne, 10 arkaya"],kurek:["Omuzları geriye çevir, kürek kemiklerini sık","10 tekrar"],
+ govde:["Gövdeyi sağa sola döndür","10 tekrar"],kalca:["Kalça çevirme","her yöne 10"]};
+function isinmaListe(d){const G=gunGrup(d),cok=G.length>=3,L=[["Yürüyüş bandı ya da bisiklet, hafif tempo","5 dk"]];
+  G.forEach(g=>{const tum=d.ex.filter(e=>LIB[e.k].g===g).map(e=>e.k),ks=tum.filter(k=>!KUCUKH.has(k)),ilk=ks[0];let a=[];
+    if(!ks.length&&g!=="karin")return;   /* yalnız küçük hareketi olan bölgeye ayrı hazırlık gerekmez */
+    if(g==="bacak"){const m=MENTESE.has(ilk),iki=ks.some(k=>MENTESE.has(k))&&ks.some(k=>!MENTESE.has(k));a=m?[ISH.mentese,iki?ISH.squat:ISH.savur]:[ISH.squat,iki?ISH.mentese:ISH.savur]}
+    else if(g==="itis")a=DIKITIS.has(ilk)?[ISH.kol,ISH.sinav]:[ISH.sinav,ISH.kol];
+    else if(g==="cekis")a=[ISH.kurek,ISH.govde];
+    else if(g==="karin")a=[ISH.kalca];
+    L.push(...a.slice(0,cok?1:2))});
+  return L}
 function wuDurum(d,s){const k=d.id+"|"+bugun();if(!V.wu||V.wu.k!==k)V.wu={k,t:{},kapali:!!(s&&Object.values(s.sets||{}).some(a=>a&&a.length)),sg:null};return V.wu}
 function isinmaKart(d,s){const W=wuDurum(d,s),L=isinmaListe(d),n=L.filter((x,i)=>W.t[i]).length;
   if(W.kapali)return `<button class="k sat" data-a="wuAc"><span class="a"><b>Isınma</b><span>${n===L.length?"tamamlandı":n?`${n} / ${L.length} yapıldı`:"yaklaşık 8 dk · görmek için dokun"}</span></span>${n===L.length?`<span class="ok">✓</span>`:`<span class="bos"></span>`}</button>`;
