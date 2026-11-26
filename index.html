@@ -343,7 +343,7 @@ const LIB={
  legraise:{n:"Asılı bacak kaldırma",id:"Hanging_Leg_Raise",g:"karin",tip:"vucut",en:"hanging leg raise",ip:"Sallanmadan, karınla kaldır"}
 };
 const COP=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>`;
-const SURUM="2026-11-26 20:51";
+const SURUM="2026-11-26 21:09";
 const surumYazi=()=>{const [g,sa]=SURUM.split(" ");const [y,m,d]=g.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString("tr-TR",{day:"numeric",month:"long"})+" "+sa};
 const DMB=[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40];
 const WD=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
@@ -666,7 +666,7 @@ const aralik=r=>{const m=String(r).match(/(\d+)\D*(\d+)?/);if(!m)return [8,12];c
 function oneri(e,haric){
   const [alt,ust]=aralik(e.reps),son=oncekiSet(e.k,haric),tip=tipOf(e.k);
   if(!son){const kg={bar:20,plaka:40,kule:20,dambil:6,vucut:0,sure:0}[tip];return {kg,r:tip==="sure"?ust:alt,not:null}}
-  const kg=Math.max(...son.a.map(x=>x.kg)),r0=son.a[0].r;
+  const sn=son.a[son.a.length-1],kg=sn.kg,r0=sn.r;   /* öneri: geçen seferki SON setin kilosu */
   const tamam=son.a.length>=e.sets&&son.a.every(x=>x.r>=ust);
   if(tip==="sure")return {kg:0,r:tamam?r0+5:r0,not:tamam?`Hepsi ${r0} sn oldu: bugün ${r0+5} sn dene`:null};
   if(tip==="vucut")return {kg:0,r:tamam?ust+1:r0,not:tamam?`Hepsi ${ust} oldu: bugün ${ust+1} tekrar dene`:null};
@@ -697,7 +697,7 @@ function eskiKapat(){const x=S.activeSid&&S.sessions[S.activeSid];if(!x||x.done|
   S.activeSid=null;V.gun=null;kaydet(["main"])}
 function sonKiloYazi(e){const tip=tipOf(e.k),son=oncekiSet(e.k);
   if(tip==="sure")return son?`${son.a[0].r} sn`:"";if(tip==="vucut")return son?`${son.a[0].r} tekrar`:"";
-  return son?`${yaz(Math.max(...son.a.map(x=>x.kg)))} kg`:"yeni"}
+  return son?`${yaz(son.a[son.a.length-1].kg)} kg`:"yeni"}
 const setYazi=(k,x)=>tipOf(k)==="sure"?`${x.r} sn`:tipOf(k)==="vucut"?`${x.r} tekrar`:`${yaz(x.kg)} kg × ${x.r}`;
 
 /* ---------- ekranlar ---------- */
@@ -814,7 +814,7 @@ function sAnt(){
     const satirR=`<div class="ad"><span class="ad-l">${tip==="sure"?"Süre (sn)":"Tekrar"}</span><span class="r"><button data-a="r-" aria-label="Azalt">−</button><input id="r-${e.id}" inputmode="numeric" value="${g.r}" data-f="r" aria-label="${tip==="sure"?"Süre":"Tekrar"}"><button data-a="r+" aria-label="Artır">+</button></span></div>`;
     return `<section class="k hk">
      <div class="hb"><button class="foto" data-a="foto" data-k="${e.k}" aria-label="Fotoğrafı büyüt"><img src="${img(e.k,0)}" alt="${esc(L.n)}"></button><div><b>${esc(L.n)}</b>${trAd(e.k)}<span class="bil">${e.sets} × ${esc(e.reps)}${tip==="sure"?" sn":""} · </span><button class="link" data-a="foto" data-k="${e.k}">▶ Nasıl yapılır</button></div><button class="kk" data-a="kartKapat" aria-label="Kartı kapat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg></button></div>
-     ${son?`<div class="gec">Geçen sefer: ${tip==="sure"?son.a.map(x=>x.r+" sn").join(", "):tip==="vucut"?son.a.map(x=>x.r).join(", ")+" tekrar":`${yaz(Math.max(...son.a.map(x=>x.kg)))} kg × ${son.a.map(x=>x.r).join(", ")}`}</div>`:`<div class="gec">İlk kez yapıyorsun; rahat bir kiloyla başla.</div>`}
+     ${son?`<div class="gec">Geçen sefer: ${tip==="sure"?son.a.map(x=>x.r+" sn").join(", "):tip==="vucut"?son.a.map(x=>x.r).join(", ")+" tekrar":(son.a.every(x=>x.kg===son.a[0].kg)?`${yaz(son.a[0].kg)} kg × ${son.a.map(x=>x.r).join(", ")}`:son.a.map(x=>`${yaz(x.kg)}×${x.r}`).join(", ")+" kg")}</div>`:`<div class="gec">İlk kez yapıyorsun; rahat bir kiloyla başla.</div>`}
      ${o.not&&!kay.length?`<div class="oner">${esc(o.not)}</div>`:""}
      ${!kay.length?isinmaSeti(d,e,g.kg):""}
      ${kay.map((x,j)=>`<div class="yset"><i>✓</i>${j+1}. set · ${setYazi(e.k,x)}${j===kay.length-1?`<button data-a="setsil">sil</button>`:""}</div>`).join("")}
