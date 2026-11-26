@@ -343,7 +343,7 @@ const LIB={
  legraise:{n:"Asılı bacak kaldırma",id:"Hanging_Leg_Raise",g:"karin",tip:"vucut",en:"hanging leg raise",ip:"Sallanmadan, karınla kaldır"}
 };
 const COP=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>`;
-const SURUM="2026-11-26 21:09";
+const SURUM="2026-11-26 21:17";
 const surumYazi=()=>{const [g,sa]=SURUM.split(" ");const [y,m,d]=g.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString("tr-TR",{day:"numeric",month:"long"})+" "+sa};
 const DMB=[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40];
 const WD=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
@@ -794,6 +794,8 @@ function sogumaKart(d,hepsiBitti){const W=V.wu||{},acik=W.sg==null?hepsiBitti:W.
    <div class="lb">Ağrı değil, hafif gerginlik hissedene kadar ger; yaylanma.</div>
    <button class="btn ikincil" data-a="sgAc">Kapat</button></section>`}
 /* ısınma seti: her bölgenin o günkü ilk ağırlıklı hareketinde, çalışma kilosunun yarısı ve dörtte üçü */
+/* tek taraflı hareketler: bir set iki tarafı da kapsar */
+const TEK={dbrow:"kol",lunge:"bacak"};
 function isinmaSeti(d,e,kg){const L=LIB[e.k],tip=tipOf(e.k);if(!kiloVar(e.k)||L.g==="karin"||!(kg>0))return "";
   const ilk=d.ex.find(x=>LIB[x.k].g===L.g&&kiloVar(x.k)&&!KUCUKH.has(x.k));if(!ilk||ilk.id!==e.id)return "";
   const st=adim(e.k),alt=tip==="bar"?20:tip==="dambil"?DMB[0]:st;
@@ -815,6 +817,7 @@ function sAnt(){
     return `<section class="k hk">
      <div class="hb"><button class="foto" data-a="foto" data-k="${e.k}" aria-label="Fotoğrafı büyüt"><img src="${img(e.k,0)}" alt="${esc(L.n)}"></button><div><b>${esc(L.n)}</b>${trAd(e.k)}<span class="bil">${e.sets} × ${esc(e.reps)}${tip==="sure"?" sn":""} · </span><button class="link" data-a="foto" data-k="${e.k}">▶ Nasıl yapılır</button></div><button class="kk" data-a="kartKapat" aria-label="Kartı kapat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg></button></div>
      ${son?`<div class="gec">Geçen sefer: ${tip==="sure"?son.a.map(x=>x.r+" sn").join(", "):tip==="vucut"?son.a.map(x=>x.r).join(", ")+" tekrar":(son.a.every(x=>x.kg===son.a[0].kg)?`${yaz(son.a[0].kg)} kg × ${son.a.map(x=>x.r).join(", ")}`:son.a.map(x=>`${yaz(x.kg)}×${x.r}`).join(", ")+" kg")}</div>`:`<div class="gec">İlk kez yapıyorsun; rahat bir kiloyla başla.</div>`}
+     ${TEK[e.k]?`<div class="isn tek"><b>Her sette iki ${TEK[e.k]}</b>1 set = önce sağ ${TEK[e.k]} ${esc(e.reps)} tekrar, hemen ardından sol ${TEK[e.k]}.</div>`:""}
      ${o.not&&!kay.length?`<div class="oner">${esc(o.not)}</div>`:""}
      ${!kay.length?isinmaSeti(d,e,g.kg):""}
      ${kay.map((x,j)=>`<div class="yset"><i>✓</i>${j+1}. set · ${setYazi(e.k,x)}${j===kay.length-1?`<button data-a="setsil">sil</button>`:""}</div>`).join("")}
